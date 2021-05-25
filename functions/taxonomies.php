@@ -28,7 +28,7 @@ register_taxonomy( 'gestion_types', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => false,
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -58,7 +58,7 @@ register_taxonomy( 'gestion_states', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => true,
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -87,7 +87,7 @@ register_taxonomy( 'property_types', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'               => array('slug' => '%gestion_type%', 'with_front' => false),
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -116,7 +116,7 @@ register_taxonomy( 'property_zones', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => array('slug' => '%gestion_type%/%property_type%', 'with_front' => false),
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -144,7 +144,7 @@ register_taxonomy( 'property_rooms', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => true,
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -173,7 +173,7 @@ register_taxonomy( 'property_bathrooms', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => true,
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 
@@ -202,7 +202,7 @@ register_taxonomy( 'property_state', array( 'inmoob_properties' ), array(
     'query_var'         => true,
     'rewrite'           => true,
     'query_var'         => true,
-    // 'meta_box_cb'       => false,
+    'meta_box_cb'       => false,
     'capabilities'      => array('manage_options'),
 ));
 

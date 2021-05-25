@@ -35,6 +35,15 @@ new Metabox(
     'fields' => array(
 
 
+        array(
+            'tab'           => 'type',
+            'id'            => 'cloneable',
+            'name'          => 'Cloneable',
+            'type'          => 'text',
+            'add_button'    => 'Añadir otroa',
+            'clone'         => true,
+        ),
+        
 
         array(
             'tab'        => 'type',
@@ -43,7 +52,9 @@ new Metabox(
             'type'       => 'taxonomy',
             'taxonomy'   => 'gestion_types',
             'field_type' => 'select',
-            'placeholder' => 'Elige una opción'
+            'placeholder' => 'Elige una opción',
+            'columns'    => 2
+
         ),
 
         array(
@@ -53,7 +64,9 @@ new Metabox(
             'type'       => 'taxonomy',
             'taxonomy'   => 'gestion_states',
             'field_type' => 'select',
-            'placeholder' => 'Elige una opción'
+            'placeholder' => 'Elige una opción',
+            'columns'    => 2
+
         ),
 
         array(
