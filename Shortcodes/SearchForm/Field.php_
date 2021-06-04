@@ -1,0 +1,36 @@
+<?php
+
+namespace CCOM_CORE\Shortcodes\SearchForm;
+use CCOM_CORE\Shortcodes\Shortcode;
+
+
+abstract class Field extends Shortcode {
+
+    abstract static function get_values();
+    abstract static function set_default_atts();
+    
+    static $attributes_defaults = array(
+        'vc_id'                              => '',
+        'uniqid'                             => '',
+        'name'                               => '',
+        'type'                               => '',
+        'label'                              => '',
+        'placeholder'                        => '',
+        'active_filter_text'                 => '',
+        'icon'                               => '',
+        'extra_class'                        => '',
+        'hidden_when_not_options_avaliables' => '',
+    );
+
+    static function output($atts, $content){
+
+        $hide = self::get_atts('hidden_when_not_options_avaliables', false); 
+         if($hide){
+            $values = static::get_values();
+            if(is_array($values) && count($values) <= 1) return false; 
+            if(!isset($values) || empty($values)) return false;
+        }
+        return $content;
+    }
+    
+}

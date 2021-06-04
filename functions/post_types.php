@@ -19,7 +19,7 @@ add_action('init',function(){
 			'publicly_queryable'    => true,
 			'show_in_nav_menus'     => true,
 			'map_meta_cap'          => true,
-			'supports'              => array('title','editor','thumbnail'),
+			'supports'              => array('title','thumbnail'),
             'rewrite'               => array('slug' => '%gestion_type%/%property_type%/%property_zone%'),
 			'query_var'             => false,
 		)

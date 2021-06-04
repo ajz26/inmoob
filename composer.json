@@ -1,0 +1,17 @@
+{
+    "name": "obser/inmoob",
+    "authors": [
+        {
+            "name": "Tony",
+            "email": "azambrano@obser.co"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Inmoob\\": "Core",
+            "Inmoob\\Shortcodes\\": "Shortcodes",
+            "Inmoob\\Config\\": "Config",
+            "Inmoob\\WPB_Components\\": "plugins-support/js_composer/Components"
+        }
+    }
+}

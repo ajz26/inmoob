@@ -19,8 +19,10 @@ class INMOOB_CORE{
 
     private function __construct() {
         self::define_const();
+        self::load_autoload();
         self::load_framework();
         self::load_functions();
+        self::load_plugins_support();
     }
 
     private static function define_const(){
@@ -49,17 +51,32 @@ class INMOOB_CORE{
 
     }
 
+    private static function load_autoload(){
+        require_once  INMOOB_CORE_PLUGIN_DIR_PATH . '/vendor/autoload.php';
+    }
+
     private static function load_framework(){
         if(!class_exists('OBSER')){
             require_once  INMOOB_CORE_PLUGIN_DIR_PATH . '/framework/obser.php';
+
+            if (!defined('RWMB_VER')) require_once INMOOB_CORE_PLUGIN_DIR_PATH .'/libs/meta-box/meta-box.php';
+            if(defined('RWMB_VER')){
+                require_once INMOOB_CORE_PLUGIN_DIR_PATH .'libs/meta-box-addons/meta-box-tabs/meta-box-tabs.php';
+                require_once INMOOB_CORE_PLUGIN_DIR_PATH .'libs/meta-box-addons/meta-box-group/meta-box-group.php';
+                require_once INMOOB_CORE_PLUGIN_DIR_PATH .'libs/meta-box-addons/meta-box-conditional-logic/meta-box-conditional-logic.php';
+                require_once INMOOB_CORE_PLUGIN_DIR_PATH .'libs/meta-box-addons/meta-box-columns/meta-box-columns.php';
+            }
         }
     }
 
     private static function load_functions(){
+        require_once  INMOOB_CORE_PLUGIN_DIR_PATH . '/functions/configs/config.php';
         require_once  INMOOB_CORE_PLUGIN_DIR_PATH . '/functions/functions.php';
+    }
+
+    private static function load_plugins_support(){
+        require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/js_composer/js_composer.php";
     }
 }
 
 INMOOB_CORE::instance();
-
-

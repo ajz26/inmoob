@@ -1,273 +1,418 @@
 <?php
-use OBSER\Classes\Metabox\Metabox;
-
-new Metabox(
-   array(
-    'ID'        =>'prices',
-    'title'     =>  'Detalles de servicio',
-    'post_types' => 'inmoob_properties',
-    'tabs'      => array(
-        'type'  => array(
-            'label' => 'Tipo',
-            'icon'  => 'dashicons-admin-settings',
-        ),
-        'features'  => array(
-            'label' => 'Caracterísiticas',
-            'icon'  => 'dashicons-admin-settings',
-        ),
-        'requirements'  => array(
-            'label' => 'Requisitos',
-            'icon'  => 'dashicons-admin-settings',
-        ),
-        'media' => array(
-            'label' => 'Medios',
-            'icon'  => 'dashicons-images-alt2', 
-        ),
-        'prices'  => array(
-            'label' => 'Precios',
-            'icon'  => 'dashicons-money-alt',
-        ),
-        'location' => array(
-            'label' => 'Ubicación',
-            'icon'  => 'dashicons-admin-site-alt', 
-        )
-    ),
-    'fields' => array(
+use OBSER\Classes\Settings;
+$currency =  Settings::get_setting('inmoob-settings','currency_symbol') ?: '$';
 
 
-        array(
-            'tab'           => 'type',
-            'id'            => 'cloneable',
-            'name'          => 'Cloneable',
-            'type'          => 'text',
-            'add_button'    => 'Añadir otroa',
-            'clone'         => true,
-        ),
-        
 
-        array(
-            'tab'        => 'type',
-            'name'       => 'Tipo de gestión',
-            'id'         => 'gestion_types',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'gestion_types',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 2
+add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
 
-        ),
 
-        array(
-            'tab'        => 'type',
-            'name'       => 'estado de gestión',
-            'id'         => 'gestion_states',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'gestion_states',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 2
-
-        ),
-
-        array(
-            'tab'       => 'type',
-            'id'        => 'featured',
-            'name'      => 'Destacar propiedad',
-            'type'      => 'switch',                    
-            'style'     => 'rounded',
-            'on_label'  => 'Si',
-            'off_label' => 'No',
+    $meta_boxes[] = array(
+        'title'     => 'Detalles del Inmueble',
+        'post_types' => 'inmoob_properties',
+        'tabs'      => array(
+            'general'  => array(
+                'label' => 'General',
+                'icon'  => 'dashicons-admin-settings',
+            ),
+            'features'  => array(
+                'label' => 'Caracterísiticas',
+                'icon'  => 'dashicons-admin-settings',
+            ),
+            'requirements'  => array(
+                'label' => 'Requisitos',
+                'icon'  => 'dashicons-admin-settings',
+            ),
+            'media' => array(
+                'label' => 'Medios',
+                'icon'  => 'dashicons-images-alt2', 
+            ),
+            'prices'  => array(
+                'label' => 'Precio',
+                'icon'  => 'dashicons-money-alt',
+            ),
+            'location' => array(
+                'label' => 'Ubicación',
+                'icon'  => 'dashicons-admin-site-alt', 
+            )
         ),
 
-        // Features
+        'tab_style' => 'left',
+        'tab_wrapper' => true,
+        'fields'    => array(
+            array(
+                'tab'        => 'general',
+                'name'    => 'Descripción del inmueble',
+                'id'      => 'content',
+                'type'    => 'wysiwyg',
+                'columns'   => 12,
+                'raw'     => false,
+                'options' => array(
+                    'textarea_rows' => 20,
+                    'wpautop'         => false,
+                    'media_buttons' => false,
+                    'dfw'   => false,
 
-        array(
-            'tab'        => 'features',
-            'name'       => 'Tipo de inmueble',
-            'id'         => 'property_types',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'property_types',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 3
+                ),
+            ),
+            
+            array(
+                'tab'       => 'general',
+                'type'      => 'divider',
+                'columns'   => 12,
+            ),
+            array(
+                'tab'        => 'general',
+                'name'       => 'Referencia',
+                'id'         => 'property_ref',
+                'type'       => 'text',
+                'placeholder' => '#ref',
+                'columns'     => 3
+            ),
+            array(
+                'tab'        => 'general',
+                'name'       => 'Tipo de gestión',
+                'id'         => 'gestion_types',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'gestion_types',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
 
-        ),
+            ),
 
-        array(
-            'tab'        => 'features',
-            'name'       => 'Estado de la propiedad',
-            'id'         => 'property_state',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'property_state',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 3
-        ),
+            array(
+                'tab'        => 'general',
+                'name'       => 'Estado de gestión',
+                'id'         => 'gestion_states',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'gestion_states',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
+            ),
 
-        array(
-            'tab'        => 'features',
-            'name'       => 'Tamaño del inmueble en m2',
-            'id'         => 'property_size',
-            'type'       => 'text',
-            'placeholder' => 'Indíca el tamaño',
-            'columns'    => 3
-        ),
-        
-        array(
-            'tab'       => 'features',
-            'type'      => 'divider',
-            'columns'   => 12,
-        ),
-        
+            array(
+                'tab'       => 'general',
+                'id'        => 'featured',
+                'name'      => 'Destacar propiedad',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 3
+            ),
 
-        array(
-            'tab'        => 'features',
-            'name'       => 'Nº de Habitaciones',
-            'id'         => 'property_rooms',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'property_rooms',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 3
+            // Features
 
-        ),
-        array(
-            'tab'        => 'features',
-            'name'       => 'Nº de baños',
-            'id'         => 'property_bathrooms',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'property_bathrooms',
-            'field_type' => 'select',
-            'placeholder' => 'Elige una opción',
-            'columns'    => 3
+            array(
+                'tab'        => 'features',
+                'name'       => 'Tipo de inmueble',
+                'id'         => 'property_types',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'property_types',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
 
-        ),
+            ),
 
-        array(
-            'tab'        => 'features',
-            'name'       => 'Nº de planta',
-            'id'         => 'property_floor',
-            'type'       => 'text',
-            'taxonomy'   => 'property_floor',
-            'placeholder' => 'Elige una opción',
-            'default'       => '1',
-            'columns'    => 3
-        ),
+            array(
+                'tab'        => 'features',
+                'name'       => 'Estado de la propiedad',
+                'id'         => 'property_state',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'property_state',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
+            ),
 
-        array(
-            'tab'        => 'features',
-            'type' => 'divider',
-            'columns' => 12,
-        ),
-        
-        array(
-            'tab'       => 'features',
-            'id'        => 'pets',
-            'name'      => 'Permiten mascotas',
-            'type'      => 'switch',                    
-            'style'     => 'rounded',
-            'on_label'  => 'Si',
-            'off_label' => 'No',
-            'columns'    => 2
-        ),
-        array(
-            'tab'       => 'features',
-            'id'        => 'childrens',
-            'name'      => 'Permiten niños',
-            'type'      => 'switch',                    
-            'style'     => 'rounded',
-            'on_label'  => 'Si',
-            'off_label' => 'No',
-            'columns'    => 2
-        ),
+            array(
+                'tab'        => 'features',
+                'name'       => 'Superficie en m2',
+                'id'         => 'property_size',
+                'type'       => 'text',
+                'placeholder' => 'Indíca el tamaño',
+                'columns'    => 3
+            ),
 
-        array(
-            'tab'       => 'features',
-            'id'        => 'terrace',
-            'name'      => 'Tiene terraza',
-            'type'      => 'switch',                    
-            'style'     => 'rounded',
-            'on_label'  => 'Si',
-            'off_label' => 'No',
-            'columns'    => 2
-        ),
+            array(
+                'tab'        => 'features',
+                'name'       => 'Superficie útil en m2',
+                'id'         => 'util_property_size',
+                'type'       => 'text',
+                'placeholder' => 'Indíca el tamaño',
+                'columns'    => 3
+            ),
 
-        array(
-            'tab'       => 'features',
-            'id'        => 'ascensor',
-            'name'      => 'Tiene Ascensor',
-            'type'      => 'switch',                    
-            'style'     => 'rounded',
-            'on_label'  => 'Si',
-            'off_label' => 'No',
-            'columns'    => 2
-        ),
+            array(
+                'tab'           => 'features',
+                'type'          => 'divider',
+                'columns'       => 12,
+            ),
+            
+            array(
+                'tab'        => 'features',
+                'name'       => 'Año de contstrucción',
+                'id'         => 'property_construction_year',
+                'type'       => 'text',
+                'columns'    => 3
 
-        array(
-            'tab'        => 'features',
-            'type' => 'divider',
-            'columns' => 12,
-        ),
-        
-        
-        array(
-            'tab'           => 'features',
-            'id'            => 'extras',
-            'name'          => 'Extras',
-            'type'          => 'textarea',
-            'add_button'    => 'Añadir otro',
-            'clone'         => true,
-        ),
-        
-        // Prices
+            ),
 
-      
-        array(
-            'tab'           => 'prices',
-            'name'          => 'Precio',
-            'id'            => 'price',
-            'placeholder'   => 'Precio del inmueble',
-            'std'           => 'a consultar',
-        ),
-        array(
-            'tab'           => 'prices',
-            'name'          => 'Mostrar antes del precio',
-            'id'            => 'price_preffix',
-            'placeholder'   => 'Prefijo',
+            array(
+                'tab'        => 'features',
+                'name'       => 'Nº de Habitaciones',
+                'id'         => 'property_rooms',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'property_rooms',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
 
-        ),
-        array(
-            'tab'           => 'prices',
-            'name'          => 'Mostrar despues del precio',
-            'id'            => 'price_suffix',
-            'placeholder'   => 'Sufijo',
+            ),
+            array(
+                'tab'        => 'features',
+                'name'       => 'Nº de baños',
+                'id'         => 'property_bathrooms',
+                'type'       => 'taxonomy',
+                'taxonomy'   => 'property_bathrooms',
+                'field_type' => 'select',
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
 
-        ),
+            ),
 
-        array(
-            'tab'        => 'location',
-            'name'       => 'Zona',
-            'id'         => 'property_zones',
-            'type'       => 'taxonomy',
-            'taxonomy'   => 'property_zones',
-            'field_type' => 'select_advanced',
-            'placeholder' => 'Elige una opción',
-        ),
-        array(
-            'tab'  => 'location',
-            'name' => 'Dirección',
-            'id'   => 'address',
-            'type' => 'textarea',
-        ),
-        array(
-            'tab'  => 'location',
-            'name' => 'Link de google maps',
-            'id'   => 'gmaps_link',
-            'type' => 'textarea',
-            'rows' => 2,
-            'columns' => 12
-        ),
+            array(
+                'tab'        => 'features',
+                'name'       => 'Planta',
+                'id'         => 'property_floor',
+                'type'       => 'text',
+                'taxonomy'   => 'property_floor',
+                'std'        => '1',
+                'columns'    => 3
+            ),
 
-    )
-    )
+            array(
+                'tab'        => 'features',
+                'type' => 'divider',
+                'columns' => 12,
+            ),
+            
+            array(
+                'tab'        => 'features',
+                'name'       => 'Certificado energético',
+                'id'         => 'property_eacs',
+                'type'       => 'select',
+                'field_type' => 'select',
+                'options'    => inmoob_get_recs(),
+                'placeholder' => 'Elige una opción',
+                'columns'    => 3
+            ),
+            
+            array(
+                'tab'       => 'features',
+                'id'        => 'pets',
+                'name'      => 'Permiten mascotas',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 2
+            ),
+            array(
+                'tab'       => 'features',
+                'id'        => 'childrens',
+                'name'      => 'Permiten niños',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 2
+            ),
+
+            array(
+                'tab'       => 'features',
+                'id'        => 'terrace',
+                'name'      => 'Tiene terraza',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 2
+            ),
+
+            array(
+                'tab'       => 'features',
+                'id'        => 'ascensor',
+                'name'      => 'Tiene Ascensor',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 2
+            ),
+
+            array(
+                'tab'        => 'features',
+                'type' => 'divider',
+                'columns' => 12,
+            ),
+            
+            
+            array(
+                'tab'           => 'features',
+                'id'            => 'extras',
+                'name'          => 'Extras',
+                'type'          => 'textarea',
+                'rows'          => 1,
+                'add_button'    => 'Añadir otro',
+                'clone' => true,
+            ),
+            
+            // Prices
+
+            array(
+                'tab'  => 'prices',
+                'name' => 'Valor',
+                'id'   => 'price',
+                'type' => 'text',
+            ),
+
+            array(
+                'tab'  => 'prices',
+                'name' => "Valor en ({$currency}) con descuento",
+                'id'   => 'sales_price',
+                'type' => 'text',
+                'before' => ''
+            ),
+
+            
+            array(
+                'tab'  => 'prices',
+                'name' => 'Mostrar antes del valor',
+                'id'   => 'price_preffix',
+                'type' => 'text',
+            ),
+            array(
+                'tab'  => 'prices',
+                'name' => 'Mostrar despues del valor',
+                'id'   => 'price_suffix',
+                'type' => 'text',
+            ),
+
+            array(
+                'tab'  => 'prices',
+                'id'        => 'on_sale',
+                'name'      => 'Mostrar como oferta',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+            ),
+
+            // requirements
+
+            array(
+                'tab'       => 'requirements',
+                'id'        => 'no_docs',
+                'name'      => '¿ Se puede alquilar si documentación ?',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+            ),
+
+            array(
+                'tab'           => 'requirements',
+                'id'            => 'requirements',
+                'name'          => 'Requisitos adicionales',
+                'type'          => 'textarea',
+                'rows'          => 1,
+                'add_button'    => 'Añadir otro',
+                'clone' => true,
+            ),
+
+            array(
+                'tab'              => 'media',
+                'id'               => 'images',
+                'name'             => 'Galeria',
+                'type'             => 'image_advanced',
+                'force_delete'     => false,
+                'max_status'       => 'false',
+                'image_size'       => 'thumbnail'
+            ),
+
+            array(
+                'tab'   => 'media',
+                'id'    => 'video',
+                'name'  => 'Adjunta el enlace del video (Youtube)',
+                'type'  => 'textarea',
+                'size'  => 1000,
+            ),
+
+
+            // Location
+
+            array(
+                'tab'           => 'location',
+                'name'          => 'Provincia',
+                'id'            => 'province',
+                'type'          => 'select',
+                'field_type'    => 'select',
+                'options'       => inmoob_get_es_provinces(),
+                'columns'       => 3,
+            ),
+
+            array(
+                'tab'           => 'location',
+                'name'          => 'Zona',
+                'id'            => 'property_zones',
+                'type'          => 'taxonomy',
+                'taxonomy'      => 'property_zones',
+                'field_type'    => 'select_advanced',
+                'placeholder'   => 'Elige una opción',
+                'columns'       => 3,
+
+            ),
+
+            array(
+                'tab'       => 'location',
+                'name'      => 'Ciudad',
+                'id'        => 'city',
+                'type'      => 'text',
+                'columns'   => 3,
+            ),
+            array(
+                'tab'       => 'location',
+                'name'      => 'Código postal',
+                'id'        => 'zip_code',
+                'type'      => 'text',
+                'columns'   => 3,
+            ),
+
+            array(
+                'tab'  => 'location',
+                'name' => 'Dirección',
+                'id'   => 'address',
+                'type' => 'textarea',
+            ),
+            array(
+                'tab'  => 'location',
+                'name' => 'Google maps',
+                'id'   => 'gmaps_link',
+                'type' => 'textarea',
+                'rows' => 2,
+                'columns' => 12
+            ),
+          
+        ),
+    );
+
+
+
+    return $meta_boxes;
+
+}
 );

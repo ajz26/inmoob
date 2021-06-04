@@ -5,4 +5,5 @@ require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/post_types.php";
 require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/taxonomies.php";
 require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/rewrite_rules.php";
 require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/properties_metaboxes.php";
+require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/shortcodes.php";
 

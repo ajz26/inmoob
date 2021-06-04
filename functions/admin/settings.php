@@ -100,6 +100,22 @@ Settings::set_section('inmoob-settings',array(
     )
 ));
 
+
+Settings::set_section('inmoob-settings',array(
+    'title'   => 'Gestión de inmuebles',
+    'heading' => 'Gestión de inmuebles',
+    'desc'    => 'Descripción',
+    'fields'  => array(
+        array(
+            'name'          => 'currency_symbol',
+            'title'         => 'Símbolo del la moneda',
+            'description'   => '',
+            'type'          => 'textfield',
+        ),
+    )
+));
+
+
 add_action('init', function(){
     Settings::init('inmoob-settings');
 },100);
