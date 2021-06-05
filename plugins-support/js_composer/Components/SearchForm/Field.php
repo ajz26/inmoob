@@ -1,14 +1,17 @@
 <?php
-namespace CCOM_CORE\Components\SearchForm;
-use  CCOM_CORE\Components\Component;
+namespace Inmoob\WPB_Components\SearchForm;
+use OBSER\Classes\Component;
+use Inmoob\Shortcodes\SearchForm\Form;
+
 class Field extends Component {
 
     public static function map(): array {
-        
+        $form_shortcode = Form::$shortcode;
         return array(
-            'name'                      => __('', 'ccom'),
+            'name'                      => __('', 'inmoob'),
             'show_settings_on_create'   => false,
-            'icon'                      => CCOM_CORE_PLUGIN_DIR_URL .'/framework/assets/images/wpb_icons/input.png',
+            "as_child"                  => array('only' => $form_shortcode.',inmoob_grupable'),
+            'category'                  => __('Buscador Inmoob', 'inmoob'),
             'params'                    => array(
                 array(                  
                     "type" => "textfield",
@@ -16,23 +19,10 @@ class Field extends Component {
                     "param_name" => "label",
                     "admin_label" => true,
                 ),
-    
-                array(                  
-                    "type" => "checkbox",
-                    "heading" => __("Utilizar placeholder personalizado", "mx-plugin"),
-                    "param_name" => "custom_placeholder",
-                    'value' => array(
-                        ''   => 'true',
-                    )
-                ),
                 array(                  
                     "type" => "textfield",
-                    "heading" => __("Placeholder personalizado", "mx-plugin"),
+                    "heading" => __("Placeholder", "mx-plugin"),
                     "param_name" => "placeholder",
-                    "dependency" => array(
-                        "element" => "custom_placeholder",
-                        "value" => "true"
-                    )
                 ),
                 array(                  
                     "type" => "dropdown",

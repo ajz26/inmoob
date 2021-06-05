@@ -1,11 +1,13 @@
 <?php
 
-namespace CCOM_CORE\Shortcodes\SearchForm;
-use CCOM_CORE\Shortcodes\Shortcode;
+namespace Inmoob\Shortcodes\SearchForm;
+
+use OBSER\Classes\Shortcode;
 
 
 abstract class Field extends Shortcode {
-
+    
+    static $wpb_namespace       = "Inmoob\\WPB_Components\\SearchForm";
     abstract static function get_values();
     abstract static function set_default_atts();
     
@@ -13,18 +15,15 @@ abstract class Field extends Shortcode {
         'vc_id'                              => '',
         'uniqid'                             => '',
         'name'                               => '',
-        'type'                               => '',
         'label'                              => '',
         'placeholder'                        => '',
-        'active_filter_text'                 => '',
-        'icon'                               => '',
         'extra_class'                        => '',
-        'hidden_when_not_options_avaliables' => '',
+        'hidden_if'                          => '',
     );
 
     static function output($atts, $content){
 
-        $hide = self::get_atts('hidden_when_not_options_avaliables', false); 
+        $hide = self::get_atts('hidden_if', false); 
          if($hide){
             $values = static::get_values();
             if(is_array($values) && count($values) <= 1) return false; 

@@ -49,6 +49,7 @@ add_action('init', function () {
 
     foreach($gestion_types AS $gestion_type){
         $gestion_type_slug = $gestion_type->slug;
+        add_rewrite_rule( $gestion_type_slug.'\/inmuebles\/?$', 'index.php?gestion_types_taxonomy='.$gestion_type_slug, 'top' );
         add_rewrite_rule( $gestion_type_slug.'\/?$', 'index.php?gestion_types_taxonomy='.$gestion_type_slug, 'top' );
         add_rewrite_rule( $gestion_type_slug.'/(?:[a-z0-9-]+)\/(?:[a-z0-9-]+)\/([a-z0-9-]+)\/?$', 'index.php?post_type=inmoob_properties&name=$matches[1]', 'top');
     }
@@ -88,6 +89,7 @@ add_action('init', function () {
 
                     $propery_type_slug = $propery_type->slug;
                     add_rewrite_rule( '^'.$gestion_type_slug.'\/'.$propery_type_slug.'\/'.$property_zone_slug.'\/?$', 'index.php?property_zones_taxonomy='.$property_zone_slug.'&gestion_type='.$gestion_type_slug.'&property_type='.$propery_type_slug, 'top' );
+                    add_rewrite_rule( '^'.$gestion_type_slug.'\/inmuebles\/'.$property_zone_slug.'\/?$', 'index.php?property_zones_taxonomy='.$property_zone_slug.'&gestion_type='.$gestion_type_slug, 'top' );
                     add_rewrite_rule( '^ofertas\/'.$propery_type_slug.'\/'.$property_zone_slug.'\/?$', 'index.php?property_zones_taxonomy='.$property_zone_slug.'&gestion_type='.$gestion_type_slug.'&property_type='.$propery_type_slug, 'top' );
                 }
         }
@@ -104,6 +106,9 @@ add_action('init', function () {
 
 add_filter('query_vars',function($query_vars){
     return array_merge($query_vars,array(
+        'property_types_taxonomy',
+        'gestion_types_taxonomy',
+        'property_zones_taxonomy',
         'property_type',
         'gestion_type',
         'property_zone',
