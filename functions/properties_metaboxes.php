@@ -72,9 +72,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'general',
                 'name'       => 'Tipo de gestión',
-                'id'         => 'gestion_types',
+                'id'         => 'gestion_types_taxonomy',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'gestion_types',
+                'taxonomy'   => 'gestion_types_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -84,9 +84,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'general',
                 'name'       => 'Estado de gestión',
-                'id'         => 'gestion_states',
+                'id'         => 'gestion_states_taxonomy',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'gestion_states',
+                'taxonomy'   => 'gestion_states_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -110,7 +110,7 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'name'       => 'Tipo de inmueble',
                 'id'         => 'property_types',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'property_types',
+                'taxonomy'   => 'property_types_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -120,9 +120,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'features',
                 'name'       => 'Estado de la propiedad',
-                'id'         => 'property_state',
+                'id'         => 'property_state_taxonomy',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'property_state',
+                'taxonomy'   => 'property_state_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -164,9 +164,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'features',
                 'name'       => 'Nº de Habitaciones',
-                'id'         => 'property_rooms',
+                'id'         => 'property_rooms_taxonomy',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'property_rooms',
+                'taxonomy'   => 'property_rooms_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -175,9 +175,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'features',
                 'name'       => 'Nº de baños',
-                'id'         => 'property_bathrooms',
+                'id'         => 'property_bathrooms_taxonomy',
                 'type'       => 'taxonomy',
-                'taxonomy'   => 'property_bathrooms',
+                'taxonomy'   => 'property_bathrooms_taxonomy',
                 'field_type' => 'select',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
@@ -187,9 +187,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'features',
                 'name'       => 'Planta',
-                'id'         => 'property_floor',
+                'id'         => 'property_floor_taxonomy',
                 'type'       => 'text',
-                'taxonomy'   => 'property_floor',
+                'taxonomy'   => 'property_floor_taxonomy',
                 'std'        => '1',
                 'columns'    => 3
             ),
@@ -368,9 +368,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'           => 'location',
                 'name'          => 'Zona',
-                'id'            => 'property_zones',
+                'id'            => 'property_zones_taxonomy',
                 'type'          => 'taxonomy',
-                'taxonomy'      => 'property_zones',
+                'taxonomy'      => 'property_zones_taxonomy',
                 'field_type'    => 'select_advanced',
                 'placeholder'   => 'Elige una opción',
                 'columns'       => 3,

@@ -58,6 +58,15 @@ class Form extends Component {
                         'Modal'     => 'modal',
                     )
                 ),
+
+                array(                  
+                    'type'              => 'textfield',
+                    'heading'           => __('Texto para desplegable', 'inmoob'),
+                    'param_name'        => 'toggle_text',
+                    'edit_field_class'  => 'vc_col-sm-6',        
+                    'save_always'       => true
+                ),
+
                 array(                  
                     'type'          => 'textfield',
                     'group'             => __( 'Grid', 'ccom' ),

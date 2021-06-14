@@ -32,8 +32,62 @@ abstract class Select extends Field {
         self::set_att('values',$values);
     }
 
+    static function general_styles()
+    {
+        return "
 
-    static function gen_options_html(array $options = array()){
+        .inmmoob-searchform * + * {
+            margin-top: 1rem !important;
+        }
+
+        .field-list > div {
+            padding: 0 .5rem;
+        }
+
+        .field-list > span {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #cccccc;
+            padding: .5rem 1rem;
+            border-radius: .5rem;
+        }
+        
+        .inmmoob-searchform label > span {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .inmmoob-searchform label > span + div {
+            margin-top: 1rem;
+        }
+        
+        span.label:not(.show) + .inmoob-select {
+            display: none !important;
+        }
+
+        .label i {
+            float: right;
+        }
+
+        .label.show > i::before {
+            content: '\\f106';
+        }
+
+        .label:not(.show) > i::before {
+            content: '\\f107';
+        }
+
+
+        ";
+    }
+
+    static function gen_options_html($options = array()){
+
+        $options = (array)$options;
 
         $html = null;
 
@@ -53,6 +107,14 @@ abstract class Select extends Field {
     }
 
     static function output($atts, $content){
+        $type = self::get_atts('type');
+        if($type == 'list'){
+            $atts = self::get_atts();
+            FieldList::set_atts($atts);
+            $atts = FieldList::get_atts();
+            return FieldList::output($atts,$content);
+        }
+
         $values         = self::get_atts('values');
         $vc_id          = self::get_atts('vc_id');
         $name           = sanitize_key(self::get_atts('name'));

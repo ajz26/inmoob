@@ -3,8 +3,8 @@
 namespace Inmoob\Shortcodes\SearchForm;
 use Inmoob\Classes\Api;
 
-class PriceMin extends Select {
-    static  $shortcode   = "inmoob_sf_property_price_min_select";
+class PriceMax extends Select {
+    static  $shortcode   = "inmoob_sf_property_price_max_select";
 
     static function get_values(){
         $gestion_type = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : get_query_var('gestion_type');
@@ -27,7 +27,7 @@ class PriceMin extends Select {
             'type'      => 'selector',
             'values'    => array(),
             'multiple'  => false,
-            'name'      => 'property_price_min',
+            'name'      => 'property_price_max',
         ));
     }
 

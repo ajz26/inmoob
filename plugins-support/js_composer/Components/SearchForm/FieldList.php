@@ -1,7 +1,7 @@
 <?php
 namespace Inmoob\WPB_Components\SearchForm;
 
-abstract class Select extends Field {    
+abstract class FieldList extends Field {    
 
     public static function map(): array {
         $parent     = parent::map();
@@ -28,7 +28,7 @@ abstract class Select extends Field {
                     'group'         => __( 'Apariencia', 'ccom' ),
                     "heading"       => __("Habilitar selección múltiple", "mx-plugin"),
                     "param_name"    => "multiple",
-                    'value'         => array( ''   => true)
+                    'value'         => array( ''   => 'true')
                 )
             )
         );

@@ -8,7 +8,7 @@ class Api {
 
     private static function get_terms($taxonomy,array $args = array()){
         $args  = array_merge(array(
-            'hide_empty' => true,
+            'hide_empty' => false,
         ),$args);
         $terms = get_terms($taxonomy,$args);
         return $terms;
@@ -28,7 +28,7 @@ class Api {
         $item = new stdClass();
         $item->val      = $copy->slug;
         $item->label    = $copy->name;
-        $item->meta     = $copy->meta;
+        $item->meta     = isset($copy->meta) ? $copy->meta : null;
         return $item;
     }
 
@@ -111,8 +111,6 @@ class Api {
             'max' => max($meta_values)
         );
 
-        var_dump($min_max_array);
-
         return $min_max_array;
     }
 
@@ -123,7 +121,47 @@ class Api {
         $options = array_map(array(__CLASS__,'parse_num_meta'),$options);
         $options = self::min_max($options);
 
-        // return $options;
+        return $options;
+    }
+
+
+    
+    static function create_range_options($min,$max,$increase){
+
+        $options = [];
+
+
+        $options = range($min,$max,$increase);
+
+        $options = array_map(function($opt){
+            $data = new stdClass();
+            $data->slug = $opt;
+            $data->name = $opt;
+            return self::parse_options($data);
+        },$options);
+
+        return $options;
+
+    }
+
+
+    static function calc_increasement($val){
+
+        switch(true){
+            case ($val >= 0 && $val < 100):
+                $increase = 100;
+            break;
+            case ($val > 100 && $val < 1000) : 
+                $increase = 1000;
+            break;
+            case ($val > 1000 && $val < 10000) : 
+                $increase = 5000;
+            break;
+            case ($val > 10000 ) : 
+                $increase = 10000;
+            break;
+        }
+        return $increase;
     }
 
     

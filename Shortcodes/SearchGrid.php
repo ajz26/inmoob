@@ -3,6 +3,7 @@
 namespace Inmoob\Shortcodes;
 
 use Obser\Shortcodes\_Grid;
+use Inmoob\Classes\Api;
 
 class SearchGrid extends _Grid {
 
@@ -26,13 +27,11 @@ class SearchGrid extends _Grid {
         );
        
         $settings   = parent::buildQuery($atts);
-        
+
         if($atts['filters']){
             $tax_query_fields = 0;
             foreach((array)$atts['filters'] AS $taxonomy => $value){
-
                 if(\preg_match('/\_taxonomy$/',$taxonomy) && isset($value) && !empty($value)){
-
                     $tax_query_fields++;
                     $tax_query[] = array(
                         'taxonomy' => $taxonomy,
@@ -42,12 +41,41 @@ class SearchGrid extends _Grid {
                 }
             }
 
+
             if($tax_query_fields >0){
                 $settings['tax_query'] = $tax_query;
             }
 
         }
 
+        
+
+        if(isset($atts['filters']['property_price_min']) || isset($atts['filters']['property_price_max'])){
+            $gestion_type = $atts['filters']['gestion_types_taxonomy'];
+            $gestion_type = get_term_by('slug', $gestion_type ,'gestion_types_taxonomy');
+            $data         = Api::get_options_range('price',$gestion_type);
+            $property_price_min = isset($atts['filters']['property_price_min']) ? intval($atts['filters']['property_price_min']) : intval($data['min']);
+            $property_price_max = isset($atts['filters']['property_price_max']) ? intval($atts['filters']['property_price_max']) : intval($data['max']);
+            
+            $settings['meta_query'] = array_merge($settings['meta_query'],array(
+                'relation' => 'OR',
+                array(
+                    'type'      => 'NUMERIC',
+                    'key'       => 'price',
+                    'value'     => array($property_price_min,$property_price_max),
+                    'compare'   => 'BETWEEN'
+                ),
+                $settings['meta_query'][] = array(
+                    'type'      => 'NUMERIC',
+                    'key'       => 'sales_price',
+                    'value'     => array($property_price_min,$property_price_max),
+                    'compare'   => 'BETWEEN'
+                ),
+            ));
+
+
+
+        }
 
         if(isset($atts["filters"]["heuristic"]) && !empty($atts["filters"]["heuristic"])){
             $heuristic = $atts["filters"]["heuristic"];
@@ -70,7 +98,6 @@ class SearchGrid extends _Grid {
             }
         }
 
-
         return $settings;
     }
 
@@ -91,10 +118,11 @@ class SearchGrid extends _Grid {
         self::set_att('post_type',$post_type[0]);
         $cookie         = self::get_cookie_data($shortcode_id);
 
-        if ((!defined('DOING_AJAX') || !DOING_AJAX) && isset($cookie['filters'])) {
-                $filters = self::get_atts('filters');
-                $filters = \array_merge($filters,(array)$cookie['filters']);
-                self::set_att('filters',$filters);
+        if (!defined('DOING_AJAX') || !DOING_AJAX) {
+            $cookie       = self::get_cookie_data($id_to_save);
+            if (isset($cookie['paged'])) {
+                self::set_att('paged', $cookie['paged']);
+            }
         }
 
 
@@ -163,9 +191,9 @@ class SearchGrid extends _Grid {
 
             $output .= "aqui va una busqueda desierta
             <script>
-                jQuery(document).ready(function () {
-                    obser_grid.delete_cookie('{$shortcode_id}')
-                });
+            window.onload = function() {
+                obser_grid.delete_cookie('{$shortcode_id}')   
+            };
             </script>";
         }
         if ($items != "") {
@@ -194,8 +222,10 @@ class SearchGrid extends _Grid {
         $el_nonce           = esc_attr(vc_generate_nonce('vc-public-nonce'));
         $items              = self::renderItems();
         $output  = "
-        <div  id='{$id}' class='contenedor-obser-grid {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
-            <div class='obser-custom-preloader d-none'></div>
+        <div id='{$id}' class='contenedor-obser-grid {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
+            <div class='obser-custom-preloader'>
+                <!--<span class='preloader-text'>Estamos buscando las mejores alternativas para ti...</span>-->
+            </div>
             <div class='obser-custom-grid-items d-flex flex-wrap'>
                 {$items}
             </div>        

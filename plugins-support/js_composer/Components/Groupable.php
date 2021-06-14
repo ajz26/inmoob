@@ -7,7 +7,8 @@ class Groupable extends Component {
     
     static $shortcode = "inmoob_grupable";
     static $wpb_namespace = "Inmoob\\WPB_Components";
-
+    
+    
 
     public static function map(): array {
         return array(
@@ -27,6 +28,21 @@ class Groupable extends Component {
                         'Columna' => 'column',
                         'Fila'    => 'row',
                     )
+                ),
+
+                array(                  
+                    "type"          => "textfield",
+                    "heading"       => __("Id personalizado", "mx-plugin"),
+                    "param_name"    => "el_id",
+                    'edit_field_class'  => "vc_col-xs-6",
+                    'save_always'   => true,
+                ),
+                array(                  
+                    "type"          => "textfield",
+                    "heading"       => __("Clase css personalizada", "mx-plugin"),
+                    "param_name"    => "el_class",
+                    'edit_field_class'  => "vc_col-xs-6",
+                    'save_always'   => true,
                 ),
             )
         );
