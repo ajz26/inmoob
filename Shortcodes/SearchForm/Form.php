@@ -101,6 +101,10 @@ class Form extends Shortcode  {
                 padding: 10px;
             }
 
+            .field-list > .inmoob-select {
+                max-height: 250px;
+                overflow-y: scroll;
+            }
             
 
             .toggle-cta {

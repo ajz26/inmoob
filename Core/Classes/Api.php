@@ -3,6 +3,7 @@ namespace Inmoob\Classes;
 
 use stdClass;
 use WP_Term;
+use WP_Query;
 class Api {
 
 
@@ -16,8 +17,33 @@ class Api {
 
 
     static function get_terms_select($taxonomy,$args = array(), string $field ='slug'){
-        $terms = self::get_terms($taxonomy,$args);
-        $terms = array_map(array(__CLASS__,"reduce_array_by_{$field}"),$terms);
+        $gestion_type = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : get_query_var('gestion_type');
+        $terms          = self::get_terms($taxonomy,$args);
+        $terms          = array_map(array(__CLASS__,"reduce_array_by_{$field}"),$terms);
+        if(isset($gestion_type)){
+            $terms          = array_filter($terms,function($term) use($taxonomy,$gestion_type,$field){
+                $args = array(
+                 'post_type' => 'inmoob_properties',
+                 'post_status'=>'publish',
+                    'tax_query' => array(
+                        'relation' => 'AND',
+                        array(
+                            'taxonomy' => $taxonomy,
+                            'field'    => $field,
+                            'terms'    => array( $term->slug ),
+                        ),
+                        array(
+                            'taxonomy' => 'gestion_types_taxonomy',
+                            'field'    => 'slug',
+                            'terms'    => array( $gestion_type ),
+                        ),
+                    ),
+                );
+                $query = new WP_Query( $args );
+                return ($query->post_count >= 1) ? true : false;
+            });
+        }
+        
         $terms = array_map(array(__CLASS__,"parse_options"),$terms);
 
         return $terms;

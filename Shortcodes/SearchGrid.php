@@ -360,28 +360,24 @@ class IO_grid_item{
             ".(!empty($tags) ? '<div class="tags-container">'.$tags.'</div>': false)."
 
             <div class='property-picture'>
-                <a href='$link'>
-                    <img src='$image' alt='$title'>
+                <a href='{$link}'>
+                    <img src='{$image}' alt='{$title}'>
                 </a>
             </div>
             <div class='property-data'>
-                <div class='row location-prices-row justify-content-between'>
-                   ".$location."
-                   ".$price."
-                </div>
-
                 <div class='row info-row justify-content-between'>
-                ".$rooms."
-                ".$bathrooms."
-                ".$property_size."
+                {$property_size}
+                {$rooms}
+                {$bathrooms}
                 </div>
-
+                <div class='row location-prices-row justify-content-between'>
+                    <span>{$price}</span>
+                    <span>{$location}</span>
+                </div>
                 <div class='row title-row'>
-                    <div class='title'><a href='$link'>
-                        <span class='property-title'>$title</span>
-                        </a>
-                    </div>
+                    <a href='$link'>$title</a>
                 </div>
+                <div class='view-more row'><a href='$link'>ver mas</a></div>
             </div>
             </div>
         </div>";

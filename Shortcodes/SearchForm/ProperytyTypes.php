@@ -8,7 +8,7 @@ class ProperytyTypes extends Select {
     static  $shortcode   = "inmoob_sf_property_types_select";
 
     static function get_values(){
-
+        
         $values     = Api::get_terms_select('property_types_taxonomy');
         $options    = array_map(array(__CLASS__,'parse_options'),$values);
         $options    =  array_map(array(__CLASS__,'set_selected'),$options);
