@@ -1,17 +1,14 @@
 <?php
-namespace Inmoob\WPB_Components\SearchForm;
+namespace Inmoob\WPB_Components\Properties;
 use OBSER\Classes\Component;
-use Inmoob\Shortcodes\SearchForm\Form;
 
-class Field extends Component {
+class Gallery extends Component {
 
     public static function map(): array {
-        $form_shortcode = Form::$shortcode;
         return array(
-            'name'                      => __('', 'inmoob'),
-            'show_settings_on_create'   => false,
-            "as_child"                  => array('only' => $form_shortcode.',inmoob_grupable'),
-            'category'                  => __('Buscador Inmoob', 'inmoob'),
+            'name'                      => __('Gallery', 'inmoob'),
+            'show_settings_on_create'   => true,
+            'category'                  => __('Ficha', 'inmoob'),
             'params'                    => array(
                 array(                  
                     "type" => "textfield",

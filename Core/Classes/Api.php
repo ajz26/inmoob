@@ -134,7 +134,7 @@ class Api {
 
         $min_max_array = array(
             'min' => min($meta_values),
-            'max' => max($meta_values)
+            'max' => max($meta_values) + 100
         );
 
         return $min_max_array;

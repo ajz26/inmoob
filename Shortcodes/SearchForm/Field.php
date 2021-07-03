@@ -25,10 +25,11 @@ abstract class Field extends Shortcode {
 
         $hide = self::get_atts('hidden_if', false); 
          if($hide){
-            $values = static::get_values();
+            $values = self::get_atts('values');
             if(is_array($values) && count($values) <= 1) return false; 
             if(!isset($values) || empty($values)) return false;
         }
+
         return $content;
     }
     

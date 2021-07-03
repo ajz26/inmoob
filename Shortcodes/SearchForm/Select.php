@@ -29,6 +29,7 @@ abstract class Select extends Field {
         $atts       = shortcode_atts($default, $_atts);
         self::set_atts($atts);
         $values     = static::get_values();
+
         self::set_att('values',$values);
     }
 
@@ -108,6 +109,17 @@ abstract class Select extends Field {
 
     static function output($atts, $content){
         $type = self::get_atts('type');
+
+
+        $opt_def = new \stdClass();
+        $opt_def->val = '-';
+        $opt_def->label = __('Todas','Inmoob');
+        $vals[] = $opt_def;
+        $vals = (count(self::get_atts('values',array())) > 1 ) ?  array_merge($vals,self::get_atts('values',array())) : array();
+
+        self::set_att('values',$vals);
+
+
         if($type == 'list'){
             $atts = self::get_atts();
             FieldList::set_atts($atts);

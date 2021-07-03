@@ -40,20 +40,33 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
         'tab_style' => 'left',
         'tab_wrapper' => true,
         'fields'    => array(
+
+           
+
             array(
                 'tab'        => 'general',
-                'name'    => 'Descripción del inmueble',
+                'name'    => 'Descripción',
                 'id'      => 'content',
                 'type'    => 'wysiwyg',
                 'columns'   => 12,
                 'raw'     => false,
                 'options' => array(
-                    'textarea_rows' => 20,
-                    'wpautop'         => false,
+                    'textarea_rows' => 10,
+                    'wpautop'       => false,
                     'media_buttons' => false,
-                    'dfw'   => false,
-
+                    'teeny'         => true,
+                    'quicktags'     => false,
+                    
                 ),
+            ),
+
+            array(
+                'tab'        => 'general',
+                'name'    => 'Descripción corta',
+                'id'      => 'short_description',
+                'type'    => 'textarea',
+                'columns'   => 12,
+                
             ),
             
             array(
@@ -265,9 +278,9 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'tab'           => 'features',
                 'id'            => 'extras',
                 'name'          => 'Extras',
-                'type'          => 'textarea',
-                'rows'          => 1,
-                'add_button'    => 'Añadir otro',
+                'type'          => 'text',
+                'size'          => 1000,
+                'add_button'    => 'Añadir extra',
                 'clone' => true,
             ),
             
@@ -278,6 +291,7 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'name' => 'Valor',
                 'id'   => 'price',
                 'type' => 'text',
+                'columns' => 4,
             ),
 
             array(
@@ -285,7 +299,8 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'name' => "Valor en ({$currency}) con descuento",
                 'id'   => 'sales_price',
                 'type' => 'text',
-                'before' => ''
+                'before' => '',
+                'columns' => 4,
             ),
 
             
@@ -294,12 +309,14 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'name' => 'Mostrar antes del valor',
                 'id'   => 'price_preffix',
                 'type' => 'text',
+                'columns' => 4,
             ),
             array(
                 'tab'  => 'prices',
                 'name' => 'Mostrar despues del valor',
                 'id'   => 'price_suffix',
                 'type' => 'text',
+                'columns' => 4,
             ),
 
             array(
@@ -323,13 +340,17 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'on_label'  => 'Si',
                 'off_label' => 'No',
             ),
-
+            array(
+                'tab'       => 'requirements',
+                'type'      => 'divider',
+                'columns'   => 12,
+            ),
             array(
                 'tab'           => 'requirements',
                 'id'            => 'requirements',
                 'name'          => 'Requisitos adicionales',
-                'type'          => 'textarea',
-                'rows'          => 1,
+                'type'          => 'text',
+                'size'          => 1000,
                 'add_button'    => 'Añadir otro',
                 'clone' => true,
             ),
@@ -348,7 +369,7 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'tab'   => 'media',
                 'id'    => 'video',
                 'name'  => 'Adjunta el enlace del video (Youtube)',
-                'type'  => 'textarea',
+                'type'  => 'text',
                 'size'  => 1000,
             ),
 

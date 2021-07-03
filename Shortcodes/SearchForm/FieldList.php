@@ -10,18 +10,20 @@ abstract class FieldList extends Select {
         $options = (array)$options;
 
         $html = null;
+        $name       = sanitize_key(self::get_atts('name'));
 
         foreach($options AS $option){
+
             $val        = $option->val;
             $label      = $option->label;
+
             $selected   = isset($option->selected ) && $option->selected  ? "checked=\"checked\"" : null;
             $type       = self::get_atts('multiple',false) ? 'checkbox' : 'radio'; 
-            $name       = sanitize_key(self::get_atts('name'));
-            $html      .= "<label for=\"opt-{$val}\"><input type=\"{$type}\" name=\"$name\" value=\"{$val}\" id=\"opt-{$val}\" {$selected}>{$label}</label>";
+            $html      .= "<label for=\"opt-{$name}-{$val}\"><input type=\"{$type}\" name=\"$name\" value=\"{$val}\" id=\"opt-{$name}-{$val}\" {$selected}>{$label}</label>";
         }
 
         return $html;
-
+ 
     }
 
     static function gen_placeholder($placeholder){

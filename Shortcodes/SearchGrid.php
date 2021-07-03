@@ -2,9 +2,9 @@
 
 namespace Inmoob\Shortcodes;
 
-use Obser\Shortcodes\_Grid;
+use OBSER\Shortcodes\_Grid;
 use Inmoob\Classes\Api;
-
+ 
 class SearchGrid extends _Grid {
 
     static $shortcode = "inmoob_search_grid";
@@ -119,7 +119,6 @@ class SearchGrid extends _Grid {
         $cookie         = self::get_cookie_data($shortcode_id);
 
         if (!defined('DOING_AJAX') || !DOING_AJAX) {
-            $cookie       = self::get_cookie_data($id_to_save);
             if (isset($cookie['paged'])) {
                 self::set_att('paged', $cookie['paged']);
             }
@@ -277,7 +276,7 @@ class IO_grid_item{
             $value = ((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price) ? '<span class="price">'.$price_preffix .' '.$sales_price.' € '.$price_suffix .'</span> <span class="old_price"> Antes '.$price.' € </span>'  : '<span class="price">'.$price_preffix .' '.$price.' € '.$price_suffix .'</span>';
         }
 
-        if($field_name == 'property_size') $value .= ' m2';
+        if($field_name == 'property_size') $value .= ' m²';
 
 
         $label =    !empty($label) ? "<span class='label--$field_name'> $label </span>" : false;
@@ -287,7 +286,7 @@ class IO_grid_item{
 
     }
 
-    public function get_taxonomy_value($post_id,$taxonomy){
+    public static function get_taxonomy_value($post_id,$taxonomy){
 
         $terms = get_the_terms($post_id,$taxonomy);
 
@@ -306,6 +305,30 @@ class IO_grid_item{
 
     }
 
+    public static function get_featured_tags($post_id){
+
+        $tags = get_the_terms($post_id,'property_tags_taxonomy');
+
+        if(!$tags) return null;
+        
+        $features = [];
+
+        foreach($tags AS $tag){
+
+            $is_fetured = get_term_meta($tag->term_id,'featured',true);
+
+            if($is_fetured != 1) continue;
+
+            $features[] = array(
+                'term_id'   => $tag->term_id, 
+                'slug'      => $tag->slug, 
+                'name'      => $tag->name, 
+            );
+        }
+
+        return $features;
+    }
+
 
     public function render_item($post){
         $atts       = self::$atts;
@@ -318,46 +341,44 @@ class IO_grid_item{
 
         $title                  = $item->post_title;
         $location               = self::get_value($post_id,'property_zones_taxonomy',false,'taxonomy');
-        $rooms                  = self::get_value($post_id,'property_rooms_taxonomy','<i class="fas fa-bed"></i> ','taxonomy');
-        $bathrooms              = self::get_value($post_id,'property_bathrooms_taxonomy','<i class="fas fa-shower"></i> ','taxonomy');
+        $rooms                  = self::get_value($post_id,'property_rooms_taxonomy','<i class="inmoob inmoob-bedrooms"></i> ','taxonomy');
+        $bathrooms              = self::get_value($post_id,'property_bathrooms_taxonomy','<i class="inmoob inmoob-bathrooms"></i> ','taxonomy');
         $price                  = self::get_value($post_id,'price',false,'meta_value');
-        $property_size          = self::get_value($post_id,'property_size','<i class="far fa-home-lg"></i> ','meta_value');
+        $property_size          = self::get_value($post_id,'property_size','<i class="inmoob inmoob-m2"></i> ','meta_value');
         
         $image                  = get_the_post_thumbnail_url( $post_id,'property_list');
         $image                  = ($image) ? $image : INMOOB_CORE_PLUGIN_DIR_URL.'/assets/images/placeholder-alt.jpg';
         $status                 = self::get_taxonomy_value($post_id,'gestion_states_taxonomy');
+        $tags                   = (array)self::get_featured_tags($post_id);
         $link                   = get_the_permalink($post_id);
+        $flag_status            = false;
 
-
-        switch($status['slug']){
-            case 'reservado' :
-                $flag_status = '<span class="flag">'.__('Reservado','obser').'</span>';
-            break;
-            case 'alquilado':
-                $flag_status = '<span class="flag">'.__('Alquilado','obser').'</span>';
-            break;
-            case 'vendido':
-                $flag_status = '<span class="flag">'.__('Vendido','obser').'</span>';
-            break;
-            default :
-            $flag_status = false;
+        if(isset($status['slug'])){
+            switch($status['slug']){
+                case 'reservado' :
+                    $flag_status = '<span class="flag">'.__('Reservado','obser').'</span>';
+                break;
+                case 'alquilado':
+                    $flag_status = '<span class="flag">'.__('Alquilado','obser').'</span>';
+                break;
+                case 'vendido':
+                    $flag_status = '<span class="flag">'.__('Vendido','obser').'</span>';
+                break;
+            }
+        }
+        
+        
+        $html_tags = "";
+        foreach($tags AS $tag){
+            $html_tags .= ' <span class="tag '.$tag['slug'].'">'.$tag['name'].'</span>';
         }
 
-
-        $on_sale                = get_post_meta($post_id,'on_sale',true);
-        $featured               = get_post_meta($post_id,'featured',true);
-        $no_docs                = get_post_meta($post_id,'no_docs',true);
-        $tags = '';
-
-        if ($featured == '1') $tags .= ' <span class="tag featured">'.__('Destacado','obser').'</span>';
-        if ($on_sale == '1') $tags .= ' <span class="tag on_sale" data-tooltip="'.__('Este Inmueble está rebajado de precio','obser').'">'.__('Oferta','obser').'</span>';
-        if ($no_docs == '1') $tags .= ' <span class="tag no_docs" data-tooltip="'.__('¿Aún no tienes DNI, NIE o Contrato?, Alquila este inmuebel sin documentación.','obser').'">'.__('Sin papeles','obser').'</span>';
-
+       
         $output =
         "<div class='obser-grid-item property-item-$item->ID $css_class'>
         <div  class='obser-grid-item-content property-item'>
             $flag_status 
-            ".(!empty($tags) ? '<div class="tags-container">'.$tags.'</div>': false)."
+            ".(!empty($tags) ? '<div class="tags-container">'.$html_tags.'</div>': false)."
 
             <div class='property-picture'>
                 <a href='{$link}'>
@@ -365,19 +386,18 @@ class IO_grid_item{
                 </a>
             </div>
             <div class='property-data'>
-                <div class='row info-row justify-content-between'>
+                <div class='row info-row justify-content-between icons-data'>
                 {$property_size}
                 {$rooms}
                 {$bathrooms}
                 </div>
                 <div class='row location-prices-row justify-content-between'>
-                    <span>{$price}</span>
-                    <span>{$location}</span>
+                    <span class='price-field'>{$price}</span>
+                    <span class='location-field'>{$location}</span>
                 </div>
                 <div class='row title-row'>
                     <a href='$link'>$title</a>
                 </div>
-                <div class='view-more row'><a href='$link'>ver mas</a></div>
             </div>
             </div>
         </div>";
