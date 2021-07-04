@@ -200,9 +200,8 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'        => 'features',
                 'name'       => 'Planta',
-                'id'         => 'property_floor_taxonomy',
+                'id'         => 'property_floor',
                 'type'       => 'text',
-                'taxonomy'   => 'property_floor_taxonomy',
                 'std'        => '1',
                 'columns'    => 3
             ),
@@ -307,14 +306,14 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
             array(
                 'tab'  => 'prices',
                 'name' => 'Mostrar antes del valor',
-                'id'   => 'price_preffix',
+                'id'   => 'price_prefix',
                 'type' => 'text',
                 'columns' => 4,
             ),
             array(
                 'tab'  => 'prices',
                 'name' => 'Mostrar despues del valor',
-                'id'   => 'price_suffix',
+                'id'   => 'price_sufix',
                 'type' => 'text',
                 'columns' => 4,
             ),
@@ -424,12 +423,13 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes) use($currency){
                 'name' => 'Google maps',
                 'id'   => 'gmaps_link',
                 'type' => 'textarea',
+                'sanitize_callback' => 'none',
                 'rows' => 2,
                 'columns' => 12
             ),
           
         ),
-    );
+    );  
 
 
 

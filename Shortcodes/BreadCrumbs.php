@@ -78,18 +78,18 @@ class BreadCrumbs extends Shortcode {
 
                 if($property_types_taxonomy         =  get_the_terms($post->ID,'property_types_taxonomy')){
                     $property_types_taxonomy        = $property_types_taxonomy[0];
-                    $property_types_taxonomy_slug   = $gestion_types_taxonomy->slug ?: $property_types_taxonomy_slug;
-                    $tax_url = get_term_link( $property_types_taxonomy, 'property_types_taxonomy');
-                    $tax_url = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
-                    $html .= $sep . $before . sprintf( $link, $tax_url , $property_types_taxonomy->name, $position ). $after;
+                    $property_types_taxonomy_slug   = $property_types_taxonomy->slug ?: $property_types_taxonomy_slug;
+                    $tax_url                        = get_term_link( $property_types_taxonomy, 'property_types_taxonomy');
+                    $tax_url                        = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
+                    $html                          .= $sep . $before . sprintf( $link, $tax_url , $property_types_taxonomy->name, $position ). $after;
                 }
 
                 if($property_zones_taxonomy =  get_the_terms($post->ID,'property_zones_taxonomy')){
-                    $property_zones_taxonomy = $property_zones_taxonomy[0];
-                    $tax_url = get_term_link( $property_zones_taxonomy, 'property_zones_taxonomy');
-                    $tax_url = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
-                    $tax_url = str_replace('inmuebles',$property_types_taxonomy_slug,$tax_url);
-                    $html .= $sep . $before . sprintf( $link, $tax_url , $property_zones_taxonomy->name, $position ). $after;
+                    $property_zones_taxonomy    = $property_zones_taxonomy[0];
+                    $tax_url                    = get_term_link( $property_zones_taxonomy, 'property_zones_taxonomy');
+                    $tax_url                    = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
+                    $tax_url                    = str_replace('inmuebles',$property_types_taxonomy_slug,$tax_url);
+                    $html                      .= $sep . $before . sprintf( $link, $tax_url , $property_zones_taxonomy->name, $position ). $after;
                 }
 
                 if ( $show_current ) $html .= $sep . $before . get_the_title() . $after;

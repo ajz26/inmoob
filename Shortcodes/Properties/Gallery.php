@@ -8,6 +8,99 @@ class Gallery extends Shortcode{
 
     }
 
+    public static function general_styles()
+    {
+        return "
+
+        .pswp__button--arrow--left::before, .pswp__button--arrow--right::before {
+            content: '';
+            top: 35px;
+            background-color: rgba(255, 255, 255, 0.3);
+            height: 30px;
+            width: 32px;
+            position: absolute;
+            border-radius: 5px;
+        }
+        
+        .swiper-container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+
+
+        .swiper-wrapper {
+            position: absolute !important;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+        }
+
+        .inmoob-props-gallery {
+            max-width: 1024px;
+            margin: 0 auto;
+            margin-bottom: 2rem;
+        }
+
+        .inmoob-props-gallery::before {
+            content: '';
+            padding-bottom: 56.25%;
+            display: block;
+        }
+        
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+        }
+
+        .inmoob-gallery-swiper-button-prev-next {
+            background-color: rgba(255, 255, 255, 0.77);
+            z-index: 9999;
+            border-radius: .5rem;
+            margin-bottom: .5rem;
+            position: absolute;
+            width: 35px;
+            text-align: center;
+            height: 35px;
+            font-size: 1.5rem;
+            line-height: 2.2rem;
+            opacity: .6;
+            transition: all .5s;
+            -webkit-transition: all .5s;
+            top: 10px;
+        }
+
+        .swiper-slide {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .swiper-pagination-bullet-active {
+            opacity: 1;
+            background: #ffffff !important;
+        }
+        
+        .inmoob-gallery-swiper-button-next {
+            right: 10px;
+        }
+
+        .inmoob-gallery-swiper-button-prev {
+            right: 50px;
+        }
+
+        .inmoob-gallery-swiper-button-prev-next:hover {
+            transition: all .5s;
+            -webkit-transition: all .5s; 
+            opacity: 1;
+            cursor:pointer;
+        }
+        ";
+    }
+
 
     public static function generateContentLoop(){
         global $post;
@@ -15,7 +108,8 @@ class Gallery extends Shortcode{
         $images                 = get_post_meta($post_id,'images');
       
         $loopResult = '';
-
+        
+        
         foreach($images AS $image){
             $imageUrl   = wp_get_attachment_image_src($image,'full');
             $link   = $imageUrl[0];
@@ -25,18 +119,30 @@ class Gallery extends Shortcode{
             $galleryUrl = wp_get_attachment_image_src($image,'full');
 
             $src    = $galleryUrl[0];
-            $img = '<a href="' . $link. '" data-pid="'.$image.'" data-size="' . $width . 'x' . $height . '">
-                        <img class="" src="'.$src.'">
-                    </a>';
-            $loopResult .= "<div class='swiper-slide '>$img</div>";
-        }
 
+            if(!$src) continue;
+
+            
+                $loopResult .= "<div class='swiper-slide'>
+                    <a href='$link' data-pid='{$image}' data-size='{$width}x{$height}'>
+                        <img class='' src='{$src}'>
+                    </a>
+                </div>";
+           
+        }
+        if((self::get_atts('show_video',0) == 1 ? true : false) && ($url_video = get_post_meta( $post->ID,'video',true))){
+
+            $loopResult .="
+                <div class='swiper-slide'>
+                    <iframe width='100%' height='100%' src='{$url_video}?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0&mute=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                </div>";
+        }
+                
         return $loopResult;
 
     }
 
-    public static function enquee_styles()
-    {
+    public static function enquee_styles(){
         return array(
             'swiper-js' => array(
                 'src'   => OBSER_FRAMEWORK_DIR_URL . 'assets/css/swiper-bundle.min.css',
@@ -49,8 +155,7 @@ class Gallery extends Shortcode{
             ),
         );
     }
-    public static function enquee_scripts()
-    {
+    public static function enquee_scripts(){
         return array(
             'swiper-js' => array(
                 'src'   => OBSER_FRAMEWORK_DIR_URL . 'assets/js/swiper-bundle.min.js',
@@ -72,37 +177,22 @@ class Gallery extends Shortcode{
 
 
     public static function output($atts,$content){
-        add_action('wp_footer', array(__CLASS__,'psw_body_bottom'));
+        add_action('wp_footer', array(__CLASS__,'psw_body_bottom'),1000);
 
-        $loopResult             = self::generateContentLoop();        
-        $output = "<div class=\"inmoob-props-gallery swiper-container\">
-                        <div class=\"swiper-button-next\"></div>
-                        <div class=\"swiper-button-prev\"></div>
-                        <div class=\"swiper-wrapper\">
+        $loopResult = self::generateContentLoop();        
+        $output = "<div class='inmoob-props-gallery swiper-container'>
+                        <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
+                            <i class='far fa-angle-right'></i>
+                        </div>
+                        <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
+                            <i class='far fa-angle-left'></i>
+                        </div>
+                        <div class='swiper-wrapper'>
                             $loopResult
                         </div>
-                        <div class=\"swiper-pagination\"></div>
-
+                        <div class='swiper-pagination'></div>
                     </div>";
 
-        $output .= "<script>jQuery(document).ready(function($){
-
-            const swiper = new Swiper('.inmoob-props-gallery', {
-                loop: true,
-                slidesPerView: 1,
-                centeredSlides: true,
-                spaceBetween: 10,
-                pagination: {
-                    el: \".swiper-pagination\",
-                    clickable: true,
-                  },
-                navigation: {
-                    nextEl: \".swiper-button-next\",
-                    prevEl: \".swiper-button-prev\",
-                }
-                });
-
-          });</script>";
         return $output;
     }
 
@@ -113,23 +203,18 @@ class Gallery extends Shortcode{
         
             <div class="pswp__bg"></div>
             <div class="pswp__scroll-wrap">
-        
-                <div class="pswp__container">
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
-                    <div class="pswp__item"></div>
-                </div>
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
         
                 <div class="pswp__ui pswp__ui--hidden">
         
                     <div class="pswp__top-bar">
-        
-                        <!--  Controls are self-explanatory. Order can be changed. -->
-        
                         <div class="pswp__counter"></div>
-        
-                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
                         
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
                         <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
         
                         <div class="pswp__preloader">
@@ -145,7 +230,6 @@ class Gallery extends Shortcode{
                         <div class="pswp__share-tooltip"></div> 
                     </div>
 
-                    
                     <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
                     </button>
 
@@ -163,7 +247,24 @@ class Gallery extends Shortcode{
         </div>
         ';                    
 
-        $script ='var initPhotoSwipeFromDOM = function(gallerySelector) {
+        $script ='
+        
+        const InmoobPropsGallery = new Swiper(".inmoob-props-gallery", {
+                loop: true,
+                slidesPerView: 1,
+                centeredSlides: true,
+                spaceBetween: 10,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: ".inmoob-gallery-swiper-button-next",
+                    prevEl: ".inmoob-gallery-swiper-button-prev",
+                }
+            });
+        
+        var initPhotoSwipeFromDOM = function(gallerySelector) {
 
             var parseThumbnailElements = function(el) {
 
@@ -325,6 +426,12 @@ class Gallery extends Shortcode{
                 // Pass data to PhotoSwipe and initialize it
                 gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
                 gallery.init();
+
+
+                gallery.listen("unbindEvents", function() {
+                    var getCurrentIndex = gallery.getCurrentIndex();
+                    InmoobPropsGallery.slideTo(getCurrentIndex, 0, false);
+                  });
             };
         
             var galleryElements = document.querySelectorAll( gallerySelector );
@@ -332,6 +439,8 @@ class Gallery extends Shortcode{
             for(var i = 0, l = galleryElements.length; i < l; i++) {
                 galleryElements[i].setAttribute("data-pswp-uid", i+1);
                 galleryElements[i].onclick = onThumbnailsClick;
+
+                
             }
         };
         initPhotoSwipeFromDOM(".inmoob-props-gallery");
