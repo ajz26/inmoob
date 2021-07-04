@@ -80,3 +80,8 @@ class INMOOB_CORE{
 }
 
 INMOOB_CORE::instance();
+
+
+// $prop = new \Inmoob\Classes\Properties(array());
+
+// var_dump($prop->get_data());

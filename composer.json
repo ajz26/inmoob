@@ -9,6 +9,8 @@
     "autoload": {
         "psr-4": {
             "Inmoob\\": "Core",
+            "Inmoob\\Witei\\": "plugins-support/Witei",
+            "Inmoob\\Api\\": "Api",
             "Inmoob\\Shortcodes\\": "Shortcodes",
             "Inmoob\\Config\\": "Config",
             "Inmoob\\WPB_Components\\": "plugins-support/js_composer/Components"

@@ -9,14 +9,20 @@ class ComposerStaticInit00da1f11a37cff960263beb4d8056d39
     public static $prefixLengthsPsr4 = array (
         'I' => 
         array (
+            'Inmoob\\Witei\\' => 13,
             'Inmoob\\WPB_Components\\' => 22,
             'Inmoob\\Shortcodes\\' => 18,
             'Inmoob\\Config\\' => 14,
+            'Inmoob\\Api\\' => 11,
             'Inmoob\\' => 7,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'Inmoob\\Witei\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins-support/Witei',
+        ),
         'Inmoob\\WPB_Components\\' => 
         array (
             0 => __DIR__ . '/../..' . '/plugins-support/js_composer/Components',
@@ -28,6 +34,10 @@ class ComposerStaticInit00da1f11a37cff960263beb4d8056d39
         'Inmoob\\Config\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Config',
+        ),
+        'Inmoob\\Api\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Api',
         ),
         'Inmoob\\' => 
         array (

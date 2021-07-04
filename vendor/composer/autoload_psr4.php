@@ -6,8 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Inmoob\\Witei\\' => array($baseDir . '/plugins-support/Witei'),
     'Inmoob\\WPB_Components\\' => array($baseDir . '/plugins-support/js_composer/Components'),
     'Inmoob\\Shortcodes\\' => array($baseDir . '/Shortcodes'),
     'Inmoob\\Config\\' => array($baseDir . '/Config'),
+    'Inmoob\\Api\\' => array($baseDir . '/Api'),
     'Inmoob\\' => array($baseDir . '/Core'),
 );
