@@ -1,10 +1,12 @@
 <?php
 namespace Inmoob\Witei;
 
+use stdClass;
+
 class Translator {
 
     private $object;
-    public  $property   = [];
+    public  $property;
     private $dictionary = array(
         "id"                          => 'witei_id',
         "identifier"                  => 'reference',
@@ -28,7 +30,7 @@ class Translator {
         "bathrooms"                   => 'property_bathrooms_taxonomy',
         "area"                        => 'property_size',
         "pictures"                    => 'images',
-        "description"                 => 'content',
+        "description"                 => 'post_content',
         "agency"                      => null,
         "status"                      => 'gestion_states_taxonomy', // parsear
         "is_reserved"                 => 'gestion_states_taxonomy', // parsear,
@@ -39,7 +41,7 @@ class Translator {
         "area_plot"                   => null,
         "area_terrace"                => null,
         "energy_certificate_display"  => 'property_eacs', // parsear
-        "updated"                     => null, // Fecha actualización
+        "updated"                     => 'post_date', // Fecha actualización
         "kind_value"                  => 'property_types_taxonomy', // consultar con witei
         "renting_period_display"      => null,
         "tags"                        => 'property_tags_taxonomy',
@@ -56,13 +58,13 @@ class Translator {
         "description_sv"              => null,
         "is_exclusive"                => '', // consultar con witei
         "year_built"                  => 'property_construction_year',
-        "title"                       => 'title',
+        "title"                       => 'post_title',
         "contact"                     => null,
         'neighborhood'                => null,
         'public_address'              => null,         
         'transfer'                    => null, 
         'transfer_cost'               => null,     
-        'video_url'                   => null, 
+        'video_url'                   => 'video', 
         'published_web'               => null,     
         'energy_consumption'          => null,             
         'energy_emission'             => null,         
@@ -74,7 +76,9 @@ class Translator {
     
 
     function __construct($object){
-        $this->object = json_decode($object);
+        $this->object = $object;
+        $this->property   = new stdClass;
+
         $this->parse_object();
         return $this->property;
     }
@@ -97,7 +101,7 @@ class Translator {
                 break;
             }
 
-            $this->property[$translation] = $val;
+            $this->property->$translation = $val;
         }
 
     }

@@ -354,6 +354,7 @@ final class Properties {
                 'id'               => 'images',
                 'name'             => 'Galeria',
                 'type'             => 'image_advanced',
+                'clone_as_multiple' => true,
                 'force_delete'     => false,
                 'max_status'       => 'false',
                 'image_size'       => 'thumbnail'
