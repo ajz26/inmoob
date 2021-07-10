@@ -1,86 +1,148 @@
 <?php
-
 namespace Inmoob\Api\Endpoints\Properties;
 use Obser\Classes\Helpers;
+use stdClass;
 
 class Create extends Endpoint{
     protected static $route     = "create";
     private static $data;
+    private static $post;
+    private static $meta_input  = [];
+    private static $tax_input   = [];
+    
+
     static function callback( \WP_REST_Request $data){
         $body           = $data->get_body();
+
+        if(!$body){
+            return false;
+        }
+
         if(!is_object($body)){
-            $body           = Helpers::stripslashes_deep($body);
-            $body           = !is_array($body) ? json_decode($body) : $body;
-        }
-        self::$data     = $body;
-        $post           = self::parse();
-
-        
-        $post_id        = wp_insert_post($post);
-
-
-        if(isset($post->meta_input)){
-            foreach($post->meta_input AS $meta_key => $meta_value){
-                add_post_meta( $post_id, $meta_key, $meta_value, false);
-            }
+            $body               = Helpers::stripslashes_deep($body);
+            $body               = !is_array($body) ? json_decode($body) : $body;
         }
 
+        self::$data             = $body;
 
-        if(isset($post->tax_input)){
-            foreach($post->tax_input AS $taxonomy => $value){
-                $term = get_term_by('slug', $value ,$taxonomy);
-                $term_id = $term->term_id;
-                if(!$term){
-                   $term = wp_insert_term( $value, $taxonomy);
-                   if ( !is_wp_error( $term ) ) {
-                        $term_id = $term['term_id'];
-                    }
-                }
-                try {
-                    wp_set_object_terms($post_id,intval($term_id), $taxonomy);
-                } catch (\WP_Error $error) {
-                    error_log($error->get_error_messages());
-                }
+        $post                   = self::parse();
+        $post->ID               = wp_insert_post($post);
 
-                add_post_meta( $post_id, $meta_key, $meta_value, false);
-            }
+        if( !isset($post->ID) || $post->ID == 0){
+            return wp_send_json(array('error' => 'json no válido'), 500);
         }
 
+        self::$post = $post;
+       
+        self::manage_meta();
+        self::managet_terms();
 
         return $post;
+    }
+
+    static function managet_terms(){
+
+        $terms = self::$tax_input;
+        $post  = self::$post;
+
+        foreach($terms AS $taxonomy => $value){
+            $value = is_array($value) ? implode(',',$value): $value;
+            Helpers::set_term_by_slug($post,$value,$taxonomy);
+        }
+    }
+
+    static function manage_meta(){
+        $metas = self::$meta_input;
+        $post  = self::$post;
+
+
+
+        foreach($metas AS $meta_key => $meta_value){
+            
+
+
+            switch($meta_key){
+
+                case 'images':
+
+                    $meta_value = Helpers::upload_external_media($meta_value);
+                    $multiple   = get_post_meta( $post->ID, $meta_key);
+
+                    foreach((array)$meta_value AS $array_key => $value) {
+
+                        if(!add_post_meta( $post->ID, $meta_key, $value,true)){
+                            
+                            if(!in_array($value,$multiple)){
+                                add_post_meta( $post->ID, $meta_key, $value);
+                            }
+                            
+                            $multiple = array_filter($multiple,function($val) use ($value){
+                                return ($val != $value) ? true : false; 
+                            });
+
+                        }else{
+                            update_post_meta( $post->ID, $meta_key, $value);
+                        }
+                    }
+
+                    foreach($multiple AS $value){
+                        delete_post_meta( $post->ID, $meta_key, $value);
+                    }
+
+                break;
+                default:
+
+                if(!add_post_meta( $post->ID, $meta_key, $meta_value ,true )){
+                    update_post_meta ( $post->ID, $meta_key, $meta_value);
+                }
+
+            }
+        }
     }
 
 
     static function parse(){
         $object             = self::$data;
-        $post               = new \WP_Post(null);
+
+        $post               = new \WP_Post(new stdClass);
+
+
         $post->post_type    = 'inmoob_properties';
-        $post->meta_single  = true;
-        $post->meta_input   = [];
-        $post->tax_input    = [];
+        self::$meta_input   = [];
+        self::$tax_input    = [];
+
+
+
         foreach ( get_object_vars( $post ) as $key => $value ) {
             $post->$key = isset($object->$key) ? $object->$key : $value ;
         }
 
+
+
         foreach ( get_object_vars( $object ) as $key => $value ) {
-            
-            if( preg_match("/taxonomy$/",$key)){
-                $post->tax_input[$key] = $value;
-            }else if(!isset($post->$key)){
-                $post->meta_input[$key] = $value;
+           
+
+            switch(true){
+                case (preg_match("/taxonomy$/",$key) ? true : false ):
+                    if(!isset($post->$key)){
+                        self::$tax_input[$key] = $value;
+                    }
+                break;
+                default :
+                    if(!isset($post->$key) || $post->$key != $value ){
+                        error_log("field -> {$key} == ". var_export($value,true));
+                        self::$meta_input[$key] = $value;
+                    }
             }
+            
         }
 
+        if(isset($object->ID)){
+            $post->ID           = $object->ID;
+        }else{
+            $post->ID           = 0;
+        }
 
-        if(isset( $post->meta_input['images'])){
-            $images = $post->meta_input['images'] ?: array();
-
-            $images = array_map(function($image){
-                return Helpers::upload_external_media($image);
-            },$images);
-            $post->meta_input['images'] = $images;
-        };
-        $post->ID           = 645;
 
         return $post;
     }

@@ -211,9 +211,7 @@ final class Properties {
                 'tab'        => 'features',
                 'name'       => 'Certificado energético',
                 'id'         => 'property_eacs',
-                'type'       => 'select',
-                'field_type' => 'select',
-                'options'    => inmoob_get_recs(),
+                'type'       => 'text',
                 'placeholder' => 'Elige una opción',
                 'columns'    => 3
             ),
