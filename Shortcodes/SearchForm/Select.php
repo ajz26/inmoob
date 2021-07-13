@@ -3,6 +3,7 @@
 namespace Inmoob\Shortcodes\SearchForm;
 abstract class Select extends Field {
 
+    static $general_encoled = false;
 
     static function generate_css(){
 
@@ -14,6 +15,7 @@ abstract class Select extends Field {
             'values'    => array(),
             'multiple'  => false,
             'name'      => 'property_types_taxonomy',
+            'opened'    => 0,
         ));
     }
 
@@ -34,8 +36,11 @@ abstract class Select extends Field {
     }
 
     static function general_styles()
-    {
-        return "
+    {   
+
+        if(self::$general_encoled) return;
+        
+        $styles = "
 
         .inmmoob-searchform * + * {
             margin-top: 1rem !important;
@@ -81,9 +86,12 @@ abstract class Select extends Field {
         .label:not(.show) > i::before {
             content: '\\f107';
         }
-
-
         ";
+
+
+        self::$general_encoled = true;
+
+        return $styles;
     }
 
     static function gen_options_html($options = array()){
@@ -118,7 +126,6 @@ abstract class Select extends Field {
         $vals = (count(self::get_atts('values',array())) > 1 ) ?  array_merge($vals,self::get_atts('values',array())) : array();
 
         self::set_att('values',$vals);
-
 
         if($type == 'list'){
             $atts = self::get_atts();

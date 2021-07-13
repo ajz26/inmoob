@@ -1,4 +1,5 @@
-jQuery('#wp-admin-bar-inmoob_reimport_properties').click(function (e) { 
+jQuery(document).on('click','#wp-admin-bar-inmoob_reimport_properties',function (e) { 
+    alert('adasd');
     e.preventDefault();
     jQuery.ajax({
         type: "POST",

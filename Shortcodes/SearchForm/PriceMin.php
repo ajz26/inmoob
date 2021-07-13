@@ -9,7 +9,7 @@ class PriceMin extends Select {
     static function get_values(){
         $gestion_type = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : get_query_var('gestion_type');
         $gestion_type = get_term_by('slug', $gestion_type ,'gestion_types_taxonomy');
-        $gestion_type = $gestion_type->term_id;
+        $gestion_type = isset($gestion_type->term_id) ? $gestion_type->term_id : null;
         $data         = Api::get_options_range('price',$gestion_type);
 
         $min	    = intval($data['min']);

@@ -23,6 +23,22 @@ abstract class Select extends Field {
                                             'Lista'     => 'list',
                     )
                 ),
+
+
+                array(                  
+                    "type"              => "checkbox",
+                    'group'             => __( 'Apariencia', 'ccom' ),
+                    "heading"           => __("Mostrar abierto", "mx-plugin"),
+                    "param_name"        => "opened",
+                    'edit_field_class'  => "vc_col-xs-12",
+                    'value'             => array(
+                        'Abrir' => 1,
+                    ),
+                    "dependency" => array(
+                        "element"   => "type",
+                        "value"     => "list"
+                    )
+                ),
                 array(                  
                     "type"          => "checkbox",
                     'group'         => __( 'Apariencia', 'ccom' ),

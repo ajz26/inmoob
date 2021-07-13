@@ -21,7 +21,7 @@ class PriceBlock extends Shortcode{
         if((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price){
             $value = "<span class='price'>{$price_prefix} {$sales_price} {$price_sufix}</span> <span class='old_price'> Antes {$price} </span>";
         }else{
-            $value = "<span class='price'>{$price_prefix} {$price} {$price_sufix}</span>";
+            $value = "<span class='price'>{$price_prefix} {$price} €{$price_sufix}</span>";
         }
         
         return "<div id='{$el_id}' class='{$el_class} inmoob-price-block'>$value</div>";

@@ -38,7 +38,10 @@ abstract class FieldList extends Select {
         $type           = self::get_atts('type');
         $name           = sanitize_key(self::get_atts('name'));
         $options_html   = self::gen_options_html($values);
-        $label          = self::get_atts('label') ? "<span class='label '>".self::get_atts('label')." <i class=\"far \"></i></span>" : null;
+        $show           = self::get_atts('opened',0) == '1' ? 'show' : null;
+
+
+        $label          = self::get_atts('label') ? "<span class='label {$show}'>".self::get_atts('label')." <i class=\"far \"></i></span>" : null;
         $content        = "<label for='select-{$name}' class='field-{$type}'>{$label}<div id='select-{$name}' name='{$name}' class='inmoob-select {$vc_id}'>{$options_html}</div></label>";
       
         return  Field::output($atts, $content);

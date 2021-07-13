@@ -64,6 +64,7 @@ Settings::set_section('inmoob-settings',array(
             'description'   => 'Dirección de la empresa',
             'type'          => 'textarea',
         ),
+        
     )
 ));
 
@@ -101,6 +102,7 @@ Settings::set_section('inmoob-settings',array(
 ));
 
 
+
 Settings::set_section('inmoob-settings',array(
     'title'   => 'Gestión de inmuebles',
     'heading' => 'Gestión de inmuebles',
@@ -109,6 +111,12 @@ Settings::set_section('inmoob-settings',array(
         array(
             'name'          => 'currency_symbol',
             'title'         => 'Símbolo del la moneda',
+            'description'   => '',
+            'type'          => 'textfield',
+        ),
+        array(
+            'name'          => 'embed_gmap_api_key',
+            'title'         => 'API KEY DE GMAP EMBED',
             'description'   => '',
             'type'          => 'textfield',
         ),

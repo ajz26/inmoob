@@ -10,6 +10,12 @@ class Features extends Shortcode{
             'sufix'     => '',
             'type'      => 'string',
         ),
+        'property_floor' => array(
+            'label'     => 'Piso',
+            'prefix'    => '',
+            'sufix'     => '',
+            'type'      => 'string',
+        ),
         'property_size' => array(
             'label'     => 'Superficie',
             'prefix'    => '',
@@ -41,7 +47,7 @@ class Features extends Shortcode{
             'type'      => 'taxonomy',
         ),
         'property_eacs' => array(
-            'label'    => 'Certificado',
+            'label'    => 'Certificado energético',
             'prefix'    => '',
             'sufix'     => '',
             'type'      => 'string',
@@ -75,6 +81,11 @@ class Features extends Shortcode{
             'prefix'    => '',
             'sufix'     => '',
             'type'      => 'array',
+        ),
+        'property_tags_taxonomy' => array(
+            'prefix'    => '',
+            'sufix'     => '',
+            'type'      => 'taxonomy_list',
         )
     );
 
@@ -85,6 +96,14 @@ class Features extends Shortcode{
 
     public static function general_styles(){
         return "
+
+        .inmoob-feature-list {
+            columns: 3;
+            -webkit-columns: 3;
+            -moz-columns: 3;
+            text-transform: capitalize;
+        }
+        
         .inmoob-feature-list {
             columns: 3;
             -webkit-columns: 3;
@@ -111,13 +130,22 @@ class Features extends Shortcode{
 
         $value = '';
         switch($type){
+            case 'taxonomy_list':
+                $terms =  get_the_terms($post->ID,$field);
+ 
+                if(!$terms) return null;
+                $value = [];
+
+                foreach($terms AS $term){
+                    $value[] = $term->name;
+                }
+             break;
             case 'taxonomy':
                $terms =  get_the_terms($post->ID,$field);
 
                if(!$terms) return null;
                 $i = 0;
                foreach($terms AS $term){
-
                    $value .= ($i >= 1) ? ' ,'. $term->name : $term->name;
                    $i ++;
                }
@@ -155,6 +183,7 @@ class Features extends Shortcode{
 
         foreach($fields AS $field ){
             $key    = sanitize_key($field );
+            
             $label  = isset(self::$options[$field]['label'])    ? self::$options[$field]['label'] : null;
             $prefix = isset(self::$options[$field]['prefix'])   ? self::$options[$field]['prefix'] : null;
             $sufix  = isset(self::$options[$field]['sufix'])    ? self::$options[$field]['sufix'] : null;
@@ -163,12 +192,17 @@ class Features extends Shortcode{
             if( $value == "" || empty($value) || is_null($value) ) continue;
 
             foreach( (array)$value AS $val ){
-                $html .= "<li id='$key' class='$key'>{$label} : {$prefix} {$val} {$sufix}</li>";
+                $html .= "<li class='item-list--$key'>";
+
+                if($label){
+                    $html .= "<b>{$label}</b> :";
+                }
+                $html .= " {$prefix} {$val} {$sufix}</li>";
             }
 
         }
 
-        return "<ul id='{$el_id}' class='{$el_class} inmoob-feature-list'>$html</ul>";
+        return "<ul id='features-list' class='features-list--{$el_id} {$el_class} inmoob-feature-list'>$html</ul>";
     }
 
 }

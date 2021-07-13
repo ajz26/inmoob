@@ -13,6 +13,7 @@ class Create extends Endpoint{
 
     static function callback( \WP_REST_Request $data){
         $body           = $data->get_body();
+        error_log('prop ->' . $body->ID);
 
         if(!$body){
             return false;
@@ -46,8 +47,13 @@ class Create extends Endpoint{
         $post  = self::$post;
 
         foreach($terms AS $taxonomy => $value){
-            $value = is_array($value) ? implode(',',$value): $value;
-            Helpers::set_term_by_slug($post,$value,$taxonomy);
+
+            $value = is_array($value) ? $value : explode(',',$value);
+
+            foreach($value AS $term){
+                Helpers::set_term_by_slug($post,$term,$taxonomy);
+            }
+
         }
     }
 
@@ -87,6 +93,11 @@ class Create extends Endpoint{
 
                     foreach($multiple AS $value){
                         delete_post_meta( $post->ID, $meta_key, $value);
+                    }
+
+                    if($meta_value){
+                        $thumnbail = is_array($meta_value) ? $meta_value[0] : $meta_value;
+                        set_post_thumbnail( $post->ID, $thumnbail );
                     }
 
                 break;
@@ -130,7 +141,6 @@ class Create extends Endpoint{
                 break;
                 default :
                     if(!isset($post->$key) || $post->$key != $value ){
-                        error_log("field -> {$key} == ". var_export($value,true));
                         self::$meta_input[$key] = $value;
                     }
             }

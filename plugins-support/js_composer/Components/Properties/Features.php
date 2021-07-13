@@ -17,7 +17,8 @@ class Features extends Component {
         'Acepta niños'                  => 'childrens',
         'Tiene Terraza'                 => 'terrace',
         'Tiene Ascensor'                => 'ascensor',
-        'Extras'                        => 'extras'
+        'Extras'                        => 'extras',
+        'Etiquetas'                     => 'property_tags_taxonomy',
     );
 
     public static function map(): array {

@@ -33,6 +33,12 @@ class SearchGrid extends _Grid {
             foreach((array)$atts['filters'] AS $taxonomy => $value){
                 if(\preg_match('/\_taxonomy$/',$taxonomy) && isset($value) && !empty($value)){
                     $tax_query_fields++;
+                    if(in_array('-',(array)$value)){
+                        $value = array();  
+                    }
+
+                    if(empty($value) || !isset($value)) continue;
+                    
                     $tax_query[] = array(
                         'taxonomy' => $taxonomy,
                         'field'    => 'slug',
@@ -42,7 +48,7 @@ class SearchGrid extends _Grid {
             }
 
 
-            if($tax_query_fields >0){
+            if($tax_query_fields > 0 ){
                 $settings['tax_query'] = $tax_query;
             }
 
@@ -72,39 +78,27 @@ class SearchGrid extends _Grid {
                     'compare'   => 'BETWEEN'
                 ),
             ));
-
-
-
         }
 
-        if(isset($atts["filters"]["heuristic"]) && !empty($atts["filters"]["heuristic"])){
-            $heuristic = $atts["filters"]["heuristic"];
-            $settings['s'] = $heuristic;
-        }
 
-        
-        if(isset($atts["filters"]["start_with"]) && !empty($atts["filters"]["start_with"])){
-            $start_with = $atts["filters"]["start_with"];
-            switch($start_with){
-                case  "all" :
-                    $start_with = null;
-                break;
-                case "num" :
-                    $start_with = "[0-9]";
-                break;
-            }
-            if(isset($start_with)){
-                $settings['starts_with'] = "^{$start_with}+";
-            }
+        if(isset($atts['filters']['no_docs']) || isset($atts['filters']['no_docs'])){
+           
+         
+            $settings['meta_query'] = array_merge($settings['meta_query'],array(
+                'relation' => 'AND',
+                array(
+                    'type'      => 'NUMERIC',
+                    'key'       => 'no_docs',
+                    'value'     => 1,
+                    'compare'   => '='
+                ),
+            ));
+
+
+
         }
 
         return $settings;
-    }
-
-    private static function extract_taxonomy_from_search_form(){
-        $post_type = self::get_atts('post_type',null);
-        return "{$post_type}_category";
-  
     }
 
     static function buildAtts($atts = array(), $content = null){
@@ -188,7 +182,21 @@ class SearchGrid extends _Grid {
         } else {
             $shortcode_id = self::get_atts('shortcode_id');
 
-            $output .= "aqui va una busqueda desierta
+            $not_results_page_block_id  = self::get_atts('not_results_page_block');
+
+            \WPBMap::addAllMappedShortcodes();
+
+            if($not_results_page_block_id){
+                $page_block             = get_post($not_results_page_block_id);
+                $page_block_content     = $page_block->post_content;
+                $output                .= apply_filters('the_content', $page_block_content);
+
+                // $output .= do_shortcode($pb);
+            }
+
+
+
+            $output .= "
             <script>
             window.onload = function() {
                 obser_grid.delete_cookie('{$shortcode_id}')   
@@ -241,6 +249,7 @@ class IO_grid_item{
     static $item;
     static $atts;
     static $css_class;
+    static $mode = 'grid';
 
     public function set_item_atts($atts){
         self::$atts = $atts;
@@ -269,8 +278,8 @@ class IO_grid_item{
 
         if($field_name == 'price'){
             $sales_price    = get_post_meta($post_id,'sales_price',true);
-            $price_preffix  = get_post_meta($post_id,'price_preffix',true);
-            $price_suffix   = get_post_meta($post_id,'price_suffix',true);
+            $price_preffix  = get_post_meta($post_id,'price_prefix',true);
+            $price_suffix   = get_post_meta($post_id,'price_sufix',true);
             $price          = $value;
 
             $value = ((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price) ? '<span class="price">'.$price_preffix .' '.$sales_price.' € '.$price_suffix .'</span> <span class="old_price"> Antes '.$price.' € </span>'  : '<span class="price">'.$price_preffix .' '.$price.' € '.$price_suffix .'</span>';
@@ -330,14 +339,23 @@ class IO_grid_item{
     }
 
 
+    public static function set_mode($mode = 'grid'){
+
+        self::$mode = $mode;
+
+    }
+
+
     public function render_item($post){
         $atts       = self::$atts;
         $item       = self::$item = $post;
         $css_class  = self::$css_class;
         $post_id    = self::$item->ID;
         $css_class .= ' main-color';
-
-
+        $mode       = self::$mode;
+        if($mode =='swiper'){
+            $css_class .= ' swiper-slide';
+        }
 
         $title                  = $item->post_title;
         $location               = self::get_value($post_id,'property_zones_taxonomy',false,'taxonomy');

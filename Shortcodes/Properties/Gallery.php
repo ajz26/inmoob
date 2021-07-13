@@ -179,7 +179,10 @@ class Gallery extends Shortcode{
     public static function output($atts,$content){
         add_action('wp_footer', array(__CLASS__,'psw_body_bottom'),1000);
 
-        $loopResult = self::generateContentLoop();        
+        $loopResult = self::generateContentLoop();
+        
+        if(!isset($loopResult) || empty($loopResult)) return null;
+
         $output = "<div class='inmoob-props-gallery swiper-container'>
                         <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
                             <i class='far fa-angle-right'></i>

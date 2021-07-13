@@ -21,7 +21,7 @@ class BreadCrumbs extends Shortcode {
 
     static function output($atts, $content){
         $text               = [];
-        $text['home']       = self::get_atts('home_text','Inicio');
+        $text['home']       = "<i class='far fa-home'></i> " . self::get_atts('home_text','Inicio');
         $text['404']        = 'Error 404';
         $separator          = '>';
         $wrap_before        = '<div class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">';

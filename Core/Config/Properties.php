@@ -413,6 +413,23 @@ final class Properties {
                 'type' => 'textarea',
             ),
             array(
+                'tab'       => 'location',
+                'name'      => 'Latitud',
+                'id'        => 'geo_lat',
+                'type'      => 'text',
+                'size'      => 1000,
+                'columns'   => 6
+
+            ),
+            array(
+                'tab'       => 'location',
+                'name'      => 'Longitud',
+                'id'        => 'geo_lng',
+                'type'      => 'text',
+                'columns'   => 6,
+                'size'      => 1000,
+            ),
+            array(
                 'tab'  => 'location',
                 'name' => 'Google maps',
                 'id'   => 'gmaps_link',

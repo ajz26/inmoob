@@ -17,13 +17,13 @@ class Translator {
         "urbanization"                => null,
         "street"                      => 'address',
         "street_number"               => null,
-        "geo_lat"                     => null,
-        "geo_lng"                     => null,
+        "geo_lat"                     => "geo_lat",
+        "geo_lng"                     => "geo_lng",
         "renting"                     => 'gestion_types_taxonomy', // PARSEAR
         "selling"                     => 'gestion_types_taxonomy', // PARSEAR
-        "renting_cost"                => 'price',
-        "renting_period"              => 'price_sufix', // PARSEAR
-        "selling_cost"                => 'price',
+        "renting_cost"                => null,
+        "renting_period"              => null, // PARSEAR
+        "selling_cost"                => null,
         "kind"                        => 'property_types_taxonomy',
         "floor"                       => null,
         "bedrooms"                    => 'property_rooms_taxonomy',
@@ -139,7 +139,7 @@ class Translator {
         $kind       = ucwords($object->kind) ?: 'Inmueble';
         $address    = $object->street ?: null;
 
-        return "Nuevo {$kind} en $address";
+        return "{$kind} en $address";
     }
 
     function parse_object(){
@@ -154,8 +154,13 @@ class Translator {
                 case "selling":
                     if($key == 'renting' && $val ){
                         $val = 'alquiler';
+
+                        $this->property->price = $object->renting_cost; 
+                        $this->property->price_sufix = '/mes';
+
                     }else if($key == 'selling' && $val){
                         $val = 'venta';
+                        $this->property->price = $object->selling_cost; 
                     }
                     if(!$val){
                         continue(2);
@@ -194,8 +199,13 @@ class Translator {
                         foreach($val AS $note_group => $note_value){
                             $this->property->$note_group = $note_value;
                         }
-
                         continue(2);
+                    }
+                break;
+
+                case "tags":
+                    if(is_array($val) && in_array('sin nómina',$val)){
+                        $this->property->no_docs = 1;
                     }
                 break;
             }

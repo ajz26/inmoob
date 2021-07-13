@@ -10,7 +10,6 @@ class Create extends Endpoint{
 
     static function callback( \WP_REST_Request $data){
 
-
         $body           = $data->get_body();
         
         if(!is_object($body)){

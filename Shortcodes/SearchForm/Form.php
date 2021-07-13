@@ -60,7 +60,7 @@ class Form extends Shortcode  {
                 left: 0;
                 right: 0;
                 width: 100%;
-                background-color: rgb(255,255,255,.95);
+                background-color: rgb(255,255,255,.25);
                 z-index: 100000;
                 text-align: center;
                 top: 0;
@@ -103,7 +103,7 @@ class Form extends Shortcode  {
 
             .field-list > .inmoob-select {
                 max-height: 250px;
-                overflow-y: scroll;
+                overflow-y: auto;
             }
             
 
