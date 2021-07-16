@@ -109,9 +109,10 @@ class Form extends Shortcode  {
 
             .toggle-cta {
                 width: 100%;
-                padding: .5rem 1rem;
-                border-radius: .5rem;
-                letter-spacing: 1px;
+                padding: 1rem;
+                border-radius: 1.3rem;
+                font-size: 1.2rem;
+                font-weight: bold;
             }
 
 
@@ -122,6 +123,10 @@ class Form extends Shortcode  {
             }
             @media(max-width:768px){
 
+                .inmmoob-searchform > div:last-child {
+                    margin-bottom: 3rem;
+                }
+                
                 .inmmoob-searchform {
                     padding: .5rem 1rem;
                 }
@@ -163,6 +168,8 @@ class Form extends Shortcode  {
                     display: block;
                     order: 2;
                     box-shadow: 0px 4px 8px rgba(0,0,0,.18);
+                    bottom: 1rem;
+                    position: relative;
                 }
 
                 .toggle-cta.active + .content-form {
@@ -171,7 +178,7 @@ class Form extends Shortcode  {
                 
 
                 .toggle-cta.active {
-                    background-color: #95bec8;
+                    background-color: var(--color-content-secondary) !important;
                     color: #ffffff;
                     font-weight: bold;
                     box-shadow: 0px 4px 8px rgba(0,0,0,.18);

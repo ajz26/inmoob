@@ -72,7 +72,8 @@ class Translator {
         'owner'                       => null, 
         'second_owner'                => null,     
         'commercial'                  => null,     
-        'creator'                     => null, 
+        'creator'                     => null,
+        'witei_event_type'            => 'witei_event_type',
         'notes'                       => 'notes', 
     );
     
@@ -176,6 +177,9 @@ class Translator {
 
                 case "raw_status":
                     if($val ){
+                        if($val == 'inactive'){
+                            $this->property->post_status = 'draft';
+                        }
                         $val =  self::parse_status($val);
                     }
                 break;

@@ -1,25 +1,16 @@
 <?php
-namespace Inmoob\WPB_Components;
-
+namespace Inmoob\WPB_Components\Properties;
 use OBSER\Classes\Component;
 
-class Breadcrumbs extends Component {
-    
-    static $wpb_namespace   = "Inmoob\\WPB_Components";
-    
+class Address extends Component {
+
+   
     public static function map(): array {
         return array(
-            'name'                      => __('Migas de pan', 'inmoob'),
+            'name'                      => __('Ubicación del inmueble', 'inmoob'),
             'show_settings_on_create'   => false,
-            'icon'                      => INMOOB_CORE_PLUGIN_DIR_URL .'/assets/images/icons/searchform.png',
-            'params' => array(
-                array(                  
-                    "type"              => "textfield",
-                    "heading"           => __("Texto para la home", "mx-plugin"),
-                    "param_name"        => "home_text",
-                    'edit_field_class'  => "vc_col-xs-6",
-                    'save_always'       => true,
-                ),
+            'category'                  => __('Ficha', 'inmoob'),
+            'params'                    => array(
                 array(                  
                     "type"          => "textfield",
                     "heading"       => __("Id personalizado", "mx-plugin"),
@@ -37,4 +28,5 @@ class Breadcrumbs extends Component {
             )
         );
     }
+
 }

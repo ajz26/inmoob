@@ -25,7 +25,13 @@ class Create extends Endpoint{
         $translation    =   new Translator($body);
         $property       =   $translation->property;
         
-        if($post_id     = get_post_by_id($property->witei_id)){
+
+        if(!isset($property->witei_event_type) || !in_array($property->witei_event_type,array('create','update'))){
+            error_log('hook no válido');
+            return wp_send_json_error('hook no válido para esta acción' );
+         }
+
+        if($post_id = get_post_by_id($property->witei_id)){
             $property->ID = $post_id; 
         }
         

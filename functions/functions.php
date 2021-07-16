@@ -11,9 +11,10 @@ require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/override_content.php";
 require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/enqueue.php";
 require_once INMOOB_CORE_PLUGIN_DIR_PATH ."functions/attachment_from_url.php";
 
-add_action('before_delete_post', function ($post_id){
+add_action('before_delete_post', function ($post_id,$post){
 
-    global $post_type;   
+     $post_type = $post->post_type;
+
     if($post_type !== 'inmoob_properties') return;
 
     $images = get_post_meta($post_id, 'images');
@@ -28,4 +29,4 @@ add_action('before_delete_post', function ($post_id){
         wp_delete_attachment( $blueprint ,true);
     }
 
-});
+},10,2);

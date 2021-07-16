@@ -60,8 +60,8 @@ class SearchGrid extends _Grid {
             $gestion_type = $atts['filters']['gestion_types_taxonomy'];
             $gestion_type = get_term_by('slug', $gestion_type ,'gestion_types_taxonomy');
             $data         = Api::get_options_range('price',$gestion_type);
-            $property_price_min = isset($atts['filters']['property_price_min']) ? intval($atts['filters']['property_price_min']) : intval($data['min']);
-            $property_price_max = isset($atts['filters']['property_price_max']) ? intval($atts['filters']['property_price_max']) : intval($data['max']);
+            $property_price_min = isset($atts['filters']['property_price_min']) && $atts['filters']['property_price_min'] != '-' ? intval($atts['filters']['property_price_min']) : intval($data['min']);
+            $property_price_max = isset($atts['filters']['property_price_max']) && $atts['filters']['property_price_max'] != '-' ? intval($atts['filters']['property_price_max']) : intval($data['max']);
             
             $settings['meta_query'] = array_merge($settings['meta_query'],array(
                 'relation' => 'OR',

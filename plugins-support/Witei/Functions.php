@@ -17,8 +17,7 @@ namespace Inmoob\Witei\Functions {
             FROM {$wpdb->postmeta} pm 
             JOIN {$wpdb->posts} p 
             ON p.ID = pm.post_id 
-                AND post_status = \"publish\" 
-                AND post_type = \"inmoob_properties\"
+            AND post_type = \"inmoob_properties\"
             WHERE meta_key = \"witei_id\" 
             AND meta_value = $witei_id 
             ";

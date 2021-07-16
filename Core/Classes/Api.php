@@ -154,17 +154,22 @@ class Api {
     
     static function create_range_options($min,$max,$increase){
 
-        $options = [];
+        $options    = [];
+        $minlength  = strlen($min)-1;
+        $min        = round($min,-$minlength,PHP_ROUND_HALF_EVEN) + $increase;
+        $options    = range($min,$max,$increase);
 
-
-        $options = range($min,$max,$increase);
-
-        $options = array_map(function($opt){
+        $options    = array_map(function($opt){
             $data = new stdClass();
             $data->slug = $opt;
             $data->name = $opt;
             return self::parse_options($data);
         },$options);
+
+
+        $options = array_filter($options,function($opt){
+            return ($opt->val == 0) ? false : true;
+        });
 
         return $options;
 

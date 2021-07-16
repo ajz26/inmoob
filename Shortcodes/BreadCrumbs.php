@@ -15,21 +15,30 @@ class BreadCrumbs extends Shortcode {
 
     static function general_styles(){
 
-        // return $styles;
+        return ".breadcrumbs__link i {
+            margin-right: .5rem;
+        }
+        
+        .breadcrumbs {
+            font-weight: bold;
+        }
+        ";
     }
 
 
     static function output($atts, $content){
+        $el_id              = self::get_atts('el_id');
+        $el_class           = self::get_atts('el_class');  
         $text               = [];
         $text['home']       = "<i class='far fa-home'></i> " . self::get_atts('home_text','Inicio');
         $text['404']        = 'Error 404';
         $separator          = '>';
-        $wrap_before        = '<div class="breadcrumbs" itemscope itemtype="http://schema.org/BreadcrumbList">';
+        $wrap_before        = "<div id=\"{$el_id}\" class=\" breadcrumbs breadcrumbs-el--$el_id {$el_class}\" itemscope itemtype=\"http://schema.org/BreadcrumbList\">";
         $wrap_after         = '</div><!-- .breadcrumbs -->';
         $sep                = "<span class='breadcrumbs__separator'> $separator </span>";
         $before             = '<span class="breadcrumbs__current">';
         $after              = '</span>';
-    
+         
         $show_home_link     = true;
         $show_current       = self::get_atts('show_current',false);
         $html               = ""; 

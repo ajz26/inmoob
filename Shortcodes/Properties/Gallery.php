@@ -30,7 +30,7 @@ class Gallery extends Shortcode{
         
 
 
-        .swiper-wrapper {
+        .inmoob-gallery-wrapper {
             position: absolute !important;
             left: 0;
             right: 0;
@@ -97,6 +97,13 @@ class Gallery extends Shortcode{
             -webkit-transition: all .5s; 
             opacity: 1;
             cursor:pointer;
+        }
+
+
+        @media(max-width:768px){
+            .inmoob-props-gallery::before {
+                padding-bottom: 110%;
+            }
         }
         ";
     }
@@ -190,7 +197,7 @@ class Gallery extends Shortcode{
                         <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
                             <i class='far fa-angle-left'></i>
                         </div>
-                        <div class='swiper-wrapper'>
+                        <div class='inmoob-gallery-wrapper swiper-wrapper'>
                             $loopResult
                         </div>
                         <div class='swiper-pagination'></div>

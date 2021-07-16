@@ -29,42 +29,42 @@ add_action('admin_head',function () {
 
 add_action('admin_bar_menu', function ($admin_bar){
 
-    $admin_bar->add_node(array(
-        'id'    => 'witei_menu_group',
-        'title' => 'Importar desde Witei'
-    ));
+    // // $admin_bar->add_node(array(
+    // //     'id'    => 'witei_menu_group',
+    // //     'title' => 'Importar desde Witei'
+    // // ));
 
-    $admin_bar->add_menu( array(
-        'id'    => 'inmoob_reimport_properties',
-        'title' => "Importar propiedades",
-		'parent'=> "witei_menu_group"
-    ));
+    // $admin_bar->add_menu( array(
+    //     'id'    => 'inmoob_reimport_properties',
+    //     'title' => "Importar propiedades",
+	// 	// 'parent'=> "witei_menu_group"
+    // ));
 
-	global $Inmoob_witei_importer;
+	// global $Inmoob_witei_importer;
 
 
-	$tasks = $Inmoob_witei_importer->get_stats_data();
-	$extra_class = "";
-	if($tasks >= 1){
-		$extra_class = 'importing';
-	}
+	// $tasks = $Inmoob_witei_importer->get_stats_data();
+	// $extra_class = "";
+	// if($tasks >= 1){
+	// 	$extra_class = 'importing';
+	// }
 
-	$meta = array(
-		'class' => "wp-admin-bar-inmoob_reimport_properties {$extra_class}",
-	);
+	// $meta = array(
+	// 	'class' => "wp-admin-bar-inmoob_reimport_properties {$extra_class}",
+	// );
 
-	if(isset($tasks['count_tasks']) && $tasks['count_tasks'] >= 1){
+	// if(isset($tasks['count_tasks']) && $tasks['count_tasks'] >= 1){
 
-		$count_tasks 		= $tasks['count_tasks'];
-		$completed_tasks 	= $tasks['completed_tasks'];
-		$meta['html'] = "{$completed_tasks} Importadas de {$count_tasks}";
-	}
+	// 	$count_tasks 		= $tasks['count_tasks'];
+	// 	$completed_tasks 	= $tasks['completed_tasks'];
+	// 	$meta['html'] = "{$completed_tasks} Importadas de {$count_tasks}";
+	// }
 
 	$admin_bar->add_menu( array(
         'id'    => 'inmoob_reimport_properties',
         'title' => "Importar propiedades",
-		'parent'=> "witei_menu_group",
-		'meta'	=> $meta,
+		// 'parent'=> "witei_menu_group",
+		// 'meta'	=> $meta,
     ));
 
 }, 100);
@@ -119,12 +119,16 @@ if ( class_exists( 'WP_Background_Process' ) AND ! class_exists( 'Inmoob_witei_i
 
             $path = Inmoob\Api\Endpoints\Witei\Create::get_path();
 
-
             $request   = new WP_REST_Request( 'POST', $path );
             $request->set_header( 'content-type', 'application/json' );
             $request->set_body( json_decode($json) );
-
-			$res = Inmoob\Api\Endpoints\Witei\Create::callback($request);
+						
+			$res 	= false;
+			try {
+				$res = Inmoob\Api\Endpoints\Witei\Create::callback($request);
+			} catch (\Throwable $th) {
+				//throw $th;
+			}
 
 			return FALSE;
 		}
@@ -176,6 +180,7 @@ function reimport_witei_props(){
 		
         
         foreach ( $props as $prop ) {
+			$prop->witei_event_type = 'create';
             $json   = json_encode($prop,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 			$Inmoob_witei_importer->push_to_queue( $json );
 		}

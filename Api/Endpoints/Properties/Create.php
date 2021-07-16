@@ -12,9 +12,9 @@ class Create extends Endpoint{
     
 
     static function callback( \WP_REST_Request $data){
+        
         $body           = $data->get_body();
-        error_log('prop ->' . $body->ID);
-
+ 
         if(!$body){
             return false;
         }
