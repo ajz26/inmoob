@@ -38,6 +38,11 @@ class ProperytyTypes extends Select {
 
 
     static function output($atts, $content = null){
+
+        $property_type = get_query_var('property_types_taxonomy') ?: (get_query_var('property_type') ?: null);
+
+        if($property_type) return null;
+
         self::get_values();
         return parent::output($atts,$content);
     }

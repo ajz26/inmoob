@@ -1,6 +1,7 @@
 <?php namespace Inmoob\Witei {
 
     require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/Witei/importer.php";
+    require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/Witei/contacts.php";
 
 }
 

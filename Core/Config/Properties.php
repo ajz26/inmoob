@@ -258,7 +258,6 @@ final class Properties {
                 'off_label' => 'No',
                 'columns'    => 2
             ),
-    
             array(
                 'tab'        => 'features',
                 'type' => 'divider',

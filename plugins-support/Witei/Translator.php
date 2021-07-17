@@ -43,7 +43,7 @@ class Translator {
         "energy_certificate_display"  => 'property_eacs', // parsear
         "created"                     => 'post_date', // Fecha actualización
         "updated"                     => 'post_modified', // Fecha actualización
-        "kind_value"                  => 'property_types_taxonomy', // consultar con witei
+        "kind_value"                  => null, // consultar con witei
         "renting_period_display"      => null,
         "tags"                        => 'property_tags_taxonomy',
         "virtual_visit"               => null,
@@ -188,8 +188,11 @@ class Translator {
                     if($val == "" || !$val){
                         $val = self::gen_title($object);
                     }
+                break;
+                case "street":
                     $this->property->post_name = sanitize_title($val);
                 break;
+
                 case "created":
                 $this->property->post_date_gmt = $val;
                 break;
@@ -208,9 +211,7 @@ class Translator {
                 break;
 
                 case "tags":
-                    if(is_array($val) && in_array('sin nómina',$val)){
-                        $this->property->no_docs = 1;
-                    }
+                    $this->property->no_docs        = (is_array($val) && in_array('sin nómina',$val)) ? 1 : 0;
                 break;
             }
             $this->property->$translation = $val;

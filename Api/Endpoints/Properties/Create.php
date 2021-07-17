@@ -48,11 +48,15 @@ class Create extends Endpoint{
 
         foreach($terms AS $taxonomy => $value){
 
-            $value = is_array($value) ? $value : explode(',',$value);
+            if(!is_array($value)){
+                Helpers::set_term_by_slug($post,$value,$taxonomy);
 
-            foreach($value AS $term){
-                Helpers::set_term_by_slug($post,$term,$taxonomy);
+            }else{
+                foreach($value AS $term){
+                    Helpers::set_term_by_slug($post,$term,$taxonomy,true);
+                }
             }
+
 
         }
     }
@@ -113,15 +117,22 @@ class Create extends Endpoint{
 
 
     static function parse(){
-        $object             = self::$data;
+        $object                 = self::$data;
+        $post                   = new \WP_Post(new stdClass);
+        $post->post_type        = 'inmoob_properties';
+        $post->comment_status   = "closed";
+        $post->ping_status      = "closed";
 
-        $post               = new \WP_Post(new stdClass);
-
-
-        $post->post_type    = 'inmoob_properties';
-        self::$meta_input   = [];
-        self::$tax_input    = [];
-
+        unset($post->post_excerpt);
+        unset($post->post_password);
+        unset($post->to_ping);
+        unset($post->pinged);
+        unset($post->post_content_filtered);
+        unset($post->guid);
+        unset($post->post_mime_type);
+        unset($post->comment_count);
+        unset($post->menu_order);
+        unset($post->post_parent);
 
 
         foreach ( get_object_vars( $post ) as $key => $value ) {
@@ -152,7 +163,6 @@ class Create extends Endpoint{
         }else{
             $post->ID           = 0;
         }
-
 
         return $post;
     }

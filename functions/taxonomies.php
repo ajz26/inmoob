@@ -231,7 +231,7 @@ add_action('init',function(){
         'capabilities'      => array('manage_options'),
     ));
 
-});
+},0);
 
 
 new OBSER\Classes\Metabox\Metabox(array(
@@ -254,6 +254,28 @@ new OBSER\Classes\Metabox\Metabox(array(
         ),
     ),
 ));
+
+
+new OBSER\Classes\Metabox\Metabox(array(
+    'ID'            => 'feaured_types',
+    'title'         => 'Información adicional',
+    'post_types'    => 'property_types_taxonomy',
+    'type'          => 'taxonomy',
+    'fields'        => array(
+        array(
+            'id'            => 'singular_label',
+            'name'          => 'Etiqueta en singular',
+            'type'          => 'text',
+            'std'           => "1",
+        ),
+        array(
+            'id'            => 'plural_label',
+            'name'          => 'Etiqueta en plural',
+            'type'          => 'text',
+            'std'           => "1",
+        ),
+    ),
+)); 
 
 
 

@@ -135,8 +135,9 @@ if ( class_exists( 'WP_Background_Process' ) AND ! class_exists( 'Inmoob_witei_i
 
 		protected function complete() {
 			parent::complete();
+			\flush_rewrite_rules();
 			error_log('complete');
-			delete_option( $this->get_data_key() );
+			\delete_option( $this->get_data_key() );
 		}
 
 	}

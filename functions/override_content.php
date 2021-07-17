@@ -7,7 +7,7 @@ function override_inmoob_data( $content ) {
     $pattern = '/\{\{(?:(?<group>[\w\_\-]+)+(?:\:))?(?:(?<key>[\w\_\-]+))+(?:(?:\:)+(?<alt>[\s\w\_\-]+))?\}\}/';
     
     preg_match_all($pattern,$content,$matches, PREG_SET_ORDER);
-
+    
     foreach($matches as $match){
         $group  = isset($match['group'])    ? sanitize_key($match['group'])     : null;
         $key    = isset($match['key'])      ? sanitize_key($match['key'])       : null;
@@ -30,10 +30,84 @@ function override_inmoob_data( $content ) {
                     break;
                     default:
                     $value  = get_term_meta($term->term_id,$key,true);
-
                 }
 
             break;
+
+            case 'gestion_types':
+            
+            if($gestion_type  = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : (get_query_var('gestion_type') ?: null)){
+                
+
+                $gestion_types_taxonomy = get_term_by('slug', $gestion_type ,'gestion_types_taxonomy');
+
+
+                switch ($key){
+                    case 'count':
+                        $value  = $gestion_types_taxonomy->count;
+                    break;
+                    case 'name':
+                        $value  = $gestion_types_taxonomy->name;
+                    break;
+                    case 'label':
+                        $key    = ($gestion_types_taxonomy->count == 1) ? 'singular_label' : 'plural_label';
+                        $value  = get_term_meta($gestion_types_taxonomy->term_id,$key,true);
+                        $value  = (isset($value) && !empty($value)) ? $value : (($key == 'singular_label') ? 'oferta' : 'OFertas');
+                    break;
+                    default:
+                    $value  = get_term_meta($gestion_types_taxonomy->term_id,$key,true);
+                }
+
+            }
+            break;
+            case 'property_type':
+            
+                if($property_type  = get_query_var('property_types_taxonomy') ? get_query_var('property_types_taxonomy') : (get_query_var('property_type') ?: null)){
+                    
+                    $property_types_taxonomy = get_term_by('slug', $property_type ,'property_types_taxonomy');
+    
+                    switch ($key){
+                        case 'count':
+                            $value  = $property_types_taxonomy->count;
+                        break;
+                        case 'name':
+                            $value  = $property_types_taxonomy->name;
+                        break;
+                        case 'label':
+                            $key    = ($property_types_taxonomy->count == 1) ? 'singular_label' : 'plural_label';
+                            $value  = get_term_meta($property_types_taxonomy->term_id,$key,true);
+                            $value  = (isset($value) && !empty($value)) ? $value : (($key == 'singular_label') ? 'propiedad' : 'propiedades');
+                        break;
+                        default:
+                        $value  = get_term_meta($property_types_taxonomy->term_id,$key,true);
+                    }
+                }
+            
+            break;
+            case 'property_zone':
+            
+                if($property_zone  = get_query_var('property_zones_taxonomy') ? get_query_var('property_zones_taxonomy') : (get_query_var('property_zone') ?: null)){
+                    
+                    $property_zones_taxonomy = get_term_by('slug', $property_zone ,'property_zones_taxonomy');
+    
+                    switch ($key){
+                        case 'count':
+                            $value  = $property_zones_taxonomy->count;
+                        break;
+                        case 'name':
+                            $value  = $property_zones_taxonomy->name;
+                        break;
+                        case 'label':
+                            $key    = ($property_zones_taxonomy->count == 1) ? 'singular_label' : 'plural_label';
+                            $value  = get_term_meta($property_zones_taxonomy->term_id,$key,true);
+                        break;
+                        default:
+                        $value  = get_term_meta($property_zones_taxonomy->term_id,$key,true);
+                    }
+                }
+            
+            break;
+    
 
             case 'post':
                 global $post;

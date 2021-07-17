@@ -37,6 +37,10 @@ class ProperytyZones extends Select {
 
 
     static function output($atts, $content = null){
+
+        $property_zones = get_query_var('property_zones_taxonomy') ?: (get_query_var('property_zones') ?: null);
+        if($property_zones) return null;
+
         self::get_values();
         return parent::output($atts,$content);
     }

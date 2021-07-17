@@ -13,10 +13,10 @@ class Create extends Endpoint{
         $body           = $data->get_body();
         
         if(!is_object($body)){
-            $body           = Helpers::stripslashes_deep($body);
+            // $body           = Helpers::stripslashes_deep($body);
             $body           = json_decode($body);
         }
-
+        
         if(!$body){
             error_log('error en body');
             return wp_send_json(array('error' => 'json no válido'), 500);

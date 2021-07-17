@@ -10,32 +10,12 @@ class Form extends Shortcode  {
 
     static function generate_css(){
 
-        //$element_id     = self::get_atts('vc_id');
-        $uniqid         = self::get_atts('searchform_uniqid');
-        $inlinestyles   = '';
-        // $color_main     = ColorSchemes::get_color_by_scheme('sch01','main');
-        // $color_alter    = ColorSchemes::get_color_by_scheme('sch01','alter');
-
-        // $inlinestyles .= "
-        // .{$uniqid} .caja-lista--item input + label .caja-lista--item--txt { color: {$color_main}!important; }
-        // .{$uniqid} .caja-lista--item__selector input + label .caja-lista--item--txt:before { background-color: {$color_main}!important; }
-        // .{$uniqid} .caja-lista--item input:checked + label .caja-lista--item--txt { color: {$color_alter}!important; }
-        // .{$uniqid} .caja-lista--item__selector input:checked + label .caja-lista--item--txt:before { background-color: {$color_alter}!important; }
-        // ";
-        return $inlinestyles;
-
     }
 
 
     static function general_styles(){
 
-        //$element_id     = self::get_atts('vc_id');
-        $uniqid         = self::get_atts('searchform_uniqid');
-        $inlinestyles   = '';
-        // $color_main     = ColorSchemes::get_color_by_scheme('sch01','main');
-        // $color_alter    = ColorSchemes::get_color_by_scheme('sch01','alter');
-
-            $inlinestyles .= "
+        $inlinestyles = "
 
             .inmmoob-searchform {
                 width: 100%;
@@ -43,6 +23,7 @@ class Form extends Shortcode  {
 
             .inmmoob-searchform label{
                 display: block;
+                width : 100%;
             }
             .inmmoob-searchform label + label {
                 margin-top: 1rem;
@@ -184,11 +165,8 @@ class Form extends Shortcode  {
                     box-shadow: 0px 4px 8px rgba(0,0,0,.18);
                 }
 
-            }
-
+            }";
             
-
-            ";
         return $inlinestyles;
 
     }
@@ -213,4 +191,4 @@ class Form extends Shortcode  {
 
     }
     
-}
+} 

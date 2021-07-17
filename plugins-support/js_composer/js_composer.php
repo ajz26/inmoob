@@ -100,32 +100,32 @@ add_action( 'init', function () {
 }, 8 );
 
 
-add_action( 'current_screen', function () {
+// add_action( 'current_screen', function () {
 	
-	if ( function_exists( 'get_current_screen' ) ) {
-		global $pagenow;
-		// Receive data only on the edit page or create a record
-		if ( wp_doing_ajax() OR ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
-			return;
-		}
+// 	if ( function_exists( 'get_current_screen' ) ) {
+// 		global $pagenow;
+// 		// Receive data only on the edit page or create a record
+// 		if ( wp_doing_ajax() OR ! in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) {
+// 			return;
+// 		}
 
-		$screen 	= get_current_screen();
-		$components =  INMOOB_SHORTCODES::get_shortcodes();
+// 		$screen 	= get_current_screen();
+// 		$components =  INMOOB_SHORTCODES::get_shortcodes();
 
-		foreach ( $components as $component ) {
+// 		foreach ( $components as $component ) {
 
-			$shortcode 	= $component::$shortcode;
-			$elm 		= $component::get_component();
+// 			$shortcode 	= $component::$shortcode;
+// 			$elm 		= $component::get_component();
 
-			if(!class_exists($elm)) continue;
+// 			if(!class_exists($elm)) continue;
 
-			$params =$elm::map();
+// 			$params = $elm::map();
 			
-			if ( isset( $params['shortcode_post_type'] ) ) {
-				if ( ! empty( $screen->post_type ) AND  is_array($params['shortcode_post_type']) AND !empty($params['shortcode_post_type']) AND ! in_array( $screen->post_type, $params['shortcode_post_type'] ) ) {
-					vc_remove_element( $shortcode );
-				}
-			}
-		}
-	}
-});
+// 			if ( isset( $params['shortcode_post_type'] ) ) {
+// 				if ( ! empty( $screen->post_type ) AND  is_array($params['shortcode_post_type']) AND !empty($params['shortcode_post_type']) AND ! in_array( $screen->post_type, $params['shortcode_post_type'] ) ) {
+// 					vc_remove_element( $shortcode );
+// 				}
+// 			}
+// 		}
+// 	}
+// });

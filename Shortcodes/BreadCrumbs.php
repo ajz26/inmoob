@@ -32,7 +32,7 @@ class BreadCrumbs extends Shortcode {
         $text               = [];
         $text['home']       = "<i class='far fa-home'></i> " . self::get_atts('home_text','Inicio');
         $text['404']        = 'Error 404';
-        $separator          = '>';
+        $separator          = '/';
         $wrap_before        = "<div id=\"{$el_id}\" class=\" breadcrumbs breadcrumbs-el--$el_id {$el_class}\" itemscope itemtype=\"http://schema.org/BreadcrumbList\">";
         $wrap_after         = '</div><!-- .breadcrumbs -->';
         $sep                = "<span class='breadcrumbs__separator'> $separator </span>";
@@ -139,8 +139,47 @@ class BreadCrumbs extends Shortcode {
             if ( $show_current ) $html .= $sep . $before . get_the_title() . $after;
 
         }  elseif ( is_archive() ) {
+
+
            $name            = get_queried_object()->name;
+
+            $gestion_types_taxonomy_slug = 'ofertas';
+
+            if($gestion_type  = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : (get_query_var('gestion_type') ?: null)){
+                $gestion_types_taxonomy = get_term_by('slug', $gestion_type ,'gestion_types_taxonomy');
+                if(!empty( $gestion_types_taxonomy ) && !is_wp_error( $gestion_types_taxonomy )){
+                    $tax_url = get_term_link( $gestion_types_taxonomy, 'gestion_types_taxonomy');
+                    $gestion_types_taxonomy_slug = $gestion_types_taxonomy->slug ?: $gestion_types_taxonomy_slug ;
+                    $html   .= $sep . $before . sprintf( $link, $tax_url , $gestion_types_taxonomy->name, $position ). $after;
+                }
+            }
+
+
+            $property_types_taxonomy_slug   = 'inmuebles' ;
+
+            if($property_type  = get_query_var('property_types_taxonomy') ? get_query_var('property_types_taxonomy') : (get_query_var('property_type') ?: null)){
+                $property_types_taxonomy = get_term_by('slug', $property_type ,'property_types_taxonomy');
+                if(!empty( $property_types_taxonomy ) && !is_wp_error( $property_types_taxonomy )){
+                    $tax_url    = get_term_link( $property_types_taxonomy, 'property_types_taxonomy');
+                    $tax_url    = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
+                    $property_types_taxonomy_slug = $property_types_taxonomy->slug ?: $property_types_taxonomy_slug ;
+                    $html   .= $sep . $before . sprintf( $link, $tax_url , $property_types_taxonomy->name, $position ). $after;
+                }
+            }
+
+
+            if($property_zone  = get_query_var('property_zones_taxonomy') ? get_query_var('property_zones_taxonomy') : (get_query_var('property_zone') ?: null)){
+                $property_zones_taxonomy = get_term_by('slug', $property_zone ,'property_zones_taxonomy');
+                if(!empty( $property_zones_taxonomy ) && !is_wp_error( $property_zones_taxonomy )){
+                    $tax_url    = get_term_link( $property_zones_taxonomy, 'property_zones_taxonomy');
+                    $tax_url    = str_replace('ofertas',$gestion_types_taxonomy_slug,$tax_url);
+                    $tax_url    = str_replace('inmuebles',$property_types_taxonomy_slug,$tax_url);
+                    $html   .= $sep . $before . sprintf( $link, $tax_url , $property_zones_taxonomy->name, $position ). $after;
+                }
+            }
+
            if ( $show_current && $name ) $html .= $sep . $before . $name . $after;
+        
         }  elseif ( is_404() ) {
             if ( $show_home_link && $show_current ) $html .= $sep;
             if ( $show_current ) $html .= $before . $text['404'] . $after;

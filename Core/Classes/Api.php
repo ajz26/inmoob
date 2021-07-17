@@ -17,8 +17,12 @@ class Api {
 
 
     static function get_terms_select($taxonomy,$args = array(), string $field ='slug'){
-        $gestion_type = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : get_query_var('gestion_type');
+
+        $gestion_type   = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : (get_query_var('gestion_type') ?: null);
         $terms          = self::get_terms($taxonomy,$args);
+
+        if(empty( $terms )  || is_wp_error( $terms )) return null;
+
         $terms          = array_map(array(__CLASS__,"reduce_array_by_{$field}"),$terms);
         if(isset($gestion_type)){
             $terms          = array_filter($terms,function($term) use($taxonomy,$gestion_type,$field){

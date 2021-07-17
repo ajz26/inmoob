@@ -85,7 +85,7 @@ class NoDocs extends Field {
 
 
     static function output($atts, $content = null){
-        $name = self::get_atts('name','no_docs');
+        $name  = self::get_atts('name','no_docs');
         $label = self::get_atts('label','Sin Documentación');
 
         return "<label for='field-{$name}' class='switches'><input type='checkbox' class='switch fake-switch' name='$name' id='field-{$name}' value='1'><span class='switch'></span> <span class='label-text'>{$label}</span></label>";
