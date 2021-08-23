@@ -219,44 +219,54 @@ final class Properties {
             array(
                 'tab'       => 'features',
                 'id'        => 'pets',
-                'name'      => 'Permiten mascotas',
+                'name'      => 'Mascotas',
                 'type'      => 'switch',                    
                 'style'     => 'rounded',
                 'on_label'  => 'Si',
                 'off_label' => 'No',
-                'columns'    => 2
+                'columns'    => 1
             ),
             array(
                 'tab'       => 'features',
                 'id'        => 'childrens',
-                'name'      => 'Permiten niños',
+                'name'      => 'Niños',
                 'type'      => 'switch',                    
                 'style'     => 'rounded',
                 'on_label'  => 'Si',
                 'off_label' => 'No',
-                'columns'    => 2
+                'columns'    => 1
             ),
     
             array(
                 'tab'       => 'features',
                 'id'        => 'terrace',
-                'name'      => 'Tiene terraza',
+                'name'      => 'Terraza',
                 'type'      => 'switch',                    
                 'style'     => 'rounded',
                 'on_label'  => 'Si',
                 'off_label' => 'No',
-                'columns'    => 2
+                'columns'    => 1
             ),
     
             array(
                 'tab'       => 'features',
                 'id'        => 'ascensor',
-                'name'      => 'Tiene Ascensor',
+                'name'      => 'Ascensor',
                 'type'      => 'switch',                    
                 'style'     => 'rounded',
                 'on_label'  => 'Si',
                 'off_label' => 'No',
-                'columns'    => 2
+                'columns'    => 1
+            ),
+            array(
+                'tab'       => 'features',
+                'id'        => 'garage',
+                'name'      => 'Garaje',
+                'type'      => 'switch',                    
+                'style'     => 'rounded',
+                'on_label'  => 'Si',
+                'off_label' => 'No',
+                'columns'    => 1
             ),
             array(
                 'tab'        => 'features',

@@ -204,7 +204,13 @@ class Translator {
                         $val = self::parse_groups($val);
                         
                         foreach($val AS $note_group => $note_value){
-                            $this->property->$note_group = $note_value;
+
+                            switch($note_group){
+                                case 'requirements':
+                                case 'extras':
+                                    $this->property->$note_group = $note_value;
+                                break;
+                            }
                         }
                         continue(2);
                     }
@@ -212,6 +218,7 @@ class Translator {
 
                 case "tags":
                     $this->property->no_docs        = (is_array($val) && in_array('sin nómina',$val)) ? 1 : 0;
+                    $this->property->garage         = (is_array($val) && in_array('garaje',$val)) ? 1 : 0;
                 break;
             }
             $this->property->$translation = $val;

@@ -1,4 +1,7 @@
 <?php defined( 'ABSPATH' ) OR die( 'This script cannot be accessed directly.' );
+
+use Inmoob\Classes\Mails\Notification;
+
 /*
  * Plugin Name: Inmoob | Gestión de proyectos inmobiliarios
  * Description: Gestión de proyectos inmobiliarios
@@ -81,8 +84,3 @@ class INMOOB_CORE{
 }
 
 INMOOB_CORE::instance();
-
-
-// $prop = new \Inmoob\Classes\Properties(array());
-
-// var_dump($prop->get_data());

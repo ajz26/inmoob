@@ -1,5 +1,8 @@
 <?php
 
+use OBSER\Classes\Settings;
+
+
 // If the plug-in for background processes is not installed, then we will connect it from the vendor folder
 if ( ! class_exists( 'WP_Async_Request' ) AND ! class_exists( 'WP_Background_Process' ) ) {
 	$wp_background_processing_path = OBSER_FRAMEWORK_DIR_PATH . 'vendor/wp-background-processing/wp-background-processing.php';
@@ -29,42 +32,13 @@ add_action('admin_head',function () {
 
 add_action('admin_bar_menu', function ($admin_bar){
 
-    // // $admin_bar->add_node(array(
-    // //     'id'    => 'witei_menu_group',
-    // //     'title' => 'Importar desde Witei'
-    // // ));
+	$witei_api_key   =  Settings::get_setting('inmoob-settings','witei_api_key') ?: null;
 
-    // $admin_bar->add_menu( array(
-    //     'id'    => 'inmoob_reimport_properties',
-    //     'title' => "Importar propiedades",
-	// 	// 'parent'=> "witei_menu_group"
-    // ));
-
-	// global $Inmoob_witei_importer;
-
-
-	// $tasks = $Inmoob_witei_importer->get_stats_data();
-	// $extra_class = "";
-	// if($tasks >= 1){
-	// 	$extra_class = 'importing';
-	// }
-
-	// $meta = array(
-	// 	'class' => "wp-admin-bar-inmoob_reimport_properties {$extra_class}",
-	// );
-
-	// if(isset($tasks['count_tasks']) && $tasks['count_tasks'] >= 1){
-
-	// 	$count_tasks 		= $tasks['count_tasks'];
-	// 	$completed_tasks 	= $tasks['completed_tasks'];
-	// 	$meta['html'] = "{$completed_tasks} Importadas de {$count_tasks}";
-	// }
+	if(!$witei_api_key) return null;
 
 	$admin_bar->add_menu( array(
         'id'    => 'inmoob_reimport_properties',
         'title' => "Importar propiedades",
-		// 'parent'=> "witei_menu_group",
-		// 'meta'	=> $meta,
     ));
 
 }, 100);
@@ -123,12 +97,18 @@ if ( class_exists( 'WP_Background_Process' ) AND ! class_exists( 'Inmoob_witei_i
             $request->set_header( 'content-type', 'application/json' );
             $request->set_body( json_decode($json) );
 						
+
+			error_log('importando...');
+
 			$res 	= false;
 			try {
 				$res = Inmoob\Api\Endpoints\Witei\Create::callback($request);
 			} catch (\Throwable $th) {
 				//throw $th;
 			}
+
+			error_log('listo...' . $res->ID);
+
 
 			return FALSE;
 		}
@@ -156,11 +136,14 @@ function reimport_witei_props(){
 
 	if ( $Inmoob_witei_importer instanceof Inmoob_witei_importer ) {
 
-		$token  = 'c90576fc9b004ecba94e2ac4f9bcc866';
+		$witei_api_key   =  Settings::get_setting('inmoob-settings','witei_api_key') ?: null;
+
+		if(!$witei_api_key) return null;
+
         $url    = 'https://witei.com/api/v1/houses/?status=available';
         $args   = array(
             'headers' => array(
-            'Authorization' => "Bearer {$token}"
+            'Authorization' => "Bearer {$witei_api_key}"
             )
         );
         

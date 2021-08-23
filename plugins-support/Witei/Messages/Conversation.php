@@ -1,17 +1,26 @@
 <?php
 namespace Inmoob\Witei\Messages;
+use OBSER\Classes\Settings;
+
+
 
 class Conversation {
 
 
     public      $contact_id;
     public      $pk;
-    private     $token  = 'e2343a00c523436698d768bd39003348';
+    private     $witei_api_key;
     private     $url    = 'https://witei.com/api/v1/link/conversations/';
 
     function __construct($contact_id){
-        $this->contact_id   = $contact_id;
-        $this->create();
+
+        $this->witei_api_key   =  Settings::get_setting('inmoob-settings','witei_api_key') ?: null;
+
+        if($this->witei_api_key){
+            $this->contact_id   = $contact_id;
+            $this->create(); 
+        }
+        
     }
 
 
@@ -19,7 +28,7 @@ class Conversation {
 
         $res    = wp_remote_post($this->url,array(
                     'headers' => array(
-                        'Authorization' => "Bearer {$this->token}"
+                        'Authorization' => "Bearer {$this->witei_api_key}"
                     ),
                     'body'       => $this,
                     )

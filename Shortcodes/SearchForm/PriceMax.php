@@ -14,8 +14,8 @@ class PriceMax extends Select {
 
         $min	    = intval($data['min']);
         $max	    = intval($data['max']);
-        
-        $increase   = Api::calc_increasement(round($min,-4,PHP_ROUND_HALF_EVEN));
+        $minlength  = strlen($min) +1 ;
+        $increase   = Api::calc_increasement(round($min,$minlength,PHP_ROUND_HALF_EVEN));
         $options    = Api::create_range_options($min,$max,$increase);
         return $options;
     }

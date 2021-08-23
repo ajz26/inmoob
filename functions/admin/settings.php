@@ -124,6 +124,37 @@ Settings::set_section('inmoob-settings',array(
 ));
 
 
+Settings::set_section('inmoob-settings',array(
+    'title'   => 'Notificaciones',
+    'heading' => 'Notificaciones',
+    'desc'    => 'Descripción',
+    'fields'  => array(
+        array(
+            'name'          => 'mail_to',
+            'title'         => 'Email a notificar',
+            'type'          => 'textfield',
+        ),
+    )
+));
+
+
+
+Settings::set_section('inmoob-settings',array(
+    'title'   => 'Witei',
+    'heading' => 'Witei',
+    'desc'    => 'Descripción',
+    'fields'  => array(
+        array(
+            'name'          => 'witei_api_key',
+            'title'         => 'WITEI API KEY',
+            'description'   => '',
+            'type'          => 'textfield',
+        ),
+    )
+));
+
+
+
 add_action('init', function(){
     Settings::init('inmoob-settings');
 },100);

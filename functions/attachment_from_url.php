@@ -9,6 +9,3 @@ add_filter( 'get_attached_file', function( $file, $attachment_id ) {
 	}
 	return $file;
 }, 10, 2 );
-
-
-// add_external_media_without_import();

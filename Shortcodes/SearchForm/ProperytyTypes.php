@@ -12,13 +12,18 @@ class ProperytyTypes extends Select {
         $values     = Api::get_terms_select('property_types_taxonomy');
         $options    = array_map(array(__CLASS__,'parse_options'),$values);
         $options    =  array_map(array(__CLASS__,'set_selected'),$options);
+
         return $options;
     }
 
 
     private static function set_selected(&$option): object{
-        $category = get_query_var('property_types_taxonomy') ?:  get_query_var('property_type');
+        $category = get_query_var('property_types_taxonomy') ?:  get_query_var('property_type') ?: null;
 
+        if(!isset($category)){
+            return $option;
+        }
+        
         if($option->val == $category){
             $option->selected = true;
         }
@@ -39,11 +44,14 @@ class ProperytyTypes extends Select {
 
     static function output($atts, $content = null){
 
-        $property_type = get_query_var('property_types_taxonomy') ?: (get_query_var('property_type') ?: null);
+        $property_type  = get_query_var('property_types_taxonomy') ?: (get_query_var('property_type') ?: null);
+        $post_search    = (get_query_var('post_search') == 1) ? true : false;
 
-        if($property_type) return null;
+
+        if($property_type && !$post_search) return null;
 
         self::get_values();
+
         return parent::output($atts,$content);
     }
 

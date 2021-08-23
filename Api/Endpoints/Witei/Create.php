@@ -33,7 +33,11 @@ class Create extends Endpoint{
 
         if($post_id = get_post_by_id($property->witei_id)){
             $property->ID = $post_id; 
+            error_log('actualizado');
+        }else{
+            error_log('nuevo');
         }
+
         
         $data->set_body($property);
 

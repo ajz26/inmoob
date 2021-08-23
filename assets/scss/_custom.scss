@@ -1,0 +1,47 @@
+.search_props
+    label
+        span{
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: bold;
+        }
+        select,
+        textarea{
+            width: 100%;
+
+	}
+input,
+select,
+textarea {
+	border: 1px solid #cccccc;
+	border-radius: 0.5rem;
+}
+
+textarea {
+	border: 1px solid #cccccc;
+	border-radius: 0.5rem;
+	resize: none;
+	padding: .5rem; 
+	height: auto;
+}
+
+
+
+select {
+	padding: .5rem 1rem;
+	min-width: 170px;
+}
+ 
+.tagify{
+    border: 1px solid #cccccc;
+	border-radius: 0.5rem;
+	resize: none;
+	padding: .5rem;
+} 
+
+form.loading * {
+	opacity: .8;
+	cursor: wait;
+	pointer-events: none;
+	user-select: none;
+}

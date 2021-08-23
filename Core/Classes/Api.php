@@ -19,12 +19,14 @@ class Api {
     static function get_terms_select($taxonomy,$args = array(), string $field ='slug'){
 
         $gestion_type   = get_query_var('gestion_types_taxonomy') ? get_query_var('gestion_types_taxonomy') : (get_query_var('gestion_type') ?: null);
+        $post_search    = (get_query_var('post_search') == 1) ? true : false;
         $terms          = self::get_terms($taxonomy,$args);
 
         if(empty( $terms )  || is_wp_error( $terms )) return null;
 
         $terms          = array_map(array(__CLASS__,"reduce_array_by_{$field}"),$terms);
-        if(isset($gestion_type)){
+
+        if(isset($gestion_type) && !$post_search){
             $terms          = array_filter($terms,function($term) use($taxonomy,$gestion_type,$field){
                 $args = array(
                  'post_type' => 'inmoob_properties',
@@ -47,13 +49,14 @@ class Api {
                 return ($query->post_count >= 1) ? true : false;
             });
         }
-        
+
         $terms = array_map(array(__CLASS__,"parse_options"),$terms);
 
         return $terms;
     }
 
     private static function parse_options($item){
+
         $copy = clone $item;
         $item = new stdClass();
         $item->val      = $copy->slug;
@@ -137,8 +140,8 @@ class Api {
         $meta_values    = array_column($_meta, 'meta_value');
 
         $min_max_array = array(
-            'min' => min($meta_values),
-            'max' => max($meta_values) + 100
+            'min' => (count($meta_values) >= 1) ? min($meta_values) : 0,
+            'max' => (count($meta_values) >= 1) ? max($meta_values) + 100 :  null,
         );
 
         return $min_max_array;
@@ -160,8 +163,9 @@ class Api {
 
         $options    = [];
         $minlength  = strlen($min)-1;
-        $min        = round($min,-$minlength,PHP_ROUND_HALF_EVEN) + $increase;
-        $options    = range($min,$max,$increase);
+        $min        = round($min,-$minlength,PHP_ROUND_HALF_EVEN) ;
+        
+        $options    = ($min + $increase <= $max) ? range($min + $increase  ,$max,$increase) : [$min,$max];
 
         $options    = array_map(function($opt){
             $data = new stdClass();
@@ -182,6 +186,8 @@ class Api {
 
     static function calc_increasement($val){
 
+        $increase = null;
+        
         switch(true){
             case ($val >= 0 && $val < 100):
                 $increase = 100;

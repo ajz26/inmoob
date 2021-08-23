@@ -36,6 +36,11 @@ class IconData extends Shortcode{
                    $i ++;
                }
             break;
+            case 'garage' :
+                $value = (get_post_meta($post->ID,$field,true) == 1) ? 'Garaje' : null ;
+            
+            break;
+    
             default:
                 $value = get_post_meta($post->ID,$field,true);
             break;

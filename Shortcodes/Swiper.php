@@ -4,14 +4,8 @@ namespace Inmoob\Shortcodes;
 
 class Swiper extends SearchGrid {
 
-
-
-
-    static $shortcode = "inmoob_props_swiper";
-    static $wpb_namespace = "Inmoob\\WPB_Components";
-
-
-
+    static $shortcode       = "inmoob_props_swiper";
+    static $wpb_namespace   = "Inmoob\\WPB_Components";
 
     public static function enquee_styles(){
 
@@ -38,14 +32,11 @@ class Swiper extends SearchGrid {
 
 
     public static function renderItems(){
-        $output         = $items = '';
-        $filter_terms   = self::$filter_terms;
-        $atts           = self::get_atts();
-        $settings       = self::$grid_settings;
-        $is_end         = isset(self::$is_end) && self::$is_end;
+        $output         = $items = null;
+        $atts           = static::get_atts();
+        
 
-
-        if (is_array(self::$items) && !empty(self::$items)) {
+        if (is_array(static::$items) && !empty(static::$items)) {
 
             global $post;
             $backup     = $post;
@@ -53,22 +44,19 @@ class Swiper extends SearchGrid {
             $grid_item->set_mode('swiper');
             $grid_item->set_item_atts($atts);
 
-            foreach (self::$items as $postItem) {
-                self::$WP_Query->setup_postdata($postItem);
+            foreach (static::$items as $postItem) {
+                static::$WP_Query->setup_postdata($postItem);
                 $post           = $postItem;
                 $items         .= $grid_item->render_item($post);
-            }
-
-            if(count(self::$items) >= 4){
-                $items         .= "<div class='swiper-slide'></div>";
             }
 
             $post = $backup;
 
         } else {
-            $shortcode_id = self::get_atts('shortcode_id');
+            $shortcode_id = static::get_atts('shortcode_id');
 
-            $not_results_page_block_id  = self::get_atts('not_results_page_block');
+            $not_results_page_block_id  = static::get_atts('not_results_page_block');
+
 
             \WPBMap::addAllMappedShortcodes();
 
@@ -79,7 +67,6 @@ class Swiper extends SearchGrid {
             }
 
 
-
             $output .= "
             <script>
             window.onload = function() {
@@ -87,8 +74,8 @@ class Swiper extends SearchGrid {
             };
             </script>";
         }
-        if ($items != "") {
-            $output     .= self::renderPagination($settings, $items);
+        if (isset($items) && !empty($items)) {
+            $output     .= static::renderPagination($items);
         }
 
         return $output;
@@ -98,19 +85,20 @@ class Swiper extends SearchGrid {
     public static function generate_css(){
         
         $style                      = '';
-        $parent_id                  = self::get_atts('vc_id');
-        $element_width              = (int)self::get_atts('element_width', 4);
-        $mx_responsive_1            = (int)self::get_atts('mx_responsive_1', 1200);
-        $mx_responsive_val_1        = (int)self::get_atts('mx_responsive_val_1', $element_width);
+        $parent_id                  = static::get_atts('vc_id');
+        $element_width              = (int)static::get_atts('element_width', 4);
+        $mx_responsive_1            = (int)static::get_atts('mx_responsive_1', 1200);
+        $mx_responsive_val_1        = (int)static::get_atts('mx_responsive_val_1', $element_width);
 
-        $mx_responsive_2            = (int)self::get_atts('mx_responsive_2', 1200);
-        $mx_responsive_val_2        = (int)self::get_atts('mx_responsive_val_2', $mx_responsive_val_1);
+        $mx_responsive_2            = (int)static::get_atts('mx_responsive_2', 1200);
+        $mx_responsive_val_2        = (int)static::get_atts('mx_responsive_val_2', $mx_responsive_val_1);
 
-        $mx_responsive_3            = (int)self::get_atts('mx_responsive_3', 1200);
-        $mx_responsive_val_3        = (int)self::get_atts('mx_responsive_val_3', $mx_responsive_val_2);
-        $items_gap                  = (int)self::get_atts('items_gap', 10);
+        $mx_responsive_3            = (int)static::get_atts('mx_responsive_3', 1200);
+        $mx_responsive_val_3        = (int)static::get_atts('mx_responsive_val_3', $mx_responsive_val_2);
+        $items_gap                  = (int)static::get_atts('items_gap', 10);
         
         $style .= "
+
         .{$parent_id} .inmoob-swipper {
             margin-left: calc(({$items_gap}px / 2) * (-1));
             margin-right: calc(({$items_gap}px / 2) * (-1));
@@ -153,11 +141,19 @@ class Swiper extends SearchGrid {
     static function general_styles()
     {
     
-        return "
+        // if(static::$general_encoled) return;
 
+        // static::$general_encoled = true;
+
+        return "
+        
         .inmoob-swiper-pagination {
-            margin: 0 auto;
-            text-align: center;
+            position: relative;
+        }
+
+        .contenedor-obser-grid.swiper .obser-grid-item.swiper-slide {
+            height: auto;
+            overflow: visible;
         }
 
         .prev-next-buttons-container {
@@ -210,9 +206,9 @@ class Swiper extends SearchGrid {
             opacity: 0;
             transition: visibility 0s, opacity 0.5s linear;
         }
-
-
         ";
+
+
 
     }
 
@@ -220,26 +216,33 @@ class Swiper extends SearchGrid {
 
     public static function output($_atts, $content){
 
-        self::buildGridSettings();
-        $atts = self::get_atts();
+
+        static::buildGridSettings();
+        $atts = static::get_atts();
 
         add_action('wp_footer',function() use ($atts){
-            self::generate_script($atts);
-        });
+            static::generate_script($atts);
+        },100);
 
-        $element_id     = self::get_atts('vc_id');
-        self::set_att("_gid",sanitize_title(self::get_atts('_gid')));
-        $_gid           = self::get_atts('_gid');
-        $shortcode_id   = self::get_atts('shortcode_id');
-        self::buildItems();
+        $element_id     = static::get_atts('vc_id');
+        static::set_att("_gid",sanitize_title(static::get_atts('_gid')));
+        $_gid           = static::get_atts('_gid');
+        $shortcode_id   = static::get_atts('shortcode_id');
+        static::buildItems();
 
-        $id                 = self::get_atts('el_id');
-        $post_type          = esc_attr("obser-grid-".self::get_atts('post_type'));
-        $json_data          = esc_attr(wp_json_encode(self::$grid_settings));
+
+        $id                 = static::get_atts('el_id');
+        $post_type          = esc_attr("obser-grid-".static::get_atts('post_type'));
+        $json_data          = esc_attr(wp_json_encode(static::$grid_settings));
         $current_page_id    = esc_attr(get_the_ID());
-        $el_class           = esc_attr(self::get_atts('el_class'));
+        $el_class           = esc_attr(static::get_atts('el_class'));
         $el_nonce           = esc_attr(vc_generate_nonce('vc-public-nonce'));
-        $items              = self::renderItems();
+        $items              = static::renderItems();
+        
+        if(!isset(static::$items) || empty(static::$items) ){
+            return $items;
+        }
+
         $output  = "
         <div id='{$id}' class='contenedor-obser-grid swiper {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
             <div class='obser-custom-preloader'>
@@ -254,7 +257,6 @@ class Swiper extends SearchGrid {
                     <i class='far fa-angle-right'></i>
                 </div>
             </div>
-           
             <div class='inmoob-swipper swiper-wrapper'>
                 {$items}    
             </div>
@@ -267,25 +269,27 @@ class Swiper extends SearchGrid {
 
 
     public static function generate_script($atts){
-        self::set_atts($atts);
-        $show_bullets               = self::get_atts('show_bullets',true);
-        $show_arrows                = self::get_atts('show_arrows',true);
-        $el_swipper                 = self::get_atts('vc_id');
-        $element_width              = (int)self::get_atts('element_width', 4);
+        static::set_atts($atts);
+        $show_bullets               = static::get_atts('show_bullets',true);
+        $show_arrows                = static::get_atts('show_arrows',true);
+        $el_swipper                 = static::get_atts('vc_id');
+        $element_width              = (int)static::get_atts('element_width', 4);
         $lazy_preload               = $element_width + $element_width;
-        $mx_responsive_1            = (int)self::get_atts('mx_responsive_1', 1200);
-        $mx_responsive_val_1        = (int)self::get_atts('mx_responsive_val_1', $element_width);
-        $mx_responsive_2            = (int)self::get_atts('mx_responsive_2', 1200);
-        $mx_responsive_val_2        = (int)self::get_atts('mx_responsive_val_2', $mx_responsive_val_1);
-        $mx_responsive_3            = (int)self::get_atts('mx_responsive_3', 1200);
-        $mx_responsive_val_3        = (int)self::get_atts('mx_responsive_val_3', $mx_responsive_val_2);
+        $mx_responsive_1            = (int)static::get_atts('mx_responsive_1', 1200);
+        $mx_responsive_val_1        = (int)static::get_atts('mx_responsive_val_1', $element_width);
+        $mx_responsive_2            = (int)static::get_atts('mx_responsive_2', 1200);
+        $mx_responsive_val_2        = (int)static::get_atts('mx_responsive_val_2', $mx_responsive_val_1);
+        $mx_responsive_3            = (int)static::get_atts('mx_responsive_3', 1200);
+        $mx_responsive_val_3        = (int)static::get_atts('mx_responsive_val_3', $mx_responsive_val_2);
 
         $script = "<script>
             jQuery(document).ready(function () {
-                var mySwiper = new Swiper ('.{$el_swipper} .swiper-container', {
-                    lazy: true,
-                    loadPrevNext: true,
-                    loadPrevNextAmount: {$lazy_preload},
+                var mySwiper_{$el_swipper} = new Swiper ('.{$el_swipper} .swiper-container', {
+                    lazy: {
+                        loadPrevNext: true,
+                        checkInView : true,
+                        loadPrevNextAmount: {$lazy_preload},
+                      },
                     slidesPerView: {$mx_responsive_val_3},";
                     if($show_arrows){
                         $script .= 'navigation: {

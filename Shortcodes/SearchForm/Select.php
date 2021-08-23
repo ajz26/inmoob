@@ -3,11 +3,8 @@
 namespace Inmoob\Shortcodes\SearchForm;
 abstract class Select extends Field {
 
-    static $general_encoled = false;
 
-    static function generate_css(){
-
-    }
+    static function generate_css(){}
 
     static function set_default_atts(){
         self::$attributes_defaults = array_merge(static::$attributes_defaults,array(
@@ -42,8 +39,9 @@ abstract class Select extends Field {
         
         $styles = "
 
-        .inmmoob-searchform * + * {
-            margin-top: 1rem !important;
+        .inmoob-content-sform .field-list > .inmoob-select {
+            max-height: 250px;
+            overflow-y: auto;
         }
 
         .field-list > div {
@@ -86,6 +84,7 @@ abstract class Select extends Field {
         .label:not(.show) > i::before {
             content: '\\f107';
         }
+        
         ";
 
 
@@ -112,17 +111,14 @@ abstract class Select extends Field {
     }
 
     static function gen_placeholder($placeholder){
-        return "<option value=\"\">{$placeholder}</option>";
+        return "<option value='-'>{$placeholder}</option>";
     }
 
     static function output($atts, $content){
-        $type = self::get_atts('type');
+        $type           = self::get_atts('type');
+        $placeholder    = self::get_atts('placeholder');
+        $vals           = [];
 
-
-        $opt_def = new \stdClass();
-        $opt_def->val = '-';
-        $opt_def->label = __('Todas','Inmoob');
-        $vals[] = $opt_def;
         $vals = (count(self::get_atts('values',array())) > 1 ) ?  array_merge($vals,self::get_atts('values',array())) : array();
 
         self::set_att('values',$vals);
@@ -138,8 +134,8 @@ abstract class Select extends Field {
         $vc_id          = self::get_atts('vc_id');
         $name           = sanitize_key(self::get_atts('name'));
         $options_html   = self::gen_options_html($values);
-        $label          = self::get_atts('label') ? "<span>".self::get_atts('label')."</span>" : null;
-        $placeholder    = self::get_atts('label') ? self::gen_placeholder(self::get_atts('label')) : null;
+        $label          = self::get_atts('label')       ? "<span>".self::get_atts('label')."</span>"            : null;
+        $placeholder    = self::get_atts('placeholder') ? self::gen_placeholder(self::get_atts('placeholder'))  : null;
         $content        = "<label for='select-{$name}'>{$label}<select id='select-{$name}' name='{$name}' class='inmoob-select {$vc_id}'>{$placeholder}{$options_html}</select></label>";
       
         return  parent::output($atts, $content);

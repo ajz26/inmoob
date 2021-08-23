@@ -2,7 +2,7 @@
 
 add_action('init',function(){
     
-    register_taxonomy( 'gestion_types_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'gestion_types_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Tipos de Gestión', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Gestión', 'Taxonomy singular name', 'obser' ),
@@ -32,7 +32,7 @@ add_action('init',function(){
 
     $GLOBALS['wp_rewrite']->use_verbose_page_rules = true;
 
-    register_taxonomy( 'gestion_states_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'gestion_states_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Estado de Gestión', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Estado', 'Taxonomy singular name', 'obser' ),
@@ -61,7 +61,7 @@ add_action('init',function(){
     ));
 
 
-    register_taxonomy( 'property_types_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_types_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Tipo de Inmueble', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Tipo de inmuebles', 'Taxonomy singular name', 'obser' ),
@@ -89,7 +89,7 @@ add_action('init',function(){
     ));
 
 
-    register_taxonomy( 'property_zones_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_zones_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Zona', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Zona', 'Taxonomy singular name', 'obser' ),
@@ -116,7 +116,7 @@ add_action('init',function(){
         'capabilities'      => array('manage_options'),
     ));
 
-    register_taxonomy( 'property_rooms_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_rooms_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Habitaciones', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Habitación', 'Taxonomy singular name', 'obser' ),
@@ -145,7 +145,7 @@ add_action('init',function(){
     ));
 
 
-    register_taxonomy( 'property_bathrooms_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_bathrooms_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Baños', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Baño', 'Taxonomy singular name', 'obser' ),
@@ -174,7 +174,7 @@ add_action('init',function(){
     ));
 
 
-    register_taxonomy( 'property_state_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_state_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Estado de la propiedad', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Estado', 'Taxonomy singular name', 'obser' ),
@@ -203,7 +203,35 @@ add_action('init',function(){
     ));
 
 
-    register_taxonomy( 'property_tags_taxonomy', array( 'inmoob_properties' ), array(
+    register_taxonomy( 'property_tags_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
+        'labels'            => array(
+            'name'                  => _x( 'Etiquetas', 'Taxonomy plural name', 'obser' ),
+            'singular_name'         => _x( 'Etiqueta', 'Taxonomy singular name', 'obser' ),
+            'search_items'          => __( 'Buscar Etiqueta', 'obser' ),
+            'popular_items'         => __( 'Etiquetas populares', 'obser' ),
+            'all_items'             => __( 'Todas los Etiquetas', 'obser' ),
+            'edit_item'             => __( 'Editar', 'obser' ),
+            'update_item'           => __( 'Actualizar', 'obser' ),
+            'add_new_item'          => __( 'Agregar nuevo', 'obser' ),
+            'new_item_name'         => __( 'Nuevo', 'obser' ),
+            'add_or_remove_items'   => __( 'Agregar o eliminar Etiquetas', 'obser' ),
+            'choose_from_most_used' => __( 'Escoger desde los mas usados', 'obser' ),
+            'menu_name'             => __( 'Etiquetas', 'obser' ),
+        ),
+        'public'            => false,
+        'show_in_nav_menus' => false,
+        'show_admin_column' => false,
+        'hierarchical'      => false,
+        // 'show_tagcloud'     => false,
+        'show_ui'           =>  current_user_can('administrator') ? true : false,
+        'query_var'         => true,
+        'rewrite'           => true,
+        'query_var'         => true,
+        // 'meta_box_cb'       => false,
+        'capabilities'      => array('manage_options'),
+    ));
+
+    register_taxonomy( 'property_tags_taxonomy', array(  'inmoob_properties','inmoob_leads' ), array(
         'labels'            => array(
             'name'                  => _x( 'Etiquetas', 'Taxonomy plural name', 'obser' ),
             'singular_name'         => _x( 'Etiqueta', 'Taxonomy singular name', 'obser' ),

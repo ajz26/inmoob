@@ -50,7 +50,7 @@ class Gallery extends Shortcode{
             display: block;
         }
         
-        .swiper-slide img {
+        .inmoob-props-gallery .swiper-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;

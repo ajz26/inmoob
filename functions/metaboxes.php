@@ -10,7 +10,16 @@ add_filter( 'rwmb_meta_boxes',function ($meta_boxes){
         'tab_wrapper'   => true,
         'fields'        => \Inmoob\Config\Properties::get_fields(),
     );  
+
+    $meta_boxes[] = array(
+        'title'         => 'Testimonio',
+        'post_types'    => 'inmoob_testimonials',
+        'fields'        => \Inmoob\Config\Testimonials::get_fields(),
+    );  
+
+
     return $meta_boxes;
+    
     
 });
 

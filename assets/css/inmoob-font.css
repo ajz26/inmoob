@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Inmoob';
-  src:  url('../fonts/Inmoob.eot?qtxgb0');
-  src:  url('../fonts/Inmoob.eot?qtxgb0#iefix') format('embedded-opentype'),
-    url('../fonts/Inmoob.ttf?qtxgb0') format('truetype'),
-    url('../fonts/Inmoob.woff?qtxgb0') format('woff'),
-    url('../fonts/Inmoob.svg?qtxgb0#Inmoob') format('svg');
+  src:  url('../fonts/Inmoob.eot?rnki9a');
+  src:  url('../fonts/Inmoob.eot?rnki9a#iefix') format('embedded-opentype'),
+    url('../fonts/Inmoob.ttf?rnki9a') format('truetype'),
+    url('../fonts/Inmoob.woff?rnki9a') format('woff'),
+    url('../fonts/Inmoob.svg?rnki9a#Inmoob') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,12 @@ i.inmoob {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.inmoob-send:before {
+  content: "\e904";
+}
+.inmoob-whatsapp:before {
+  content: "\e905";
+}
 .inmoob-m2:before {
   content: "\e900";
 }
@@ -33,4 +39,7 @@ i.inmoob {
 }
 .inmoob-bathrooms:before {
   content: "\e902";
+}
+.inmoob-garage:before {
+  content: "\e903";
 }

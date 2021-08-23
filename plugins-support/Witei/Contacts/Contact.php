@@ -1,5 +1,7 @@
 <?php
 namespace Inmoob\Witei\Contacts;
+use OBSER\Classes\Settings;
+use stdClass;
 
 class Contact {
 
@@ -56,59 +58,75 @@ class Contact {
     public      $created;
     public      $is_iddle;
     public      $blocked;
+    public      $errors;
 
-    private     $token  = 'e2343a00c523436698d768bd39003348';
+    protected   $witei_api_key;
     private     $url    = 'https://witei.com/api/v1/contacts/';
    
 
     function __construct($data){
-        $this->data     = $data;
+        $this->witei_api_key   =  Settings::get_setting('inmoob-settings','witei_api_key') ?: null;
+
+        $this->data = $data;
+
         $this->parse_data();
-        $this->insert_contact();
-        $this->remove_null_props();
+    } 
+
+
+    function set_error($errors){
+        $errors = json_decode($errors,true);
+        foreach($errors AS $error => $message){
+            $this->errors[$error] = is_array($message) && count($message) > 1 ? $message : $message[0];
+        }
     }
 
-    function insert_contact(){
 
-        $json = json_encode($this,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+
+
+    public function insert_contact(){
+        
+
+        if(!isset($this->witei_api_key)){
+            return false;
+        }
+
+        $json   = json_encode($this,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+
         $res    = wp_remote_post($this->url,array(
-            'headers' => array(
-                'Authorization' => "Bearer {$this->token}"
-            ),
-            'body'       => $this,
-        ));
+                'headers' => array(
+                    'Authorization' => "Bearer {$this->witei_api_key}"
+                ),
+                'body'       => json_decode($json,true),
+            )
+        );
+
         $response_code      = wp_remote_retrieve_response_code($res);
         $response_message   = wp_remote_retrieve_response_message($res);
         $response_body      = wp_remote_retrieve_body($res);
+        $response_body      = json_decode($response_body,true) ?: new stdClass;
 
 
-        if (is_wp_error($res) ) {
-            return new \WP_Error($response_code, $response_message, $response_body);
-        }
-
-        $response_body  = json_decode($response_body) ?: array();
-        
-        if(!is_wp_error($res) && ($res['response']['code'] == 200 || $res['response']['code'] == 201)) {
-            return $response_body->id;
+        if (is_wp_error($res) || $response_code >= 400 || isset($response_body->id) ) {
+            return new \WP_Error($response_code, $response_message,$response_body);
         }
 
         $this->id   = isset($response_body->id) && !empty($response_body->id) ? $response_body->id : null;
         
-        if(!isset($this->id)){
-            return null;
-        }
+        // $this->remove_null_props();
+        
+        // if(!isset($this->id)){
+            return $response_body;
+        // }
 
-        $contact = $this->get_contact($this->id);
 
-        $contact = $this->update_contact($contact);
-            
+
     }
 
     function get_contact(int $id){
 
         $res    = wp_remote_get("{$this->url}/{$id}/",array(
             'headers' => array(
-                'Authorization' => "Bearer {$this->token}"
+                'Authorization' => "Bearer {$this->witei_api_key}"
             ),
         ));
 
@@ -126,8 +144,10 @@ class Contact {
     }
 
     function update_contact($contact){
-
+        $date  = new \DateTime();
+        $date  = $date->format('d-m-y');
         foreach($contact AS $field => $value){
+
             if(!isset($value)) continue;
 
             if(isset($this->$field)){
@@ -135,10 +155,13 @@ class Contact {
                     case 'name':
                     case 'phone':
                     case 'alias':
+                    case 'email':
                         unset($this->$field);
                     break; 
                     case 'notes':
-                        $this->$field = $this->handler_value($value,$this->$field,false); 
+                        $this->$field   = "Nota desde web: {$date} \r\n {$this->$field} \r\n";
+                        $notes          = $this->handler_value($value,$this->$field,false);
+                        $this->$field   = $notes;
                     break;
                     default: 
                         $this->$field = $this->handler_value($value,$this->$field); 
@@ -147,27 +170,32 @@ class Contact {
 
         }
 
-
+        $json   = json_encode($this,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
         $res    = wp_remote_request("{$this->url}/{$this->id}/",array(
             'headers' => array(
-                'Authorization' => "Bearer {$this->token}"
+                'Authorization' => "Bearer {$this->witei_api_key}"
             ),
             'method'     => 'PUT',
-            'body'       => $this,
+            'body'       => json_decode($json,true),
         ));
+
+
 
         $response_code      = wp_remote_retrieve_response_code($res);
         $response_message   = wp_remote_retrieve_response_message($res);
         $response_body      = wp_remote_retrieve_body($res);
 
-        if (is_wp_error($res) ) {
+        if (is_wp_error($res) || $response_code >= 400 ) {
+
+            $this->set_error($response_body);
+
             return new \WP_Error($response_code, $response_message, $response_body);
         }
 
         $response_body  = json_decode($response_body) ?: array();
 
         if(!is_wp_error($res) && ($res['response']['code'] == 200 || $res['response']['code'] == 201)) {
-            return $response_body->id;
+            return $response_body;
         }else{
             return null;
         }
@@ -195,10 +223,23 @@ class Contact {
         $data     = $this->data;
 
         foreach($data AS $key => $val){ 
+            
+            switch($key){
+                case 'firstname' : 
+                case 'your-name' : 
+                $key = 'name';
+                break; 
+                case 'houserelationship_set' : 
+                    // $val = $val;
+                break; 
+            }
+
             if(property_exists($this,$key)){
                 $this->$key = $val;
             }
         }
+
+
 
     }
 
@@ -206,7 +247,7 @@ class Contact {
 
         $props = get_object_vars($this);
         unset($this->data);
-        unset($this->token);
+        unset($this->witei_api_key);
         unset($this->url);
         
         

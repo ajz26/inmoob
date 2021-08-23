@@ -1,5 +1,5 @@
 jQuery(document).on('click','#wp-admin-bar-inmoob_reimport_properties',function (e) { 
-    alert('adasd');
+    confirm('Deseas importar todas las propiedades de witei ?');
     e.preventDefault();
     jQuery.ajax({
         type: "POST",

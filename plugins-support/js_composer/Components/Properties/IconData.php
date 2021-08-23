@@ -31,6 +31,7 @@ class IconData extends Component {
                         'Tipo de propiedad' => 'property_types_taxonomy' ,
                         'Habitaciones'      => 'property_rooms_taxonomy' ,
                         'Baños'             => 'property_bathrooms_taxonomy',
+                        'Garaje'            => 'garage',
                         'Tamaño'            => 'property_size',
                     )
                 ),
