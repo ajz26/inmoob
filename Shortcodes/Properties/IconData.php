@@ -37,7 +37,7 @@ class IconData extends Shortcode{
                }
             break;
             case 'garage' :
-                $value = (get_post_meta($post->ID,$field,true) == 1) ? 'Garaje' : null ;
+                $value = (get_post_meta($post->ID,$field,true) == 1) ? 'Si' : null ;
             
             break;
     
@@ -71,6 +71,11 @@ class IconData extends Shortcode{
 
         if($value && !empty($value)){
             $value = "<div class='value'>{$value}</div>";
+        }
+
+
+        if(!$value){
+            return null;
         }
 
         $content = "<div id='{$el_id}' class='{$el_class} inmoob-icon-box'>{$icon}{$label}{$value}</div>";

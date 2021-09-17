@@ -30,6 +30,25 @@ class SearchGrid extends _Grid {
         $settings   = parent::buildQuery($atts);
 
 
+        $order      = static::get_order_atts();
+        $meta_query = $settings['meta_query'] ?: [];
+
+        if(in_array($order['orderby'],['price'])){
+
+        $meta_query[] = array(
+            'relation' => 'OR',
+            $order['orderby'] => array(
+                'key'           => $order['orderby'],
+                'type'          => 'NUMERIC',
+                // 'meta_compare'  => 'NOT IN'
+            )
+        );
+            
+        $settings['orderby']    = array($order['orderby'] => $order['order']);
+        $settings['meta_query'] = $meta_query;
+        
+        }
+
         if($atts['filters']){
             $tax_query_fields = 0;
             foreach((array)$atts['filters'] AS $taxonomy => $value){
@@ -107,17 +126,13 @@ class SearchGrid extends _Grid {
 
     static function buildAtts($atts = array(), $content = null){
 
-
-
+        static::set_order_methods();
 
         parent::buildAtts($atts, $content);
-
 
         $shortcode_id   = static::get_atts('shortcode_id');
         $post_type      = static::get_atts('post_type',array());
         static::set_att('post_type',$post_type[0]);
-
-
         $cookie         = static::get_cookie_data($shortcode_id);
 
         // if (!defined('DOING_AJAX') || !DOING_AJAX) {
@@ -226,6 +241,24 @@ class SearchGrid extends _Grid {
         return $output;
     }
 
+    public static function buildGridSettings(){
+
+        parent::buildGridSettings();
+
+    }
+
+    protected static function set_order_methods(){
+
+        static::$order_methods = array_merge(static::$order_methods,[
+            'price_asc'  => 'Precio (de menor a mayor)',
+            'price_desc' => 'Precio (de mayor a menor)'
+        ]);
+
+        unset(static::$order_methods['title_asc']);
+        unset(static::$order_methods['title_desc']);
+
+    }
+
 
     public static function output($_atts, $content){
 
@@ -240,7 +273,7 @@ class SearchGrid extends _Grid {
         $id                 = static::get_atts('el_id');
         $post_type          = esc_attr("obser-grid-".static::get_atts('post_type'));
         $json_data          = esc_attr(wp_json_encode(static::$grid_settings));
-        $current_page_id    =  esc_attr(get_the_ID());
+        $current_page_id    = esc_attr(get_the_ID());
         $el_class           = esc_attr(static::get_atts('el_class'));
         $el_nonce           = esc_attr(vc_generate_nonce('vc-public-nonce'));
         $items              = static::renderItems();
@@ -301,7 +334,7 @@ class IO_grid_item{
             $sales_price    = get_post_meta($post_id,'sales_price',true);
             $price_preffix  = get_post_meta($post_id,'price_prefix',true);
             $price_suffix   = get_post_meta($post_id,'price_sufix',true);
-            $price          = $value;
+            $price          =  number_format($value,0,',','.');
 
             $value = ((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price) ? '<span class="price">'.$price_preffix .' '.$sales_price.' € '.$price_suffix .'</span> <span class="old_price"> Antes '.$price.' € </span>'  : '<span class="price">'.$price_preffix .' '.$price.' € '.$price_suffix .'</span>';
         }

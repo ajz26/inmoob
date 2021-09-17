@@ -12,11 +12,14 @@ class PriceMax extends Select {
         $gestion_type = isset($gestion_type->term_id) ? $gestion_type->term_id : null;
         $data         = Api::get_options_range('price',$gestion_type);
 
-        $min	    = intval($data['min']);
+        $min	    = intval($data['min']);        
         $max	    = intval($data['max']);
-        $minlength  = strlen($min) +1 ;
+        $minlength  = strlen($min) + 1;
+
         $increase   = Api::calc_increasement(round($min,$minlength,PHP_ROUND_HALF_EVEN));
-        $options    = Api::create_range_options($min,$max,$increase);
+
+
+        $options    = Api::create_range_options($min,$max,$increase, false,false);
         return $options;
     }
 

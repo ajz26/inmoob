@@ -15,11 +15,16 @@ class PriceMin extends Select {
         
         $min	        = intval($data['min']);
         $max	        = intval($data['max']);
-        $minlength      = strlen($min) +1 ;
-        $min            = round($min,-$minlength,PHP_ROUND_HALF_EVEN);
+
+        $minlength      = strlen($min) + 1 ;
+
+        $rounded        = round($min,$minlength,PHP_ROUND_HALF_EVEN);
+        $min            = ($rounded != 0) ? $rounded : $min - 100;
 
 
         $increase       = Api::calc_increasement($min) ?: $min;
+        
+
 
         $options        = Api::create_range_options($min,$max,$increase);
         return $options;

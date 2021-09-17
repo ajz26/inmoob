@@ -105,7 +105,8 @@ class Form extends Shortcode  {
                 }
                 
                 .inmoob-content-sform.$vc_id .inmmoob-searchform {
-                    padding: .5rem 1rem;
+                    padding: .5rem 1rem 2rem;
+                    overflow-y : scroll;
                 }
 
                 .inmoob-content-sform.$vc_id {
@@ -143,7 +144,13 @@ class Form extends Shortcode  {
                     order: 2;
                     box-shadow: 0px 4px 8px rgba(0,0,0,.18);
                     bottom: 1rem;
-                    position: relative;
+                    position: fixed;
+                    z-index: 1000;
+                    width: 100%;
+                    left: 0;
+                    right: 0;
+                    max-width: 90%;
+                    margin: 0 auto;
                 }
 
                 .inmoob-content-sform.$vc_id  .toggle-cta.active + .content-form {
