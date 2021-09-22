@@ -85,6 +85,8 @@ class Contact {
 
     public function insert_contact(){
         
+        error_log(var_export($this->witei_api_key,true) );
+
 
         if(!isset($this->witei_api_key)){
             return false;
