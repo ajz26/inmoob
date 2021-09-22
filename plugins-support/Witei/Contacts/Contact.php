@@ -153,15 +153,18 @@ class Contact {
             if(isset($this->$field)){
                 switch($field){
                     case 'name':
+                    case 'firstname':
+                    case 'Firstname':
                     case 'phone':
                     case 'alias':
                     case 'email':
                         unset($this->$field);
                     break; 
+                    case 'message':
+                        $field = 'notes';
                     case 'notes':
-                        $this->$field   = "Nota desde web: {$date} \r\n {$this->$field} \r\n";
-                        $notes          = $this->handler_value($value,$this->$field,false);
-                        $this->$field   = $notes;
+                        $this->$field   = "Nota creada desde la web: {$date} \r\n {$this->$field} \r\n";
+                        $this->$field   = $this->handler_value($value,$this->$field,false);
                     break;
                     default: 
                         $this->$field = $this->handler_value($value,$this->$field); 
@@ -225,12 +228,14 @@ class Contact {
         foreach($data AS $key => $val){ 
             
             switch($key){
+                
+                case 'Firstname' : 
                 case 'firstname' : 
                 case 'your-name' : 
                 $key = 'name';
                 break; 
-                case 'houserelationship_set' : 
-                    // $val = $val;
+                case 'message' : 
+                    $key = 'notes';
                 break; 
             }
 

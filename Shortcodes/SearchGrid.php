@@ -14,9 +14,10 @@ class SearchGrid extends _Grid {
     static function set_default_atts(){
         parent::set_default_atts();
         static::$attributes_defaults = array_merge(static::$attributes_defaults,array(
-            '_gid'      => '',
-            'post_type' => '',
-            'filters'   => array(),
+            '_gid'          => '',
+            'post_type'     => '',
+            'loader_text'   => 'Estamos buscando las mejores propiedades para ti...',
+            'filters'       => array(),
         ));
     }
 
@@ -29,6 +30,25 @@ class SearchGrid extends _Grid {
        
         $settings   = parent::buildQuery($atts);
 
+
+        $order      = static::get_order_atts();
+        $meta_query = $settings['meta_query'] ?: [];
+
+        if(in_array($order['orderby'],['price'])){
+
+        $meta_query[] = array(
+            'relation' => 'OR',
+            $order['orderby'] => array(
+                'key'           => $order['orderby'],
+                'type'          => 'NUMERIC',
+                // 'meta_compare'  => 'NOT IN'
+            )
+        );
+            
+        $settings['orderby']    = array($order['orderby'] => $order['order']);
+        $settings['meta_query'] = $meta_query;
+        
+        }
 
         if($atts['filters']){
             $tax_query_fields = 0;
@@ -107,17 +127,13 @@ class SearchGrid extends _Grid {
 
     static function buildAtts($atts = array(), $content = null){
 
-
-
+        static::set_order_methods();
 
         parent::buildAtts($atts, $content);
-
 
         $shortcode_id   = static::get_atts('shortcode_id');
         $post_type      = static::get_atts('post_type',array());
         static::set_att('post_type',$post_type[0]);
-
-
         $cookie         = static::get_cookie_data($shortcode_id);
 
         // if (!defined('DOING_AJAX') || !DOING_AJAX) {
@@ -142,7 +158,7 @@ class SearchGrid extends _Grid {
         $property_zone_var      = get_query_var('property_zones_taxonomy') ?: get_query_var('property_zone') ?: null;
         $post_type              = self::get_atts('post_type');
 
-        
+        if($post_type !== 'inmoob_properties') return;
         
         $post_type_taxonomies   = get_object_taxonomies($post_type);
             
@@ -226,6 +242,40 @@ class SearchGrid extends _Grid {
         return $output;
     }
 
+    public static function buildGridSettings(){
+
+        parent::buildGridSettings();
+
+    }
+
+    protected static function set_order_methods(){
+
+        static::$order_methods = array_merge(static::$order_methods,[
+            'price_asc'  => 'Precio (de menor a mayor)',
+            'price_desc' => 'Precio (de mayor a menor)'
+        ]);
+
+        unset(static::$order_methods['title_asc']);
+        unset(static::$order_methods['title_desc']);
+
+    }
+
+    public static function general_styles(){
+
+        $styles = parent::general_styles();
+
+        $styles .= "
+
+        
+
+        .obser-custom-preloader {
+            display: none;
+        }";
+
+        return $styles;
+
+    }
+
 
     public static function output($_atts, $content){
 
@@ -240,14 +290,16 @@ class SearchGrid extends _Grid {
         $id                 = static::get_atts('el_id');
         $post_type          = esc_attr("obser-grid-".static::get_atts('post_type'));
         $json_data          = esc_attr(wp_json_encode(static::$grid_settings));
-        $current_page_id    =  esc_attr(get_the_ID());
+        $current_page_id    = esc_attr(get_the_ID());
         $el_class           = esc_attr(static::get_atts('el_class'));
         $el_nonce           = esc_attr(vc_generate_nonce('vc-public-nonce'));
         $items              = static::renderItems();
+        $loader_text        = static::get_atts('loader_text');
+        
         $output  = "
         <div id='{$id}' class='contenedor-obser-grid {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
             <div class='obser-custom-preloader'>
-                <span class='preloader-text'>Estamos buscando las mejores alternativas para ti...</span>
+                <span class='preloader-text'>{$loader_text}</span>
             </div>
             <div class='obser-custom-grid-items d-flex flex-wrap'>
                 {$items}
@@ -301,7 +353,7 @@ class IO_grid_item{
             $sales_price    = get_post_meta($post_id,'sales_price',true);
             $price_preffix  = get_post_meta($post_id,'price_prefix',true);
             $price_suffix   = get_post_meta($post_id,'price_sufix',true);
-            $price          = $value;
+            $price          =  number_format($value,0,',','.');
 
             $value = ((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price) ? '<span class="price">'.$price_preffix .' '.$sales_price.' € '.$price_suffix .'</span> <span class="old_price"> Antes '.$price.' € </span>'  : '<span class="price">'.$price_preffix .' '.$price.' € '.$price_suffix .'</span>';
         }
@@ -421,11 +473,10 @@ class IO_grid_item{
         "<div class='obser-grid-item property-item-$item->ID $css_class'>
         <div  class='obser-grid-item-content property-item'>
             $flag_status 
-            ".(!empty($tags) ? '<div class="tags-container">'.$html_tags.'</div>': false)."
-
             <div class='property-picture'>
                 <a href='{$link}'>
-                    <img {$lazy_src}src='{$image}' class='{$image_class}' alt='{$title}'>
+                ".(!empty($tags) ? '<div class="tags-container">'.$html_tags.'</div>': null)."    
+                <img {$lazy_src}src='{$image}' class='{$image_class}' alt='{$title}'>
                 </a>
             </div>
             <div class='property-data'>

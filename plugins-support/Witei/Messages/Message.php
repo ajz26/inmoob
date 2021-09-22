@@ -32,7 +32,6 @@ class Message {
         $response_message   = wp_remote_retrieve_response_message($res);
         $response_body      = wp_remote_retrieve_body($res);
 
-        error_log(var_export($response_body,true));
 
         if (is_wp_error($res) ) {
             return new \WP_Error($response_code, $response_message, $response_body);

@@ -153,15 +153,18 @@ class Translator {
             switch($key){
                 case "renting":
                 case "selling":
-                    if($key == 'renting' && $val ){
+                    if($key == 'selling' && $val){
+                        $val = 'venta';
+                        $this->property->price = $object->selling_cost; 
+                        $this->property->price_sufix = '';
+
+                    // }else if ($key == 'renting' && $val ){
+                    }else{
                         $val = 'alquiler';
 
                         $this->property->price = $object->renting_cost; 
                         $this->property->price_sufix = '/mes';
 
-                    }else if($key == 'selling' && $val){
-                        $val = 'venta';
-                        $this->property->price = $object->selling_cost; 
                     }
                     if(!$val){
                         continue(2);
@@ -206,10 +209,16 @@ class Translator {
                         foreach($val AS $note_group => $note_value){
 
                             switch($note_group){
+                                case 'requisitos':
+                                    $note_group = 'requirements';
                                 case 'requirements':
                                 case 'extras':
                                     $this->property->$note_group = $note_value;
                                 break;
+                                case 'gmaps_link':
+                                    $this->property->$note_group = $note_value[0];
+                                break;
+
                             }
                         }
                         continue(2);
@@ -217,8 +226,16 @@ class Translator {
                 break;
 
                 case "tags":
-                    $this->property->no_docs        = (is_array($val) && in_array('sin nómina',$val)) ? 1 : 0;
-                    $this->property->garage         = (is_array($val) && in_array('garaje',$val)) ? 1 : 0;
+                    
+                    $this->property->no_docs        = (in_array('Sin Nómina',(array)$val))       ? 1 : ((in_array('sin nómina',(array)$val))       ? 1 : 0);
+                    $this->property->pets           = (in_array('animales',(array)$val))         ? 1 : 0;
+                    $this->property->ascensor       = (in_array('ascensor',(array)$val))         ? 1 : 0;
+                    $this->property->terrace        = (in_array('terraza',(array)$val))          ? 1 : 0;
+                    $this->property->garage         = (in_array('garaje',(array)$val))           ? 1 : 0;
+                    $this->property->featured       = (in_array('Destacado',(array)$val))        ? 1 : 0;
+
+                    $val = array_diff_key(array_flip($val) ,array_flip(['animales','ascensor','terraza','garaje']));
+                    $val = array_keys($val);
                 break;
             }
             $this->property->$translation = $val;
@@ -227,3 +244,6 @@ class Translator {
     }
 
 }
+
+
+

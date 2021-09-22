@@ -7,7 +7,7 @@ use OBSER\Classes\Settings;
 
 class WhatsappChat extends Shortcode {
 
-    static $shortcode   = "inmoob_requirements_list";
+    static $shortcode   = "inmoob_whatsapp_link";
 
     public static function generate_css(){}
 

@@ -1,16 +1,14 @@
 <?php
 
 
-add_action( 'wpcf7_before_send_mail',
-  function( $contact_form, $abort, $submission ) {
+add_action( 'wpcf7_before_send_mail', function( $contact_form, $abort, $submission ) {
 
-    $values_list = $_POST; 
-
-
+    $values_list    = $_POST; 
     $contact        = new Inmoob\Witei\Contacts\Contact($values_list);
-    
     $create_contact = $contact->insert_contact();
 
+    error_log(var_export($create_contact,true));
+    
     if( is_wp_error( $create_contact ) ) {
         
         $error = $create_contact->get_error_data();

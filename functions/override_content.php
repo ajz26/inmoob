@@ -5,16 +5,17 @@ function override_inmoob_data( $content ) {
 
     global $post;
     $post_id = (is_object($post))? $post->ID : null;
-    $pattern = '/[\[\{]{2}(?:(?<group>[\w\_\-]+)+(?:\:))?(?:(?<key>[\w\_\-]+))+(?:(?:\:)+(?<alt>[\s\w\_\-]+))?[\]\}]{2}/';
+    $pattern = '/[\[\{]{2}(?:(?<group>[\w\_\-]+)+(?:\:))?(?:(?<key>[\w\_\-]+))+(?:(?:\:)+(?<alt>[\s\w\_\-\,]+))?[\]\}]{2}/';
     
     preg_match_all($pattern,$content,$matches, PREG_SET_ORDER);
 
     foreach($matches as $match){
         $group  = isset($match['group'])    ? sanitize_key($match['group'])     : null;
         $key    = isset($match['key'])      ? sanitize_key($match['key'])       : null;
-        $alt    = isset($match['alt'])      ? sanitize_key($match['alt'])       : null;
+        $alt    = isset($match['alt'])      ? $match['alt']                     : null;
         $value  = null;
 
+        
         switch($group){
             case 'current_term':
                 $term            = get_queried_object();
@@ -123,7 +124,8 @@ function override_inmoob_data( $content ) {
                         $value  = get_the_title($post);
                     break;
                     case 'content':
-                         $value  = get_the_content($post);
+                         $value  = $post->content;
+
                     break;
                     default:
                     $value  = get_post_meta($post->ID,$key,true);

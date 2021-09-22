@@ -72,9 +72,7 @@ class Testimonials extends Swiper {
         $items              = static::renderItems();
         $output  = "
             <div id='{$post_id}' class='contenedor-obser-grid swiper {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
-                <div class='obser-custom-preloader'>
-                    <!--<span class='preloader-text'>Estamos buscando las mejores alternativas para ti...</span>-->
-                </div>
+              
                 <div class='swiper-container'>";
         
         if(static::get_atts('show_arrows',false)){
@@ -192,7 +190,8 @@ class Testimonials extends Swiper {
 
         echo parent::generate_script($atts);
 
-        echo "<script>jQuery('.read-more-button').click(function(e){
+        echo "<script>
+        jQuery('.read-more-button').click(function(e){
             let text = jQuery(this).text();
                     text = (text == '...leer más.') ? '... cerrar.': '...leer más.';
                     jQuery(this).text(text);

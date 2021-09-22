@@ -16,7 +16,7 @@ class Gmap extends Shortcode{
         $geo_lng    = get_post_meta($post->ID,'geo_lng',true);
         $gmap       = get_post_meta($post->ID,'gmaps_link',true);
         $key        = Settings::get_setting('inmoob-settings','embed_gmap_api_key');
-
+        
         if(!$gmap && $key && $geo_lat && $geo_lng){
             $url        = "https://www.google.com/maps/embed/v1/streetview?key={$key}&location={$geo_lat},{$geo_lng}";
             $gmap       = "<iframe src='$url' width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\"></iframe>";

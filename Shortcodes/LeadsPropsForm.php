@@ -82,7 +82,7 @@ class LeadsPropsForm extends Shortcode {
     static function generate_css(){}
 
     static function get_tags(){
-        $tags = Api::get_terms_select('property_tags_taxonomy');
+        $tags = (array)Api::get_terms_select('property_tags_taxonomy');
 
         return array_map(function($tag){
              $tag->value = $tag->label;

@@ -159,18 +159,17 @@ class Api {
 
 
     
-    static function create_range_options($min,$max,$increase){
+    static function create_range_options($min,$max,$increase, $min_match = true , $max_match = true){
 
         $options    = [];
-        $minlength  = strlen($min)-1;
-        $min        = round($min,-$minlength,PHP_ROUND_HALF_EVEN) ;
-        
-        $options    = ($min + $increase <= $max) ? range($min + $increase  ,$max,$increase) : [$min,$max];
+        $min        = ($min + $increase > $min && $min_match) ? $min : ($min + $increase);
+        $max        = ($max + $increase < $max && $max_match) ? $max : ($max + $increase);
+        $options    = ($min + ( $increase * 2 ) <= $max) ? range( $min ,$max,$increase) : [$min,$max];
 
         $options    = array_map(function($opt){
             $data = new stdClass();
             $data->slug = $opt;
-            $data->name = $opt;
+            $data->name = number_format($opt,0,',','.');
             return self::parse_options($data);
         },$options);
 
@@ -183,19 +182,45 @@ class Api {
 
     }
 
+    static function calc_round_length($val){
+
+        $increase = null;
+        
+        switch(true){
+            case ($val >= 0 && $val < 500):
+                $increase = 100;
+            break;
+            case ($val > 500 && $val < 1000) : 
+                $increase = 500;
+            break;
+            case ($val > 1000 && $val < 2000) : 
+                $increase = 1000;
+            break;
+            case ($val > 2000 && $val < 10000) : 
+                $increase = 5000;
+            break;
+            case ($val > 10000 ) : 
+                $increase = 10000;
+            break;
+        }
+        return $increase;
+    }
 
     static function calc_increasement($val){
 
         $increase = null;
         
         switch(true){
-            case ($val >= 0 && $val < 100):
+            case ($val >= 0 && $val <= 500):
                 $increase = 100;
             break;
-            case ($val > 100 && $val < 1000) : 
+            case ($val > 500 && $val < 1000) : 
+                $increase = 500;
+            break;
+            case ($val > 1000 && $val < 2000) : 
                 $increase = 1000;
             break;
-            case ($val > 1000 && $val < 10000) : 
+            case ($val > 2000 && $val < 10000) : 
                 $increase = 5000;
             break;
             case ($val > 10000 ) : 

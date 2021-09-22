@@ -20,7 +20,7 @@ add_action('init',function(){
 			'show_in_nav_menus'     => true,
 			'map_meta_cap'          => true,
 			'supports'              => array('title','thumbnail'),
-            'rewrite'               => array('slug' => '%gestion_type%/%property_type%/%property_zone%'),
+            'rewrite'               => array('with_front'=> false, 'slug' => '%gestion_type%/%property_type%/%property_zone%'),
 			'query_var'             => false,
 		)
 	);

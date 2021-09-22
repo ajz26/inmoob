@@ -144,8 +144,9 @@ class Swiper extends SearchGrid {
         // if(static::$general_encoled) return;
 
         // static::$general_encoled = true;
+        $styles  = parent::general_styles();
 
-        return "
+        $styles .= "
         
         .inmoob-swiper-pagination {
             position: relative;
@@ -208,7 +209,7 @@ class Swiper extends SearchGrid {
         }
         ";
 
-
+        return $styles;
 
     }
 
@@ -245,9 +246,6 @@ class Swiper extends SearchGrid {
 
         $output  = "
         <div id='{$id}' class='contenedor-obser-grid swiper {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
-            <div class='obser-custom-preloader'>
-                <!--<span class='preloader-text'>Estamos buscando las mejores alternativas para ti...</span>-->
-            </div>
             <div class='swiper-container'>
             <div class='prev-next-buttons-container'>
                 <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev'>

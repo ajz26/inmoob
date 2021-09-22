@@ -5,6 +5,154 @@ class Gallery extends Shortcode{
     static $shortcode       = "inmoob_props_gallery";
 
     public static function generate_css(){
+        $style  = '';
+        $gallery_mode = self::get_atts('mode','swiper');
+        $parent_id                  = static::get_atts('vc_id');
+        $element_width              = (int)static::get_atts('element_width', 4);
+        $mx_responsive_1            = (int)static::get_atts('mx_responsive_1', 1200);
+        $mx_responsive_val_1        = (int)static::get_atts('mx_responsive_val_1', $element_width);
+
+        $mx_responsive_2            = (int)static::get_atts('mx_responsive_2', 1200);
+        $mx_responsive_val_2        = (int)static::get_atts('mx_responsive_val_2', $mx_responsive_val_1);
+
+        $mx_responsive_3            = (int)static::get_atts('mx_responsive_3', 1200);
+        $mx_responsive_val_3        = (int)static::get_atts('mx_responsive_val_3', $mx_responsive_val_2);
+        $items_gap                  = (int)static::get_atts('items_gap', 10);
+
+
+        if($gallery_mode == 'swiper'){
+            
+            $style = ".{$parent_id}.swiper-container .inmoob-gallery-wrapper {
+                position: absolute !important;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: 0;
+            }
+    
+            .inmoob-props-gallery {
+                max-width: 1024px;
+                margin: 0 auto;
+                margin-bottom: 2rem;
+            }
+    
+            .{$parent_id}.swiper-container.inmoob-props-gallery::before {
+                content: '';
+                padding-bottom: 56.25%;
+                display: block;
+            }
+            
+            .inmoob-props-gallery .swiper-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+            }
+    
+            .inmoob-gallery-swiper-button-prev-next {
+                background-color: rgba(255, 255, 255, 0.77);
+                z-index: 9999;
+                border-radius: .5rem;
+                margin-bottom: .5rem;
+                position: absolute;
+                width: 35px;
+                text-align: center;
+                height: 35px;
+                font-size: 1.5rem;
+                line-height: 2.2rem;
+                opacity: .6;
+                transition: all .5s;
+                -webkit-transition: all .5s;
+                top: 10px;
+            }
+    
+            .swiper-slide {
+                border-radius: 1rem;
+                overflow: hidden;
+            }
+    
+            .swiper-pagination-bullet-active {
+                opacity: 1;
+                background: #ffffff !important;
+            }
+            
+            .inmoob-gallery-swiper-button-next {
+                right: 10px;
+            }
+    
+            .inmoob-gallery-swiper-button-prev {
+                right: 50px;
+            }
+    
+            .inmoob-gallery-swiper-button-prev-next:hover {
+                transition: all .5s;
+                -webkit-transition: all .5s; 
+                opacity: 1;
+                cursor:pointer;
+            }
+    
+    
+            @media(max-width:768px){
+                .inmoob-props-gallery::before {
+                    padding-bottom: 110%;
+                }
+            }";
+        }else if($gallery_mode == 'grid' ){
+
+
+            
+
+            $style .= "
+            .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper {
+                display: flex;
+                flex-flow: wrap;
+                flex-wrap: wrap;
+
+                margin-left: calc(({$items_gap}px / 2) * (-1));
+                margin-right: calc(({$items_gap}px / 2) * (-1));
+            }
+
+            .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper .gallery-item.gallery-grid-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius:1.5rem;
+
+            }
+
+
+            .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper .gallery-item {
+                padding-left: calc({$items_gap}px / 2);
+                padding-right: calc({$items_gap}px / 2);
+            }
+            .{$parent_id} .gallery-item {
+                width: calc(100% / {$element_width});
+            }
+            ";
+            if (!is_null($mx_responsive_1) && $mx_responsive_val_1 > 0) {
+                $style .= "@media only screen and (max-width: {$mx_responsive_1}px) {
+                    .{$parent_id} .gallery-item{
+                        width: calc(100% / {$mx_responsive_val_1});
+                    } 
+                }";
+            }
+            if (!is_null($mx_responsive_2) && $mx_responsive_val_2 > 0) {
+                $style .= "@media only screen and (max-width: {$mx_responsive_2}px) {
+                    .{$parent_id} .gallery-item{
+                        width: calc(100% / {$mx_responsive_val_2});
+                    }
+                }";
+            }
+            if (!is_null($mx_responsive_3) && $mx_responsive_val_3 > 0) {
+                $style .= "@media only screen and (max-width: {$mx_responsive_3}px) {
+                    .{$parent_id} .gallery-item{
+                        width: calc(100% / {$mx_responsive_val_3});
+                    }
+                }";
+            }
+        }
+
+        return $style;
 
     }
 
@@ -26,86 +174,7 @@ class Gallery extends Shortcode{
             width: 100%;
             margin-left: auto;
             margin-right: auto;
-        }
-        
-
-
-        .inmoob-gallery-wrapper {
-            position: absolute !important;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: 0;
-        }
-
-        .inmoob-props-gallery {
-            max-width: 1024px;
-            margin: 0 auto;
-            margin-bottom: 2rem;
-        }
-
-        .inmoob-props-gallery::before {
-            content: '';
-            padding-bottom: 56.25%;
-            display: block;
-        }
-        
-        .inmoob-props-gallery .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            position: absolute;
-        }
-
-        .inmoob-gallery-swiper-button-prev-next {
-            background-color: rgba(255, 255, 255, 0.77);
-            z-index: 9999;
-            border-radius: .5rem;
-            margin-bottom: .5rem;
-            position: absolute;
-            width: 35px;
-            text-align: center;
-            height: 35px;
-            font-size: 1.5rem;
-            line-height: 2.2rem;
-            opacity: .6;
-            transition: all .5s;
-            -webkit-transition: all .5s;
-            top: 10px;
-        }
-
-        .swiper-slide {
-            border-radius: 1rem;
-            overflow: hidden;
-        }
-
-        .swiper-pagination-bullet-active {
-            opacity: 1;
-            background: #ffffff !important;
-        }
-        
-        .inmoob-gallery-swiper-button-next {
-            right: 10px;
-        }
-
-        .inmoob-gallery-swiper-button-prev {
-            right: 50px;
-        }
-
-        .inmoob-gallery-swiper-button-prev-next:hover {
-            transition: all .5s;
-            -webkit-transition: all .5s; 
-            opacity: 1;
-            cursor:pointer;
-        }
-
-
-        @media(max-width:768px){
-            .inmoob-props-gallery::before {
-                padding-bottom: 110%;
-            }
-        }
-        ";
+        }";
     }
 
 
@@ -115,7 +184,16 @@ class Gallery extends Shortcode{
         $images                 = get_post_meta($post_id,'images');
       
         $loopResult = '';
-        
+        $gallery_mode = self::get_atts('mode','swiper');
+        switch($gallery_mode){
+            case 'grid':
+            $gallery_mode_class = 'gallery-grid-item';
+            break;
+            case 'swiper':
+            default :
+            $gallery_mode_class = 'swiper-slide';
+
+        }
         
         foreach($images AS $image){
             $imageUrl   = wp_get_attachment_image_src($image,'full');
@@ -130,8 +208,8 @@ class Gallery extends Shortcode{
             if(!$src) continue;
 
             
-                $loopResult .= "<div class='swiper-slide'>
-                    <a href='$link' data-pid='{$image}' data-size='{$width}x{$height}'>
+                $loopResult .= "<div class='gallery-item {$gallery_mode_class}'>
+                    <a href='$link' data-pid='{$image}' data-size='{$width}x{$height}' onclick='return false'>
                         <img class='' src='{$src}'>
                     </a>
                 </div>";
@@ -140,7 +218,7 @@ class Gallery extends Shortcode{
         if((self::get_atts('show_video',0) == 1 ? true : false) && ($url_video = get_post_meta( $post->ID,'video',true))){
 
             $loopResult .="
-                <div class='swiper-slide'>
+                <div class='gallery-item {$gallery_mode_class}'>
                     <iframe width='100%' height='100%' src='{$url_video}?rel=0&modestbranding=1&autohide=1&showinfo=0&controls=0&mute=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
                 </div>";
         }
@@ -182,28 +260,65 @@ class Gallery extends Shortcode{
         );
     }
 
+    protected static function gen_swiper_container(string $items){
+
+        $vc_id                  = static::get_atts('vc_id');
+        $el_id                  = static::get_atts('el_id');
+        $el_class               = esc_attr(static::get_atts('el_class'));
+
+
+        $swiper_container = "<div class='inmoob-props-gallery swiper-container {$el_id}  {$el_class}  {$vc_id}'>
+                    <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
+                        <i class='far fa-angle-right'></i>
+                    </div>
+                    <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
+                        <i class='far fa-angle-left'></i>
+                    </div>
+                    <div class='inmoob-gallery-wrapper swiper-wrapper'>
+                        $items
+                    </div>
+                    <div class='swiper-pagination'></div>
+                </div>";
+
+        return $swiper_container;
+    }
+
+    protected static function gen_grid_container(string $items){
+        
+        $vc_id                  = static::get_atts('vc_id');
+
+
+        $swiper_container = "<div class='inmoob-props-gallery gallery-grid-mode {$vc_id}'>
+                                <div class='inmoob-gallery-wrapper'>
+                                    $items
+                                </div>
+                            </div>";
+
+        return $swiper_container;
+    }
+
 
     public static function output($atts,$content){
         add_action('wp_footer', array(__CLASS__,'psw_body_bottom'),1000);
 
-        $loopResult = self::generateContentLoop();
+        $items = self::generateContentLoop();
         
-        if(!isset($loopResult) || empty($loopResult)) return null;
+        if(!isset($items) || empty($items)) return null;
 
-        $output = "<div class='inmoob-props-gallery swiper-container'>
-                        <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
-                            <i class='far fa-angle-right'></i>
-                        </div>
-                        <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
-                            <i class='far fa-angle-left'></i>
-                        </div>
-                        <div class='inmoob-gallery-wrapper swiper-wrapper'>
-                            $loopResult
-                        </div>
-                        <div class='swiper-pagination'></div>
-                    </div>";
+        $gallery_mode = self::get_atts('mode','swiper');
+
+        switch($gallery_mode){
+            case 'grid':
+                $output = self::gen_grid_container($items);
+            break;
+            case 'swiper':
+            default:
+                $output = self::gen_swiper_container($items);
+        }
 
         return $output;
+
+        
     }
 
 
@@ -259,7 +374,7 @@ class Gallery extends Shortcode{
 
         $script ='
         
-        const InmoobPropsGallery = new Swiper(".inmoob-props-gallery", {
+        const InmoobPropsGallerySwiper = new Swiper(".inmoob-props-gallery", {
                 loop: true,
                 slidesPerView: 1,
                 centeredSlides: true,
@@ -407,6 +522,8 @@ class Gallery extends Shortcode{
         
                 items = parseThumbnailElements(galleryElement);
 
+                console.log(galleryElement.getAttribute("data-pswp-uid"));
+
                 options = {
                     bgOpacity           : 0.7,
                     index               : parseInt(index, 10),
@@ -438,10 +555,13 @@ class Gallery extends Shortcode{
                 gallery.init();
 
 
-                gallery.listen("unbindEvents", function() {
-                    var getCurrentIndex = gallery.getCurrentIndex();
-                    InmoobPropsGallery.slideTo(getCurrentIndex, 0, false);
-                  });
+                if(galleryElements.length == 1 ){
+                    gallery.listen("unbindEvents", function() {
+                        var getCurrentIndex = gallery.getCurrentIndex();
+                        InmoobPropsGallerySwiper.slideTo(getCurrentIndex, 0, false);
+                    });
+                }
+                
             };
         
             var galleryElements = document.querySelectorAll( gallerySelector );
@@ -449,12 +569,10 @@ class Gallery extends Shortcode{
             for(var i = 0, l = galleryElements.length; i < l; i++) {
                 galleryElements[i].setAttribute("data-pswp-uid", i+1);
                 galleryElements[i].onclick = onThumbnailsClick;
-
-                
             }
         };
-        initPhotoSwipeFromDOM(".inmoob-props-gallery");
-        ';
+        
+        initPhotoSwipeFromDOM(".inmoob-props-gallery");';
         
 
         $script = '<script>'.$script.'</script>';

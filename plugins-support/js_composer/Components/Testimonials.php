@@ -13,6 +13,7 @@ class Testimonials extends SearchGrid {
         $params     = $parent['params'];
 
         $params     = array_map(function($param){
+            
             if($param['param_name'] == 'post_type'){
                 $param['type']          = 'hidden';
                 $param['value']         = 'inmoob_testimonials';
@@ -20,6 +21,7 @@ class Testimonials extends SearchGrid {
             }
 
             return $param;
+
         },$params);
 
         return array(

@@ -15,9 +15,13 @@ class PriceBlock extends Shortcode{
         $price_prefix   = get_post_meta($post->ID,'price_prefix',true)?: self::get_atts('price_prefix',null);
         $price_sufix    = get_post_meta($post->ID,'price_sufix',true)?: self::get_atts('price_sufix',null);
         $price          = get_post_meta($post->ID,'price',true);
+        $price          =  ($price)       ? number_format($price,0,',','.') : null;
+        $sales_price    =  ($sales_price) ? number_format($sales_price,0,',','.') : null;
 
         $el_id = self::get_atts('el_id',null);
         $el_class = self::get_atts('el_class',null);
+
+
         if((isset($sales_price) && !empty($sales_price)) &&  $sales_price < $price){
             $value = "<span class='price'>{$price_prefix} {$sales_price} {$price_sufix}</span> <span class='old_price'> Antes {$price} </span>";
         }else{

@@ -32,6 +32,16 @@ class SearchGrid extends _Grid {
             'edit_field_class'  => 'vc_col-sm-12',
         );
 
+        $params[]   = array(
+            'heading'           => esc_html__( 'Texto para loader', 'tilo' ),
+            'group'             => __("Buscador", "tilo"),
+            'type'              => 'textfield',
+            'param_name'        => 'loader_text',
+            'save_always'       => true,
+            'admin_label'       => true,
+            'edit_field_class'  => 'vc_col-sm-12',
+        );
+
         return array(
             'name'      => "Listado de inmuebles",
             'icon'      =>  INMOOB_CORE_PLUGIN_DIR_URL ."/assets/images/icons/grid.png",

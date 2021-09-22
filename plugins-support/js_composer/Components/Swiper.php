@@ -22,6 +22,14 @@ class Swiper extends SearchGrid {
             return $param;
         },$params);
 
+        $params = array_filter($params,function($param){
+            if(in_array($param['param_name'],array('_gid','loader_text'))){
+                return false;
+            }
+
+            return true;
+        });
+
         return array(
             'name'      => "Swiper de inmuebles",
             'icon'      =>  INMOOB_CORE_PLUGIN_DIR_URL ."/assets/images/icons/grid.png",

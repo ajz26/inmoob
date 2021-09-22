@@ -1,6 +1,7 @@
 <?php
 
 use OBSER\Classes\Settings;
+use Inmoob\Classes\Mails\Notification;
 
 
 // If the plug-in for background processes is not installed, then we will connect it from the vendor folder
@@ -113,10 +114,67 @@ if ( class_exists( 'WP_Background_Process' ) AND ! class_exists( 'Inmoob_witei_i
 			return FALSE;
 		}
 
+
+		function send_start_mail(){
+
+			$mail_to    =  Settings::get_setting('inmoob-settings','mail_to');
+			$name_to    =  Settings::get_setting('inmoob-settings','business_name');
+			$mail       = new Notification(
+				'importer',
+				[ // mail_from
+					'name' => 'Web',
+					'email' => 'no-reply@web.com',
+				],[ // reply_to
+					'name' => 'Web',
+					'email' => 'no-reply@web.com',
+				],[// mail_to
+					'name' =>  $name_to,
+					'email' => $mail_to,
+				],
+				'Inicio de Importación',
+				array('content' => "<h2>Inicio de Importación</h2><br>\n"),
+			);
+	
+			$send = ($html = $mail->prepare()) ? $mail->send() : false;
+	
+			return $send;
+
+		}
+
+		function send_complete_mail(){
+
+			$mail_to    =  Settings::get_setting('inmoob-settings','mail_to');
+			$name_to    =  Settings::get_setting('inmoob-settings','business_name');
+			$mail       = new Notification(
+				'importer',
+				[ // mail_from
+					'name' => 'Web',
+					'email' => 'no-reply@web.com',
+				],[ // reply_to
+					'name' => 'Web',
+					'email' => 'no-reply@web.com',
+				],[// mail_to
+					'name' =>  $name_to,
+					'email' => $mail_to,
+				],
+				'Importación finalizada',
+				array(
+					'name'	  => 'WEB',
+					'content' => "<h2>Nueva Importación finalizada</h2><br>\n"
+				),
+			);
+	
+			$send = ($html = $mail->prepare()) ? $mail->send() : false;
+	
+			return $send;
+
+		}
+
 		protected function complete() {
 			parent::complete();
 			\flush_rewrite_rules();
 			error_log('complete');
+			$mail = $this->send_complete_mail();
 			\delete_option( $this->get_data_key() );
 		}
 
@@ -173,7 +231,7 @@ function reimport_witei_props(){
 			error_log('iniciar');
             
 			$Inmoob_witei_importer->save()->dispatch();
-
+			$Inmoob_witei_importer->send_start_mail();
 			$Inmoob_witei_importer->set_stats_data( $response_body->count );
 
 		}
