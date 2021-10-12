@@ -120,6 +120,11 @@ class Gallery extends Shortcode{
 
             }
 
+            .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper .gallery-item {
+                max-height: 150px;
+                margin-bottom: 0.6rem;
+            }
+
 
             .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper .gallery-item {
                 padding-left: calc({$items_gap}px / 2);
@@ -264,20 +269,27 @@ class Gallery extends Shortcode{
 
         $vc_id                  = static::get_atts('vc_id');
         $el_id                  = static::get_atts('el_id');
+        $arrows                 = static::get_atts('arrows');
+        $bullets                = static::get_atts('bullets');
+
         $el_class               = esc_attr(static::get_atts('el_class'));
 
 
+        $arrows = ($arrows == 'show') ? "<div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
+        <i class='far fa-angle-right'></i>
+    </div>
+    <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
+        <i class='far fa-angle-left'></i>
+    </div>" : null;
+
+        $bullets = ($bullets == 'show') ? "<div class='swiper-pagination'></div>" : null;
+
         $swiper_container = "<div class='inmoob-props-gallery swiper-container {$el_id}  {$el_class}  {$vc_id}'>
-                    <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-next'>
-                        <i class='far fa-angle-right'></i>
-                    </div>
-                    <div class='inmoob-gallery-swiper-button-prev-next inmoob-gallery-swiper-button-prev'>
-                        <i class='far fa-angle-left'></i>
-                    </div>
+                    {$arrows}
                     <div class='inmoob-gallery-wrapper swiper-wrapper'>
                         $items
                     </div>
-                    <div class='swiper-pagination'></div>
+                    {$bullets}
                 </div>";
 
         return $swiper_container;
@@ -382,6 +394,7 @@ class Gallery extends Shortcode{
                 pagination: {
                     el: ".swiper-pagination",
                     clickable: true,
+                    dynamicBullets: true,
                 },
                 navigation: {
                     nextEl: ".inmoob-gallery-swiper-button-next",

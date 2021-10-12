@@ -80,6 +80,11 @@ class Relateds extends Swiper {
             $tax_query[] = array(
                 'relation' => 'AND',
                 array(
+                    'taxonomy' => 'gestion_states_taxonomy',
+                    'field'    => 'slug',
+                    'terms'    => 'disponible',
+                ),
+                array(
                     'taxonomy' => 'gestion_types_taxonomy',
                     'field'    => 'slug',
                     'terms'    => $gestion_types_taxonomy->slug,

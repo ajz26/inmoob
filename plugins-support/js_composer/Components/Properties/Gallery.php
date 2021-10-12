@@ -12,11 +12,12 @@ class Gallery extends Component {
             'category'                  => __('Ficha', 'inmoob'),
             'params'                    => array(
                 array(                  
-                    "type" => "dropdown",
+                    "type"          => "dropdown",
                     "heading"       => __("Mpdo de visualización", "mx-plugin"),
+                    'group'         => __( 'Apariencia', 'mx-plugin' ),
                     "param_name"    => "mode",
-                    'save_always' => true,
-                    'value' => array(
+                    'save_always'   => true,
+                    'value'         => array(
                         'Carrusel'      => 'swiper',
                         'Grid'          => 'grid',
                     )
@@ -30,9 +31,58 @@ class Gallery extends Component {
                     'value' => array(
                         'Mostrar'   => 1,
                         'Ocultar'   => 0,
-                    )
+                    ),
+                    'dependency'            => array(
+                        'element'           => 'mode',
+                        'value'             => 'swiper',
+                    ),
                 ),
-
+                array(
+                    'type'                  => 'dropdown',
+                    'group'                 => __( 'Apariencia', 'ccom' ),
+                    'heading'               => esc_html__( 'Mostrar flechas', 'js_composer' ),
+                    'param_name'            => 'arrows',
+                    'edit_field_class'      => 'vc_col-sm-6',
+                    'value'                 => array(
+                        esc_html__( 'Mostrar', 'ccom' ) => 'show',
+                        esc_html__( 'Ocultar', 'ccom' ) => 'hide',
+                    ),
+                    'save_always'       => true,
+                    'dependency'            => array(
+                        'element'           => 'mode',
+                        'value'             => 'swiper',
+                    ),
+                ),
+                array(
+                    'type'                  => 'dropdown',
+                    'group'                 => __( 'Apariencia', 'ccom' ),
+                    'heading'               => esc_html__( 'Mostrar Bullets', 'js_composer' ),
+                    'param_name'            => 'bullets',
+                    'edit_field_class'      => 'vc_col-sm-6',
+                    'value'                 => array(
+                        esc_html__( 'Mostrar', 'ccom' ) => 'show',
+                        esc_html__( 'Ocultar', 'ccom' ) => 'hide',
+                    ),
+                    'save_always'       => true,
+                    'dependency'            => array(
+                        'element'           => 'mode',
+                        'value'             => 'swiper',
+                    ),
+                ),
+                array(
+                    'heading'           => esc_html__('ID', 'ccom' ),
+                    'group'             => esc_html__( 'Apariencia', 'ccom' ),
+                    'edit_field_class'  => 'vc_col-sm-6',
+                    'type'              => 'textfield',
+                    'param_name'        => 'el_id',
+                ),
+                array(
+                    'heading'           => esc_html__('Extra Class', 'ccom' ),
+                    'group'             => esc_html__( 'Apariencia', 'ccom' ),
+                    'edit_field_class'  => 'vc_col-sm-6',
+                    'type'              => 'textfield',
+                    'param_name'        => 'el_class',
+                ),
                 array(                  
                     "type"              => "separator",
                     'group'             => __("Opciones Responsive", "mx-plugin"),
@@ -113,20 +163,6 @@ class Gallery extends Component {
                     'value'             => params('items_per_row'),
                     'std'               => '1',
                     "save_always"       => true,
-                ),
-                array(
-                    'heading'           => esc_html__('ID', 'ccom' ),
-                    'group'             => esc_html__( 'Apariencia', 'ccom' ),
-                    'edit_field_class'  => 'vc_col-sm-6',
-                    'type'              => 'textfield',
-                    'param_name'        => 'el_id',
-                ),
-                array(
-                    'heading'           => esc_html__('Extra Class', 'ccom' ),
-                    'group'             => esc_html__( 'Apariencia', 'ccom' ),
-                    'edit_field_class'  => 'vc_col-sm-6',
-                    'type'              => 'textfield',
-                    'param_name'        => 'el_class',
                 )
             )
         );

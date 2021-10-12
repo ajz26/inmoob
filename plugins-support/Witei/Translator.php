@@ -79,7 +79,7 @@ class Translator {
     
 
     function __construct($object){
-        $this->object = $object;
+        $this->object     = $object;
         $this->property   = new stdClass;
 
         $this->parse_object();
@@ -144,11 +144,13 @@ class Translator {
     }
 
     function parse_object(){
-        $object = $this->object;    
+        $object = $this->object;
+
         foreach($object AS $key => $val){ 
 
             $translation = isset($this->dictionary[$key]) ? $this->dictionary[$key] : null;
-            if(is_null($translation) || empty($translation) || is_null($val)) continue;
+
+            if(is_null($translation) || empty($translation)) continue;
 
             switch($key){
                 case "renting":

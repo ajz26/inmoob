@@ -26,9 +26,34 @@ class Swiper extends SearchGrid {
             if(in_array($param['param_name'],array('_gid','loader_text'))){
                 return false;
             }
-
             return true;
         });
+
+        $params[] = array(
+            'type'                  => 'dropdown',
+            'group'                 => __( 'Apariencia', 'ccom' ),
+            'heading'               => esc_html__( 'Mostrar flechas', 'js_composer' ),
+            'param_name'            => 'arrows',
+            'edit_field_class'      => 'vc_col-sm-6',
+            'value'                 => array(
+                esc_html__( 'Mostrar', 'ccom' ) => 'show',
+                esc_html__( 'Ocultar', 'ccom' ) => 'hide',
+            ),
+            'save_always'       => true
+        );
+
+        $params[] = array(
+            'type'                  => 'dropdown',
+            'group'                 => __( 'Apariencia', 'ccom' ),
+            'heading'               => esc_html__( 'Mostrar Bullets', 'js_composer' ),
+            'param_name'            => 'bullets',
+            'edit_field_class'      => 'vc_col-sm-6',
+            'value'                 => array(
+                esc_html__( 'Mostrar', 'ccom' ) => 'show',
+                esc_html__( 'Ocultar', 'ccom' ) => 'hide',
+            ),
+            'save_always'       => true
+        );
 
         return array(
             'name'      => "Swiper de inmuebles",

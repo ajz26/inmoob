@@ -222,7 +222,7 @@ class SearchGrid extends _Grid {
 
             if($not_results_page_block_id){
                 $page_block             = get_post($not_results_page_block_id);
-                $page_block_content     = $page_block->post_content;
+                $page_block_content     = (isset($page_block)) ? $page_block->post_content : '<div class="text-center">No se encontraron resultados</div>';
                 $output                .= apply_filters('the_content', $page_block_content);
             }
 
@@ -266,7 +266,16 @@ class SearchGrid extends _Grid {
 
         $styles .= "
 
-        
+        .grid-nav.grid-bottom {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .property-picture a img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
         .obser-custom-preloader {
             display: none;

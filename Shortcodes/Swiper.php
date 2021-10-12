@@ -7,6 +7,15 @@ class Swiper extends SearchGrid {
     static $shortcode       = "inmoob_props_swiper";
     static $wpb_namespace   = "Inmoob\\WPB_Components";
 
+
+    static function set_default_atts(){
+        parent::set_default_atts();
+        static::$attributes_defaults = array_merge(static::$attributes_defaults,array(
+            'arrows'          => 'hide',
+            'bullets'         => 'hide',
+        ));
+    }
+
     public static function enquee_styles(){
 
         $parent = parent::enquee_styles() ?: array();
@@ -229,6 +238,12 @@ class Swiper extends SearchGrid {
         static::set_att("_gid",sanitize_title(static::get_atts('_gid')));
         $_gid           = static::get_atts('_gid');
         $shortcode_id   = static::get_atts('shortcode_id');
+        
+        
+        $arrows    = static::get_atts('arrows');
+        $bullets   = static::get_atts('bullets');
+        
+
         static::buildItems();
 
 
@@ -244,21 +259,25 @@ class Swiper extends SearchGrid {
             return $items;
         }
 
+        $arrows = ($arrows == 'show') ? "<div class='prev-next-buttons-container'>
+                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev'>
+                            <i class='far fa-angle-left'></i>
+                        </div>
+                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next'>
+                            <i class='far fa-angle-right'></i>
+                        </div>
+                    </div>" : null;
+
+        $bullets = ($bullets == 'show') ? "<div class='inmoob-swiper-pagination'></div>" : null;
+
         $output  = "
         <div id='{$id}' class='contenedor-obser-grid swiper {$el_class} obser-grid-{$post_type} {$element_id}' data-gid='{$_gid}' data-shortcode_id='$shortcode_id' data-obser-grid-settings='$json_data' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}' data-vc-post-id='{$current_page_id}' data-vc-public-nonce='{$el_nonce}'>
+        {$arrows}    
             <div class='swiper-container'>
-            <div class='prev-next-buttons-container'>
-                <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev'>
-                    <i class='far fa-angle-left'></i>
+                <div class='inmoob-swipper swiper-wrapper'>
+                    {$items}    
                 </div>
-                <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next'>
-                    <i class='far fa-angle-right'></i>
-                </div>
-            </div>
-            <div class='inmoob-swipper swiper-wrapper'>
-                {$items}    
-            </div>
-            <div class='inmoob-swiper-pagination'></div>
+                {$bullets}
             </div>        
         </div>";
         return $output;

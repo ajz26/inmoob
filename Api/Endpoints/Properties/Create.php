@@ -47,17 +47,7 @@ class Create extends Endpoint{
         $post  = self::$post;
 
         foreach($terms AS $taxonomy => $value){
-
-            if(!is_array($value)){
-                Helpers::set_term_by_slug($post,$value,$taxonomy);
-
-            }else{
-                foreach($value AS $term){
-                    Helpers::set_term_by_slug($post,$term,$taxonomy,true);
-                }
-            }
-
-
+            Helpers::set_term_by_slug($post,$value,$taxonomy);
         }
     }
 

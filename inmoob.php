@@ -80,6 +80,7 @@ class INMOOB_CORE{
     private static function load_plugins_support(){
         require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/js_composer/js_composer.php";
         require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/Witei/Functions.php";
+        require_once INMOOB_CORE_PLUGIN_DIR_PATH ."plugins-support/wordpress-seo/wp-seo.php";
     }
 }
 

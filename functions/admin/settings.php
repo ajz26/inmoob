@@ -53,6 +53,12 @@ Settings::set_section('inmoob-settings',array(
             'type'          => 'textfield',
         ),
         array(
+            'name'          => 'business_phone_alt',
+            'title'         => 'Teléfono Alternativo',
+            'description'   => 'Teléfono de la empresa',
+            'type'          => 'textfield',
+        ),
+        array(
             'name'          => 'business_email',
             'title'         => 'Email',
             'description'   => 'Email de la empresa',

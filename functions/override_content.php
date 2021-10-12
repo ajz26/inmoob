@@ -119,6 +119,9 @@ function override_inmoob_data( $content ) {
 
             case 'post':
                 global $post;
+                if(!$post){
+                    continue(2);
+                }
                 switch ($key){
                     case 'title':
                         $value  = get_the_title($post);
