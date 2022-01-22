@@ -108,10 +108,10 @@ class Swiper extends SearchGrid {
         
         $style .= "
 
-        .{$parent_id} .inmoob-swipper {
+       /*.{$parent_id} .inmoob-swipper {
             margin-left: calc(({$items_gap}px / 2) * (-1));
             margin-right: calc(({$items_gap}px / 2) * (-1));
-        }
+        }*/
         .{$parent_id} .inmoob-swipper .grid-nav ,
         .{$parent_id} .inmoob-swipper .obser-grid-item {
             padding-left: calc({$items_gap}px / 2);
@@ -260,10 +260,10 @@ class Swiper extends SearchGrid {
         }
 
         $arrows = ($arrows == 'show') ? "<div class='prev-next-buttons-container'>
-                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev'>
+                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev {$element_id}'>
                             <i class='far fa-angle-left'></i>
                         </div>
-                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next'>
+                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next {$element_id}'>
                             <i class='far fa-angle-right'></i>
                         </div>
                     </div>" : null;
@@ -287,8 +287,8 @@ class Swiper extends SearchGrid {
 
     public static function generate_script($atts){
         static::set_atts($atts);
-        $show_bullets               = static::get_atts('show_bullets',true);
-        $show_arrows                = static::get_atts('show_arrows',true);
+        $show_bullets               = static::get_atts('bullets',true);
+        $show_arrows                = static::get_atts('arrows',true);
         $el_swipper                 = static::get_atts('vc_id');
         $element_width              = (int)static::get_atts('element_width', 4);
         $lazy_preload               = $element_width + $element_width;
@@ -307,11 +307,14 @@ class Swiper extends SearchGrid {
                         checkInView : true,
                         loadPrevNextAmount: {$lazy_preload},
                       },
+                    //   autoplay: {
+                    //     delay: 2000,
+                    //   },
                     slidesPerView: {$mx_responsive_val_3},";
                     if($show_arrows){
                         $script .= 'navigation: {
-                        nextEl: ".inmoob-swiper-button-next",
-                        prevEl: ".inmoob-swiper-button-prev"
+                        nextEl: ".inmoob-swiper-button-next.'.$el_swipper.'",
+                        prevEl: ".inmoob-swiper-button-prev.'.$el_swipper.'"
                         },';
                     };
                     if($show_bullets){

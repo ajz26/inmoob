@@ -1,8 +1,8 @@
 <?php
 namespace Inmoob\WPB_Components;
-use OBSER\WPB_Components\_Grid;
+use Inmoob\WPB_Components\Swiper;
 
-class Testimonials extends SearchGrid {
+class Testimonials extends Swiper {
 
 
     public static function map(): array {
@@ -11,6 +11,13 @@ class Testimonials extends SearchGrid {
         $parent     = parent::map();
         $exclude    = array();
         $params     = $parent['params'];
+
+        $params = array_filter($params,function($param){
+            if(in_array($param['param_name'],array('not_results_page_block'))){
+                return false;
+            }
+            return true;
+        });
 
         $params     = array_map(function($param){
             
@@ -23,6 +30,8 @@ class Testimonials extends SearchGrid {
             return $param;
 
         },$params);
+
+       
 
         return array(
             'name'      => "Swiper de testimoniales",

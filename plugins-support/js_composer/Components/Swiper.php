@@ -23,7 +23,7 @@ class Swiper extends SearchGrid {
         },$params);
 
         $params = array_filter($params,function($param){
-            if(in_array($param['param_name'],array('_gid','loader_text'))){
+            if(in_array($param['param_name'],array('_gid','loader_text','show_pagination','items_per_row','posts_per_page'))){
                 return false;
             }
             return true;

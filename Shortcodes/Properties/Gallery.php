@@ -107,7 +107,6 @@ class Gallery extends Shortcode{
                 display: flex;
                 flex-flow: wrap;
                 flex-wrap: wrap;
-
                 margin-left: calc(({$items_gap}px / 2) * (-1));
                 margin-right: calc(({$items_gap}px / 2) * (-1));
             }
@@ -129,6 +128,7 @@ class Gallery extends Shortcode{
             .{$parent_id}.gallery-grid-mode .inmoob-gallery-wrapper .gallery-item {
                 padding-left: calc({$items_gap}px / 2);
                 padding-right: calc({$items_gap}px / 2);
+                margin-bottom: {$items_gap}px;
             }
             .{$parent_id} .gallery-item {
                 width: calc(100% / {$element_width});

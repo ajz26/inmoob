@@ -13,6 +13,7 @@ class Create extends Endpoint{
 
     static function callback( \WP_REST_Request $data){
         
+        set_transient('saving_property','saving');
         $body           = $data->get_body();
  
         if(!$body){
@@ -37,7 +38,9 @@ class Create extends Endpoint{
        
         self::manage_meta();
         self::managet_terms();
+        error_log('propiedad almacenada guardado');
 
+        delete_transient('saving_property');
         return $post;
     }
 

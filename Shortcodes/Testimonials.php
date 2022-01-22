@@ -75,15 +75,15 @@ class Testimonials extends Swiper {
               
                 <div class='swiper-container'>";
         
-        if(static::get_atts('show_arrows',false)){
+        if(static::get_atts('arrows',false)){
 
         $output  .= "<div class='prev-next-buttons-container'>
-                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev'>
-                            <i class='far fa-angle-left'></i>
-                        </div>
-                        <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next'>
-                            <i class='far fa-angle-right'></i>
-                        </div>
+                                <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-prev {$element_id}'>
+                                <i class='far fa-angle-left'></i>
+                            </div>
+                            <div class='inmoob-swiper-button-prev-next inmoob-swiper-button-next {$element_id}'>
+                                <i class='far fa-angle-right'></i>
+                            </div>
                     </div>";
         
         }
@@ -92,7 +92,7 @@ class Testimonials extends Swiper {
                         {$items}    
                     </div>";
                     
-        if(static::get_atts('show_bullets',true)){
+        if(static::get_atts('bullets',true)){
             $output  .= "<div class='inmoob-swiper-pagination'></div>";
         }
 

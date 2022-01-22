@@ -2,11 +2,184 @@
 namespace Inmoob\Witei;
 
 use stdClass;
+use OBSER\Classes\Arr;
 
 class Translator {
 
     private $object;
     public  $property;
+
+    protected static $status = array(
+        'rentend'               => 'Alquilado',
+        'sold'                  => 'Vendido',
+        'available'             => 'Disponible',
+        'available'             => 'Disponible',
+        'inactive'              => 'Desactivado',
+        'reserved'              => 'Reservado',
+        'prospect'              => 'Prospecto',
+    );
+
+    protected static $kind = array(
+        'flat'                  => 'Piso',
+        'chalet'                => 'Chalet',
+        'country_house'         => 'Casa de campo',
+        'bungalow'              => 'Chalet',
+        'room'                  => 'Habitacion',
+        'parking'               => 'Parking',
+        'shop'                  => 'Local',
+        'industrial'            => 'Industral',
+        'office'                => 'Oficina',
+        'land'                  => 'Terreno',
+        'storage'               => 'Trastero',
+        'building'              => 'Edificio',
+    );
+
+    protected $tags = array(
+        'access from street'    =>  'Acceso Desde La Calle',
+        'air conditioner'       =>  'Aire Acondicionado',
+        'alarm'                 =>  'Alarma',
+        'aluminum windows'      =>  'Ventanas De Aluminio',
+        'apartment'             =>  'Departamento',
+        'attached'              =>  'Adjunto',
+        'automated doors'       =>  'Puertas Automatizadas',
+        'balcony'               =>  'Balcón',
+        'barbecue'              =>  'Parilla',
+        'basement'              =>  'Sótano',
+        'bohemian'              =>  'Bohemio',
+        'bright'                =>  'Brillante',
+        'buildable'             =>  'Acumulado',
+        'built-in wardrobes'    =>  'Armarios Empotrados',
+        'bungalow'              =>  'Bungalow',
+        'butane gas'            =>  'Gas Butano',
+        'caretaker'             =>  'Vigilante',
+        'central heating'       =>  'Calefacción Central',
+        'chimney'               =>  'Chimenea',
+        'clothes line'          =>  'Tendedero',
+        'communal swimming pool'=>  'Piscina Comunitaria',
+        'community garden'      =>  'Jardín Comunitario',
+        'concrete structure'    =>  'Estructura Concreta',
+        'condominium'           =>  'Condominio',
+        'corner'                =>  'Esquina',
+        'country estate'        =>  'Finca',
+        'disabled access'       =>  'Acceso Desactivado',
+        'dishwasher'            =>  'Lavavajillas',
+        'doorman'               =>  'Portero',
+        'double glazing'        =>  'Doble Acristalamiento',
+        'downtown'              =>  'Centro',
+        'duplex'                =>  'Dúplex',
+        'east'                  =>  'Este',
+        'electric heating'      =>  'Calefacción Eléctrica',
+        'elevator'              =>  'Ascensor',
+        'emblematic building'   =>  'Edificio Emblemático',
+        'emergency exit'        =>  'Salida De Emergencia',
+        'equipped kitchen'      =>  'Cocina Equipada',
+        'extinguisher'          =>  'Extintor',
+        'false ceiling'         =>  'Techo Falso',
+        'farmhouse'             =>  'Casa De Campo',
+        'floating floor'        =>  'Piso Flotante',
+        'floor tiles'           =>  'Baldosas',
+        'from a bank'           =>  'De Un Banco',
+        'furnished'             =>  'Amueblado',
+        'furnished kitchen'     =>  'Cocina Amueblada',
+        'garage'                =>  'Garaje',
+        'garage included'       =>  'Garaje Incluido',
+        'garden'                =>  'Jardín',
+        'golf views'            =>  'Vistas De Golf',
+        'green area'            =>  'Area Verde',
+        'gym'                   =>  'Gimnasio',
+        'half bathroom'         =>  'Medio Baño',
+        'heating oil'           =>  'Aceite De Calefaccion',
+        'historic'              =>  'Histórico',
+        'hotel'                 =>  'Hotel',
+        'hotel industry'        =>  'Industria Hotelera',
+        'individual heating'    =>  'Calefacción Individual',
+        'industrial area'       =>  'Area Industrial',
+        'inner courtyard'       =>  'Patio Interior',
+        'insurance'             =>  'Seguro',
+        'interior'              =>  'Interior',
+        'internet'              =>  'Internet',
+        'large lightwell'       =>  'Gran Lightwell',
+        'laundry'               =>  'Ropa Sucia',
+        'lightwell'             =>  'Buenas Luz',
+        'loft'                  =>  'Desván',
+        'low house'             =>  'Casa Baja',
+        'luggage storage room'  =>  'Sala De Guardaequipajes',
+        'luxury'                =>  'Lujo',
+        'mansion'               =>  'Mansión',
+        'marble floor'          =>  'Piso De Mármol',
+        'metallic structure'    =>  'Estructura Metálica',
+        'mountain views'        =>  'Vistas A La Montaña',
+        'natural gas'           =>  'Gas Natural',
+        'new'                   =>  'Nuevo',
+        'new construction'      =>  'Nueva Construcción',
+        'north'                 =>  'Norte',
+        'open kitchen'          =>  'Cocina Abierta',
+        'open space'            =>  'Espacio Abierto',
+        'outdoor'               =>  'Exterior',
+        'paddle tennis court'   =>  'Pista De Tenis De Pádel',
+        'pantry'                =>  'Despensa',
+        'parking'               =>  'Estacionamiento',
+        'parquet floor'         =>  'Suelos De Parquet',
+        'patio'                 =>  'Patio',
+        'penthouse'             =>  'Ático',
+        'permanent ford'        =>  'Ford Permanente',
+        'pets'                  =>  'Mascotas',
+        'playground'            =>  'Patio De Juegos',
+        'plot'                  =>  'Gráfico',
+        'porch'                 =>  'Porche',
+        'private urbanization'  =>  'Urbanización Privada',
+        'protected building'    =>  'Edificio Protegido',
+        'radiating floor'       =>  'Piso Radiante',
+        'raised floor'          =>  'Piso Elevado',
+        'reformed'              =>  'Reformado',
+        'reinforced door'       =>  'Puerta Reforzada',
+        'rooftop terrace'       =>  'Terraza En La Azotea',
+        'sauna'                 =>  'Sauna',
+        'sea views'             =>  'Vistas Al Mar',
+        'security 24h'          =>  'Seguridad 24H',
+        'security cameras'      =>  'Cámaras De Seguridad',
+        'security door'         =>  'Puerta De Seguridad',
+        'semidetached'          =>  'Semi Separado',
+        'service bedroom'       =>  'Dormitorio De Servicio',
+        'service elevator'      =>  'Ascensor De Servicio',
+        'singular'              =>  'Singular',
+        'smoke detector'        =>  'Detector De Humo',
+        'smoke extractor'       =>  'Extractor De Humo',
+        'smooth walls'          =>  'Paredes Lisas',
+        'solarium'              =>  'Solárium',
+        'south'                 =>  'Sur',
+        'squash court'          =>  'Pista De Squash',
+        'stairs'                =>  'Escalera',
+        'stippled walls'        =>  'Paredes Puntuales',
+        'storage room'          =>  'Trastero',
+        'storage room included' =>  'Cuarto De Almacenamiento Incluido',
+        'students'              =>  'Estudiantes',
+        'studio'                =>  'Estudio',
+        'subsidised housing'    =>  'Vivienda Subsidiada',
+        'sunny'                 =>  'Soleado',
+        'swimming pool'         =>  'Alberca',
+        'tennis court'          =>  'Pista De Tenis',
+        'terrace'               =>  'Terraza',
+        'terrazzo floor'        =>  'Piso De Terrazo',
+        'to reform'             =>  'Reformar',
+        'tourist'               =>  'Turista',
+        'townhouse'             =>  'Casa Adosada',
+        'transfer'              =>  'Transferir',
+        'triplex'               =>  'Triple',
+        'TV antenna'            =>  'Antena De Televisión',
+        'unfurnished'           =>  'Sin Amueblar',
+        'vent'                  =>  'Respiradero',
+        'video intercom'        =>  'Intercomunicador De Video',
+        'villa'                 =>  'Villa',
+        'warehouse'             =>  'Depósito',
+        'west'                  =>  'Oeste',
+        'wifi'                  =>  'Wifi',
+        'wooden structure'      =>  'Estructura De Madera',
+        'wooden windows'        =>  'Ventanas De Madera',
+        'featured'              =>  'Destacado',
+        'free docs'             =>  'Sin nómina',
+    );
+
     private $dictionary = array(
         "id"                          => 'witei_id',
         "identifier"                  => 'property_ref',
@@ -24,8 +197,7 @@ class Translator {
         "renting_cost"                => null,
         "renting_period"              => null, // PARSEAR
         "selling_cost"                => null,
-        "kind"                        => 'property_types_taxonomy',
-        "floor"                       => null,
+        "floor"                       => 'property_floor',
         "bedrooms"                    => 'property_rooms_taxonomy',
         "bathrooms"                   => 'property_bathrooms_taxonomy',
         "area"                        => 'property_size',
@@ -36,14 +208,13 @@ class Translator {
         "is_reserved"                 => 'gestion_states_taxonomy', // parsear,
         "zip_code"                    => 'zip_code',
         "show_cost"                   => null,
-        "floor_display"               => 'property_floor',
         "area_util"                   => 'util_property_size',
         "area_plot"                   => null,
         "area_terrace"                => null,
         "energy_certificate_display"  => 'property_eacs', // parsear
         "created"                     => 'post_date', // Fecha actualización
         "updated"                     => 'post_modified', // Fecha actualización
-        "kind_value"                  => null, // consultar con witei
+        "kind_value"                  => 'property_types_taxonomy',
         "renting_period_display"      => null,
         "tags"                        => 'property_tags_taxonomy',
         "virtual_visit"               => null,
@@ -90,7 +261,10 @@ class Translator {
 
     static function parse_groups($groups){
 
-        $data = [];
+        $data   = [];
+        $groups = json_encode($groups);
+
+
         preg_match_all('/(?<group>\w+)[\s\n]*\:[\s*\n*]*\((?<values>[^()]*[^()]*)\)/i',$groups,$matches,PREG_SET_ORDER);
 
         foreach($matches AS $match){
@@ -103,8 +277,6 @@ class Translator {
 
         array_walk($data,array(__CLASS__,'walk_extras'));
 
-        // var_dump($data);
-        
         return $data;
         
     }
@@ -119,25 +291,9 @@ class Translator {
             $value = is_array($value) ? $value : trim($value);
     }
 
-    
-
-    static function parse_status($status){
-        $texts = array(
-            'rentend'   => 'Alquilado',
-            'sold'      => 'Vendido',
-            'available' => 'Disponible',
-            'available' => 'Disponible',
-            'inactive'  => 'Desactivado',
-            'reserved'  => 'Reservado',
-            'prospect'  => 'Prospecto',
-        );
-
-        return isset($texts[$status]) ? $texts[$status] : null; 
-    }
-
-
     static function gen_title($object){
-        $kind       = ucwords($object->kind) ?: 'Inmueble';
+
+        $kind       = Arr::get(self::$kind,$object->kind_value,'Inmueble');
         $address    = $object->street ?: null;
 
         return "{$kind} en $address";
@@ -145,6 +301,13 @@ class Translator {
 
     function parse_object(){
         $object = $this->object;
+
+        if(isset($object->tags) && is_array($object->tags)){
+            $object->tags = array_map(function($tag){
+                return Arr::get($this->tags, $tag,$tag);
+            },$object->tags);
+        }
+ 
 
         foreach($object AS $key => $val){ 
 
@@ -185,8 +348,12 @@ class Translator {
                         if($val == 'inactive'){
                             $this->property->post_status = 'draft';
                         }
-                        $val =  self::parse_status($val);
+                        $val =  Arr::get(self::$status,$val,$val);
                     }
+                break;
+
+                case "kind_value":
+                    $val =  $val ? Arr::get(self::$kind,$val,$val) : $val;
                 break;
 
                 case "title":
@@ -207,7 +374,6 @@ class Translator {
                 case "notes":
                     if($val){
                         $val = self::parse_groups($val);
-                        
                         foreach($val AS $note_group => $note_value){
 
                             switch($note_group){
@@ -228,13 +394,13 @@ class Translator {
                 break;
 
                 case "tags":
-                    
-                    $this->property->no_docs        = (in_array('Sin Nómina',(array)$val))       ? 1 : ((in_array('sin nómina',(array)$val))       ? 1 : 0);
-                    $this->property->pets           = (in_array('animales',(array)$val))         ? 1 : 0;
-                    $this->property->ascensor       = (in_array('ascensor',(array)$val))         ? 1 : 0;
-                    $this->property->terrace        = (in_array('terraza',(array)$val))          ? 1 : 0;
-                    $this->property->garage         = (in_array('garaje',(array)$val))           ? 1 : 0;
-                    $this->property->featured       = (in_array('Destacado',(array)$val))        ? 1 : 0;
+                    $val = (array)$val;
+                    $this->property->no_docs        = (Arr::exists($val,'Sin Nómina'))                                      ? 1 : 0;
+                    $this->property->pets           = (Arr::exists($val,'animales'))                                        ? 1 : 0;
+                    $this->property->ascensor       = (Arr::exists($val,'ascensor') || Arr::exists($val,'elevator'))        ? 1 : 0;
+                    $this->property->terrace        = (Arr::exists($val,'terraza')  || Arr::exists($val,'terrace'))         ? 1 : 0;
+                    $this->property->garage         = (Arr::exists($val,'garaje')   || Arr::exists($val,'garage'))          ? 1 : 0;
+                    $this->property->featured       = (Arr::exists($val,'Destacado'))                                       ? 1 : 0;
 
                     $val = array_diff_key(array_flip($val) ,array_flip(['animales','ascensor','terraza','garaje']));
                     $val = array_keys($val);
